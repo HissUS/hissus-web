@@ -35,7 +35,7 @@ export default function Hero() {
               transition-transform duration-300 hover:scale-105 hover:bg-white hover:text-black 
               hover:shadow-[0_8px_30px_rgba(255,255,255,0.5)]"
               style={{ padding: '1rem 1rem' }}>
-              Get a Quota
+              Get a Quote
             </button>
           </div>
         </div>
