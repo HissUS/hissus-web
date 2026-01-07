@@ -3,7 +3,7 @@ import heroImage from '@/assets/images/belc.jpg';
 export default function Hero() {
   return (
     <div
-      className="hero h-screen w-screen bg-cover bg-center bg-no-repeat relative"
+      className="hero h-screen w-full bg-cover bg-center bg-no-repeat relative overflow-hidden"
       style={{ backgroundImage: `url(${heroImage})` }}
     >
       <div className="hero-overlay absolute inset-0 bg-black/20"></div>
@@ -17,7 +17,7 @@ export default function Hero() {
             Retractable Screens Designed for Modern Living
           </h1>
           
-          <p className="text-lg sm:text-xl md:text-1xl mb-12 leading-relaxed opacity-90" >
+          <p className="text-lg sm:text-xl md:text-xl mb-12 leading-relaxed opacity-90" >
             Customizable, high-quality retractable screens for windows and doors with a variety of colors.
           </p>
 
@@ -38,6 +38,22 @@ export default function Hero() {
               Get a Quote
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Animated Scroll Down Arrow */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+        <div className="animate-bounce">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={2} 
+            stroke="white" 
+            className="w-15 h-15 opacity-80"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
         </div>
       </div>
     </div>
