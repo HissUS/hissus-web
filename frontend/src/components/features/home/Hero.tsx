@@ -10,7 +10,7 @@ export default function Hero() {
 
       <div className="hero-content relative z-10 flex items-center justify-center h-full px-8 sm:px-4">
         <div className="hero-content-box">
-          <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold leading-tight" style={{ marginBottom: '2rem', paddingTop: '1rem' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold leading-tight" style={{ marginBottom: '2rem', paddingTop: '0.5rem' }}>
             Retractable Screens Designed for Modern Living
           </h1>
           
@@ -18,7 +18,7 @@ export default function Hero() {
             Customizable, high-quality retractable screens for windows and doors with a variety of colors.
           </p>
 
-          <div className="flex gap-4 justify-center" style={{ paddingBottom: '1rem' }}>
+          <div className="flex gap-4 justify-center" style={{ paddingBottom: '0.5rem' }}>
             <button className="btn-hero">
               Explore Products
             </button>
