@@ -1,5 +1,5 @@
 import heroImage from '@/assets/images/belc.jpg';
-import HomeButton from '@/components/ui/HomeButton'; // make sure the path is correct
+import HomeButton from '@/components/ui/HomeButton';
 
 export default function Hero() {
   return (
