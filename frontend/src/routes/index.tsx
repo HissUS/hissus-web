@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
-import Home from '@/pages/client/Home'
-import About from '@/pages/client/About'
-import Services from '@/pages/client/Services'
-import Contact from '@/pages/client/Contact'
+import Home from '@/pages/Home'
+import About from '@/pages/About'
+import Services from '@/pages/Services'
+import Contact from '@/pages/Contact'
 
 export default function AppRoutes() {
   return (
