@@ -19,20 +19,20 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Inspiration', path: '/home' },
     { name: 'Contact', path: '/contact' },
+    { name: 'Quote', path: '/quote' },
+    { name: 'Careers', path: '/careers' },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-700 ease-in-out ${
         isScrolled 
-          ? 'bg-gray-500/25 backdrop-blur-[2px] py-10'      // Blends almost invisibly into the image
-          : 'bg-white/65 backdrop-blur-md py-4 shadow-md' // Becomes a distinct "glass" bar
+          ? 'bg-gray-500/25 backdrop-blur-[2px] py-6' // Slightly smaller when scrolled
+          : 'bg-white/65 backdrop-blur-md py-4 shadow-md'
       }`}
     >
       <div className="w-full flex items-center justify-center px-8">
-        
         <div className="hidden lg:flex items-center gap-20">
-          {/* Logo - Fixed Size & Original Color */}
           <Link to="/" className="inline-block transition-transform duration-500 hover:scale-105">
             <img 
               src={logoImage} 
@@ -42,21 +42,28 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Nav Links */}
-          <div className="flex gap-12">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`text-sm uppercase tracking-[0.35em] font-bold transition-all duration-500 hover:opacity-50 ${
-                  isScrolled 
-                    ? 'text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]' // White text for the dark gradient
-                    : 'text-neutral-900' // Dark text for the white background
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+          <div className="flex gap-12 items-center justify-center">
+            {navLinks.map((link) => {
+              // Check if this link is the 'Quote' button
+              const isSpcBtn = link.name === 'Quote' || link.name === 'Careers';
+              
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  style={isSpcBtn ? { padding: '12px 20px' } : {}}
+                  className={`text-sm uppercase tracking-[0.35em] font-bold transition-all duration-500 hover:opacity-50 
+                  ${isSpcBtn ? 'border-2 rounded-md inline-flex items-center justify-center' : ''} 
+                  ${
+                    isScrolled 
+                      ? `text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] ${isSpcBtn ? 'border-white' : ''}`
+                      : `text-neutral-900 ${isSpcBtn ? 'border-neutral-900' : ''}`
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
