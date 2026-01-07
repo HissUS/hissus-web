@@ -1,40 +1,11 @@
 @import "tailwindcss";
+@import "./styles/components.css";
 @plugin "daisyui";
 
 :root {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
   font-weight: 400;
-}
-
-@layer components {
-  .hero-content-box {
-    max-width: 64rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.4);
-    border-radius: 1rem;
-    backdrop-filter: blur(12px);
-    text-align: center;
-    color: white;
-    padding: 6rem 3rem !important;
-  }
-
-  @media (max-width: 768px) {
-    .hero-content-box {
-      padding: 4rem 1.5rem !important;
-    }
-  }
-
-  .btn-hero {
-    @apply btn btn-outline btn-lg flex-1 max-w-xs rounded-md;
-  }
-
-
-  .btn-hero:hover {
-    @apply scale-103;
-    box-shadow: 0 12px 40px rgba(255, 255, 255, 0.5);
-  }
-
 }
 
 * {
