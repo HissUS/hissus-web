@@ -81,4 +81,96 @@
   .footer-copyright-text {
     @apply text-[9px] tracking-[0.4em] uppercase opacity-40 text-neutral-900;
   }
+
+    /* Feature Card Component Styles */
+    .feature-card {
+    background: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s;
+    border: 1px solid rgba(229, 231, 235, 0.5);
+    padding: 1.5rem 0 !important;
+    }
+
+    .feature-card:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-color: rgba(212, 212, 212, 1);
+    transform: scale(1.05) translateY(-0.5rem);
+    }
+
+    .feature-card-figure {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-top: 2rem !important;
+    padding-bottom: 1.5rem !important;
+    overflow: visible;
+    min-width: 0;
+    flex-shrink: 0;
+    }
+
+    .feature-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    transition: transform 0.5s;
+    max-height: 400px;
+    }
+
+    .feature-card-image:hover {
+    transform: scale(1.05);
+    }
+
+    .feature-card-placeholder {
+    width: 100%;
+    height: 12rem;
+    background-color: rgb(245, 245, 245);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    }
+
+    .feature-card-placeholder:hover {
+    background-color: rgb(229, 229, 229);
+    }
+
+    .feature-card-placeholder-text {
+    color: rgb(163, 163, 163);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    }
+
+    .feature-card-content {
+    padding: 0 2rem 2rem 2rem !important;
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    }
+
+    .feature-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(23, 23, 23);
+    letter-spacing: 0.025em;
+    margin-bottom: 1rem !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    }
+
+    .feature-card-description {
+    color: rgb(64, 64, 64);
+    line-height: 1.625;
+    margin-bottom: 2.5rem !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    }
+
+    .feature-card-button-container {
+    display: flex;
+    justify-content: center;
+    }
 }
