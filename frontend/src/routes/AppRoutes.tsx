@@ -8,6 +8,8 @@ import Services from "@/pages/Services"
 import Contact from "@/pages/Contact"
 import Quote from "@/pages/Quote"
 import Careers from "@/pages/Careers"
+import DoorScreens from "@/pages/Products/DoorScreens"
+import WindowScreens from "@/pages/Products/WindowScreens"
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,6 +34,8 @@ export default function AppRoutes() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/quote" element={<Quote />} />
           <Route path="/careers" element={<Careers />} />
+          <Route path="/products/door-screens" element={<DoorScreens />} />
+          <Route path="/products/window-screens" element={<WindowScreens />} />
         </Route>
       </Routes>
     </>
