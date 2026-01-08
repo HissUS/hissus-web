@@ -75,8 +75,8 @@ export default function FeatureCard() {
       <div className="feature-section-wave-bottom">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" className="w-full h-auto">
           <path 
-            fill="#ffffff" 
-            fillOpacity="1" 
+            fill="#fffffff0" 
+            // fillOpacity="1" 
             d="M0,64L48,58.7C96,53,192,43,288,48C384,53,480,75,576,80C672,85,768,75,864,69.3C960,64,1056,64,1152,69.3C1248,75,1344,85,1392,90.7L1440,96L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"
           ></path>
         </svg>
