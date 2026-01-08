@@ -1,0 +1,214 @@
+/* Feature Card Component Styles */
+.feature-card {
+  background: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  padding: 1.5rem 0 !important;
+}
+
+.feature-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border-color: rgba(212, 212, 212, 1);
+  transform: scale(1.05) translateY(-0.5rem);
+}
+
+.feature-card-figure {
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 1.5rem !important;
+  overflow: visible;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.feature-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  transition: transform 0.5s;
+  max-height: 400px;
+}
+
+.feature-card-image:hover {
+  transform: scale(1.05);
+}
+
+.feature-card-placeholder {
+  width: 100%;
+  height: 12rem;
+  background-color: rgb(245, 245, 245);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.feature-card-placeholder:hover {
+  background-color: rgb(229, 229, 229);
+}
+
+.feature-card-placeholder-text {
+  color: rgb(163, 163, 163);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.feature-card-content {
+  padding: 0 2rem 2rem 2rem !important;
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.feature-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: rgb(23, 23, 23);
+  letter-spacing: 0.025em;
+  margin-bottom: 1rem !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.feature-card-description {
+  color: rgb(64, 64, 64);
+  line-height: 1.625;
+  margin-bottom: 2.5rem !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.feature-card-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* Feature Section Styles */
+.feature-section-wave-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.feature-section-main {
+  position: relative;
+  width: 100%;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%, #e0e7ef 100%);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+.feature-section-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem !important;
+}
+
+.feature-section-subtitle {
+  max-width: 800px;
+}
+
+.feature-section-cards-grid {
+  margin-top: 1rem !important;
+}
+
+.feature-section-wave-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+/* Animations */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-30px); }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 1s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.2s;
+}
