@@ -14,13 +14,24 @@
   width: 100%;
   padding-left: 1rem !important;
   padding-right: 1rem !important;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
   display: flex;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   align-items: center;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 50%, #e0e7ef 100%);
   background-size: 400% 400%;
   animation: gradient-shift 15s ease infinite;
+}
+
+/* Desktop: Flexible height to accommodate zoom */
+@media (min-width: 1024px) {
+  .feature-section-main {
+    min-height: 100vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
 }
 
 .feature-section-header {
@@ -121,6 +132,129 @@
   animation: slide-in-right 1s ease-out forwards;
   opacity: 0;
   animation-delay: 0.2s;
+}
+
+/* Animated Geometric Patterns */
+.animated-patterns-container {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+}
+
+.pattern-circle-large {
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  width: 16rem;
+  height: 16rem;
+  border: 4px solid #171717;
+  border-radius: 9999px;
+  animation: spin-slow 20s linear infinite;
+}
+
+.pattern-square-medium {
+  position: absolute;
+  top: 10rem;
+  right: 5rem;
+  width: 12rem;
+  height: 12rem;
+  border: 4px solid #171717;
+  transform: rotate(45deg);
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.pattern-circle-xlarge {
+  position: absolute;
+  bottom: 5rem;
+  left: 25%;
+  width: 18rem;
+  height: 18rem;
+  border: 4px solid #171717;
+  border-radius: 9999px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.pattern-rounded-square {
+  position: absolute;
+  top: 33.333333%;
+  right: 33.333333%;
+  width: 14rem;
+  height: 14rem;
+  background-color: rgba(23, 23, 23, 0.2);
+  border-radius: 1rem;
+  transform: rotate(12deg);
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+/* Floating Particles */
+.particle-small {
+  position: absolute;
+  background-color: #171717;
+  border-radius: 9999px;
+}
+
+.particle-1 {
+  top: 8rem;
+  left: 25%;
+  width: 0.75rem;
+  height: 0.75rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+.particle-2 {
+  top: 50%;
+  right: 27%;
+  width: 0.5rem;
+  height: 0.5rem;
+  animation: float-delayed 8s ease-in-out infinite;
+}
+
+.particle-3 {
+  bottom: 8%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Gradient Text Styles */
+.gradient-heading {
+  font-size: clamp(2.5rem, 8vw, 3.75rem);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  background: linear-gradient(135deg, #171717 0%, #404040 50%, #171717 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+  .gradient-heading {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+  }
+}
+
+.gradient-subheading {
+  color: #404040;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 700;
+}
+
+.gradient-subtitle {
+  font-size: clamp(1.125rem, 3vw, 1.5rem);
+  color: #404040;
+  line-height: 1.75;
+  font-weight: 300;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 

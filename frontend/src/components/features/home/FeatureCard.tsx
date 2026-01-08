@@ -5,7 +5,7 @@ import '../../../styles/feature-card.css';
 
 export default function FeatureCard() {
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full">
       {/* Wave top separator */}
       <div className="feature-section-wave-top">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120" className="w-full h-auto">
@@ -20,52 +20,50 @@ export default function FeatureCard() {
       {/* Main section with gradient and patterns */}
       <div className="feature-section-main">
         {/* Animated geometric patterns */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-64 h-64 border-4 border-neutral-900 rounded-full animate-spin-slow"></div>
-          <div className="absolute top-40 right-20 w-48 h-48 border-4 border-neutral-900 rotate-45 animate-pulse-slow"></div>
-          <div className="absolute bottom-20 left-1/4 w-72 h-72 border-4 border-neutral-900 rounded-full animate-float"></div>
-          <div className="absolute top-1/3 right-1/3 w-56 h-56 bg-neutral-900/20 rounded-2xl rotate-12 animate-float-delayed"></div>
+        <div className="animated-patterns-container">
+          <div className="pattern-circle-large"></div>
+          <div className="pattern-square-medium"></div>
+          <div className="pattern-circle-xlarge"></div>
+          <div className="pattern-rounded-square"></div>
         </div>
         
         {/* Floating particles */}
-        <div className="absolute top-32 left-1/4 w-3 h-3 bg-neutral-900 rounded-full animate-float"></div>
-        <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-neutral-900 rounded-full animate-float-delayed"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-4 h-4 bg-neutral-900 rounded-full animate-pulse-slow"></div>
+        <div className="particle-small particle-1"></div>
+        <div className="particle-small particle-2"></div>
+        <div className="particle-small particle-3"></div>
         
         <div className="max-w-7xl w-full relative z-10">
           {/* Section Header with gradient text */}
           <div className="feature-section-header">
             <div className="inline-block mb-6">
-              <span className="text-neutral-700 uppercase tracking-[0.3em] text-sm font-bold">Premium Solutions</span>
+              <span className="gradient-subheading">Premium Solutions</span>
             </div>
-            <h2 
-              className="text-6xl md:text-7xl font-black mb-6 tracking-tight leading-tight text-neutral-900"
-            >
+            <h2 className="gradient-heading">
               Elevate Your Space
             </h2>
-            <p className="text-2xl text-neutral-700 leading-relaxed font-light text-center feature-section-subtitle">
+            <p className="gradient-subtitle feature-section-subtitle">
               Transform your home with innovative retractable screen technology
             </p>
           </div>
 
           {/* Cards with staggered layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 feature-section-cards-grid">
-            <div className="animate-slide-in-left lg:mt-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 feature-section-cards-grid items-stretch">
+            <div className="animate-slide-in-left lg:mt-8 flex">
               <Card
-                title="Custom Retractable Screens"
-                description="Experience the perfect blend of functionality and elegance. Our retractable screens are custom-designed to fit your space, offering seamless protection against insects while maintaining your view and airflow."
+                title="Door Screens"
+                description="Our retractable door screens are custom-designed for single doors, double doors, and sliding patio doors, allowing fresh air and natural light to flow in while maintaining a clean, refined appearance and strong curb appeal."
                 buttonText="Learn More"
-                buttonLink="/services"
+                buttonLink="/products/door-screens"
                 imageSrc = {DoorImg}
               />
             </div>
 
-            <div className="animate-slide-in-right lg:-mt-8">
+            <div className="animate-slide-in-right lg:-mt-8 flex">
               <Card
-                title="Premium Quality Materials"
-                description="Built to last with high-quality materials and precision engineering. Choose from a variety of colors and finishes to complement your home's aesthetic. Our screens are designed for durability and effortless operation."
-                buttonText="View Options"
-                buttonLink="/quote"
+                title="Window Screens"
+                description="Whatever your window type, our custom window screens are designed to deliver smooth airflow and dependable insect protection—bringing fresh air in while keeping pests out."
+                buttonText="Learn More"
+                buttonLink="/products/window-screens"
                 imageSrc = {WindowsImg}
               />
             </div>
