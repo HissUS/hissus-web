@@ -13,6 +13,8 @@ export default function About() {
 
 <button className="btn btn-outline btn-primary">Primary</button>
 
+<input type="text" placeholder="Type here" className="input" />
+
 
     </div>
   );

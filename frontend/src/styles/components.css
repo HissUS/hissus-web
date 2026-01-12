@@ -1,7 +1,4 @@
 @layer components {
-  /* =========================
-     Hero Component Styles
-  ========================== */
   .hero-content-box {
     max-width: 64rem;
     background-color: rgba(255, 255, 255, 0.1);
@@ -19,9 +16,6 @@
     }
   }
 
-  /* =========================
-     Button Styles
-  ========================== */
   .btn-hero {
     @apply btn btn-outline btn-lg flex-1 max-w-xs rounded-md;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
@@ -33,9 +27,6 @@
     box-shadow: 0 12px 40px rgba(255, 255, 255, 0.5);
   }
 
-  /* =========================
-     Footer Styles
-  ========================== */
   .footer-main {
     @apply w-full bg-gray-500/25 backdrop-blur-md shadow-md;
   }
@@ -90,9 +81,6 @@
     @apply text-[9px] tracking-[0.4em] uppercase opacity-40 text-neutral-900;
   }
 
-  /* =========================
-     Feature Card Styles
-  ========================== */
   .feature-card {
     @apply bg-white/65;
     backdrop-filter: blur(12px);

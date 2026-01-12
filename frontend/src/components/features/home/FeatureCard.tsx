@@ -1,7 +1,80 @@
-import Card from '../../ui/Card';
+import { Card } from '../../ui/card/Card';
 import DoorImg from '@/assets/images/double_handle/DH_screendoor.jpg'
 import WindowsImg from '@/assets/images/windows/windows.jpg'
 import '../../../styles/feature-card.css';
+
+// // data types
+// Type = {
+//   img: string;
+//   title: string;
+//   content: string;
+// }
+
+// // parameters 
+// useFeatureCardProps{
+//   data: Type
+// }
+
+// // database info
+// useFeatureCard(props: useFeatureCardProps) {
+//   const data: Type[]=[
+//     {
+//       img: 'https...';
+//       title: "window";
+//       content: "new window";
+//     },
+//     {
+//       img: 'https...';
+//       title: "door";
+//       content: "new door";
+//     },
+//   ];
+
+//   const [isOpen, setIsOpen] = useState<boolean>(false);
+//   return (
+//     data,
+//    isOpen,
+//    setIsOpen,
+
+//   )
+// }
+
+// // FeatureCard component
+// export featureCardProps{
+//   data: Type
+// }
+// export default function FeatureCard(props:featureCardProps) {
+//   const {
+//     img, 
+//     title, 
+//     content,
+//   } = props;
+    
+//   return (
+//     <Card>
+//       <Grid> img</Grid>
+//       <Grid> title</Grid>
+//       <Grid> content</Grid>
+//     </Card>
+//   )
+//   }
+
+
+//   // Parent Component
+//   HeroProps
+//   export default Hero(props: HeroProps){
+//     const featureCardRequest = useFeatureCard();
+
+//     return (
+//       <Columns>
+//         featureCardRequest.data.map((item)=>{
+//           <Column>
+//             <FeatureCard data={item}/>
+//           </Column>
+//         })
+//         </Columns>
+//     );
+//   }
 
 export default function FeatureCard() {
   return (

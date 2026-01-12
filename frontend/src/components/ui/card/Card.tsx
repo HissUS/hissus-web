@@ -1,4 +1,4 @@
-import HomeButton from './HomeButton';
+import HomeButton from "../button/Button";
 
 interface CardProps {
   title: string;
@@ -8,7 +8,13 @@ interface CardProps {
   imageSrc?: string;
 }
 
-export default function Card({ title, description, buttonText, buttonLink, imageSrc }: CardProps) {
+export function Card({
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  imageSrc,
+}: CardProps) {
   return (
     <div className="card lg:card-side feature-card">
       <figure className="feature-card-figure">
@@ -20,20 +26,16 @@ export default function Card({ title, description, buttonText, buttonLink, image
           </div>
         )}
       </figure>
-      
+
       <div className="feature-card-content">
-        <h2 className="feature-card-title">
-          {title}
-        </h2>
-        <p className="feature-card-description">
-          {description}
-        </p>
+        <h2 className="feature-card-title">{title}</h2>
+        <p className="feature-card-description">{description}</p>
         <div className="feature-card-button-container">
-          <HomeButton to={buttonLink}>
-            {buttonText}
-          </HomeButton>
+          <HomeButton to={buttonLink}>{buttonText}</HomeButton>
         </div>
       </div>
     </div>
   );
 }
+
+Card.displayName = "Card";

@@ -24,14 +24,12 @@ export default function Footer() {
             <h6 className="footer-nav-title">Products</h6>
             <Link to="/services" className="footer-nav-link">Door Screens</Link>
             <Link to="/services" className="footer-nav-link">Window Screens</Link>
-            <Link to="/home" className="footer-nav-link">Inspiration</Link>
             <Link to="/quote" className="footer-nav-link">Get a Quote</Link>
           </nav>
 
           {/* Company */}
           <nav className="footer-nav-section">
             <h6 className="footer-nav-title">Company</h6>
-            <Link to="/about" className="footer-nav-link">About Us</Link>
             <Link to="/contact" className="footer-nav-link">Contact</Link>
             <Link to="/careers" className="footer-nav-link">Careers</Link>
           </nav>

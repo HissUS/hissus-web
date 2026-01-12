@@ -1,0 +1,1 @@
+export { TransparentCard } from "./TransparentCard";

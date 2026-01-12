@@ -1,5 +1,6 @@
 import heroImage from '@/assets/images/belc.jpg';
-import HomeButton from '@/components/ui/HomeButton';
+import { Button } from '@/components/ui';
+
 
 export default function Hero() {
   return (
@@ -26,8 +27,8 @@ export default function Hero() {
           </p>
 
           <div className="flex gap-4 justify-center" style={{ paddingBottom: '0.5rem' }}>
-            <HomeButton to ="/services"> Explore Products </HomeButton>
-            <HomeButton to="/quote"> Get a Quote </HomeButton>
+            <Button to ="/services"> Explore Products </Button>
+            <Button to="/quote"> Get a Quote </Button>
           </div>
         </div>
       </div>

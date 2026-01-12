@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import '../../styles/numbered-feature-card.css';
+import '@/styles/numbered-feature-card.css';
 
 interface NumberedFeatureCardProps {
   number: number;
