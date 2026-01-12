@@ -2,7 +2,7 @@ import DoorImg from '@/assets/images/double_handle/DH_screendoor.jpg';
 
 export default function DoorScreens() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
@@ -104,7 +104,7 @@ export default function DoorScreens() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-800">
+      <section className="py-20 px-4 bg-linear-to-r from-blue-600 to-blue-800">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Get Started?
