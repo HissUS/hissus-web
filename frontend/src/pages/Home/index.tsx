@@ -1,13 +1,13 @@
 import FeatureCard from '@/components/features/home/FeatureCard'
-import WhyChooseUs from '@/components/features/home/WhyChooseUs'
 import { HeroPageCard } from '@/components/features/home/HeroPageCard'
+import { ChooseUsPageCard } from '@/components/features/home/ChooseUsPageCard'
 export default function Home() {
   return (
     <>
     
       <HeroPageCard/>
-      <FeatureCard />
-      <WhyChooseUs />
+      <FeatureCard/>
+      <ChooseUsPageCard/>
     </>
   )
 }

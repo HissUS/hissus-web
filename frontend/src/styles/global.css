@@ -1,1 +1,19 @@
-/* Global styles */
+.page-container {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #23272f;
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+body {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #23272f;
+  background: #f8fafc;
+}

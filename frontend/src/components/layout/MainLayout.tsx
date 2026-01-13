@@ -1,9 +1,8 @@
-import { Outlet } from "react-router-dom"
-import Navbar from "./Navbar"
-import Footer from "./Footer"
+import { Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default function MainLayout() {
-
   // const [username, setUsername] = useState<string | number>("");
   // const [email, setEmail] = useState<string>("");
 
@@ -30,20 +29,22 @@ export default function MainLayout() {
     <>
       <Navbar />
       <main className="min-h-screen">
-        <Outlet />
+        <div className="page-container">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
-      // <PageCard 
-      //   title = "dfafd"
-      //   subtitle = "fdsafd"
-      //   background= "../fdsa"
-      //   />
+// <PageCard
+//   title = "dfafd"
+//   subtitle = "fdsafd"
+//   background= "../fdsa"
+//   />
 
-      //   <main className="min-h-screen">
-      //     <Outlet />
-      //   </main>
-      // <PageCard />
+//   <main className="min-h-screen">
+//     <Outlet />
+//   </main>
+// <PageCard />

@@ -35,7 +35,11 @@
   width: 20rem;
   height: 20rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08),
+    rgba(168, 85, 247, 0.05)
+  );
   animation: float-shape 20s ease-in-out infinite;
 }
 
@@ -46,7 +50,11 @@
   width: 16rem;
   height: 16rem;
   border-radius: 1.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(147, 51, 234, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.06),
+    rgba(147, 51, 234, 0.04)
+  );
   transform: rotate(45deg);
   animation: float-shape 25s ease-in-out infinite reverse;
 }
@@ -71,7 +79,11 @@
   width: 12rem;
   height: 12rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.07), rgba(236, 72, 153, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.07),
+    rgba(236, 72, 153, 0.04)
+  );
   animation: float-shape 22s ease-in-out infinite;
   animation-delay: 4s;
 }
@@ -89,7 +101,8 @@
 }
 
 @keyframes float-shape {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px) rotate(0deg);
   }
   25% {

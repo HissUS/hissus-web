@@ -9,7 +9,7 @@
 
 .numbered-feature-card-bg-number {
   position: absolute;
-  left: -2.0rem;
+  left: 6rem;
   top: 50%;
   transform: translateY(-50%);
   z-index: 0;

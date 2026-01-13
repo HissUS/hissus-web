@@ -1,7 +1,5 @@
 import type { PageCardInfo } from "@/types/PageCardType";
 import heroImage from "@/assets/images/belc.jpg";
-
-// Import the new icons
 import {
   PremiumQualityIcon,
   CustomSolutionsIcon,
@@ -17,14 +15,23 @@ const HeroPageCardInfo: PageCardInfo = {
 };
 
 const ProductPageCardInfo: PageCardInfo = {
+  header: "Elevate your Space",
   title: "Premium Solutions",
   description:
     "Elevate Your Space\n Transform your home with innovative retractable screen technology",
 };
 
+const ChooseUsPageCardInfo: PageCardInfo = {
+  header: "Why Choose Us",
+  title: "Excellence in Every Detail",
+  description:
+    "We combine innovation, craftsmanship, and customer care to deliver retractable screens that exceed expectations.",
+};
+
 export const PageCardInfoMap = {
   HeroPage: HeroPageCardInfo,
   ProdctPage: ProductPageCardInfo,
+  ChooseUsPage: ChooseUsPageCardInfo,
 };
 
 export const features = [
