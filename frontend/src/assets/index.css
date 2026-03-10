@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* 8px grid system: all spacing must be multiples of 8px */
+:root {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Senior-friendly: ensure min tap target size of 44x44px */
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}

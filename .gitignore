@@ -1,0 +1,61 @@
+# --- System Files ---
+.DS_Store
+Thumbs.db
+*.swp
+*.log
+
+# --- IDE & Editors ---
+.idea/
+.vscode/
+*.iml
+*.iws
+.project
+.classpath
+.settings/
+.factorypath
+
+# --- Frontend (React/Vite/Node) ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+package-lock.json
+yarn.lock
+
+# --- Backend (Java/Spring Boot/Maven) ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/maven-wrapper.jar
+bin/
+
+# --- Database & Infrastructure ---
+infra/data/
+data/postgres/
+pgdata/
+
+# --- Security & Secrets (Zero Trust) ---
+infra/secrets/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+cloudflared/cert.json
+
+# --- Project Specific (Surgical Constraints) ---
+app/uploads/
+uploads/
+/infra/nginx/logs/
+
+# --- Performance & Coverage ---
+.next/
+out/
+coverage/
+.nyc_output/

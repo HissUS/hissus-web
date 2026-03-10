@@ -1,0 +1,33 @@
+{
+  "auth": {
+    "email": "Email",
+    "invalidCredentials": "Invalid email or password",
+    "login": "Login",
+    "loginTitle": "Login to Hissus",
+    "password": "Password"
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "An error occurred",
+    "getQuote": "Get Quote",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "save": "Save"
+  },
+  "nav": {
+    "admin": "Admin",
+    "home": "Home",
+    "login": "Login",
+    "logout": "Logout",
+    "products": "Products"
+  },
+  "products": {
+    "realLifeInstall": "Real-life Install",
+    "title": "Product Catalog",
+    "viewDetails": "View Details"
+  }
+}

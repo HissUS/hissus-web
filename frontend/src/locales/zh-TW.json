@@ -1,0 +1,33 @@
+{
+  "auth": {
+    "email": "電子郵件",
+    "invalidCredentials": "電子郵件或密碼錯誤",
+    "login": "登入",
+    "loginTitle": "登入 Hissus",
+    "password": "密碼"
+  },
+  "common": {
+    "back": "返回",
+    "cancel": "取消",
+    "confirm": "確認",
+    "delete": "刪除",
+    "edit": "編輯",
+    "error": "發生錯誤",
+    "getQuote": "取得報價",
+    "loading": "載入中...",
+    "retry": "重試",
+    "save": "儲存"
+  },
+  "nav": {
+    "admin": "管理後台",
+    "home": "首頁",
+    "login": "登入",
+    "logout": "登出",
+    "products": "產品目錄"
+  },
+  "products": {
+    "realLifeInstall": "實際安裝照",
+    "title": "產品目錄",
+    "viewDetails": "查看詳情"
+  }
+}

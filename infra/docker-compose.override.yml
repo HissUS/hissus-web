@@ -1,0 +1,13 @@
+# Local development override for Apple Silicon (M1/M2/M3)
+# Automatically merged by `docker compose` when present in the same directory.
+#
+# Problem: postgis/postgis:17-x only publishes linux/amd64 images.
+# Solution: Force Rosetta 2 emulation on macOS ARM. Docker Desktop handles
+#           this transparently with acceptable performance for local dev.
+#
+# Production (Oracle Cloud ARM): Deploy without this file, or wait for an
+#           official linux/arm64 PostGIS 17 image to be published.
+
+services:
+  db:
+    platform: linux/amd64
