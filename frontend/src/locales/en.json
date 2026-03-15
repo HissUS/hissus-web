@@ -13,20 +13,80 @@
     "delete": "Delete",
     "edit": "Edit",
     "error": "An error occurred",
+    "explore_details": "Explore Details",
     "getQuote": "Get Quote",
     "loading": "Loading...",
     "retry": "Retry",
     "save": "Save"
   },
+  "homepage": {
+    "brand": {
+      "narrative": "Founded in Taiwan and expanding to the American market in 2017, Hissus brings precision-engineered retractable screen solutions that blend seamlessly with modern homes."
+    },
+    "hero": {
+      "cta": "Get Quote",
+      "explore": "Explore Products",
+      "subtitle": "Safe, stylish, and award-winning retractable screen technology since 2017.",
+      "title": "Modern Retractable Screens"
+    },
+    "trust": {
+      "craftsmanship": {
+        "desc": "Precision installation built on years of Taiwanese engineering.",
+        "title": "Craftsmanship"
+      },
+      "customTailored": {
+        "desc": "Unique designs precision-fit for every window and door.",
+        "title": "Custom-Tailored"
+      },
+      "ecoConscious": {
+        "desc": "Sustainable materials and responsible manufacturing practices.",
+        "title": "Eco-Conscious"
+      },
+      "heading": "Why Hissus"
+    }
+  },
+  "inquiry": {
+    "contact": {
+      "email": "hiss.usatx@gmail.com",
+      "phone": "+1 469 288 3098"
+    },
+    "section": {
+      "heading": "Get in Touch"
+    },
+    "social": {
+      "facebook": "Facebook",
+      "line": "Line",
+      "wechat": "WeChat"
+    }
+  },
+  "footer": {
+    "contactUs": "Contact Us",
+    "followUs": "Follow Us",
+    "language": "Language",
+    "rights": "All rights reserved."
+  },
   "nav": {
     "admin": "Admin",
+    "console": "Console",
     "home": "Home",
     "login": "Login",
     "logout": "Logout",
-    "products": "Products"
+    "products": "Products",
+    "getQuote": "Get A Quote"
   },
   "products": {
-    "realLifeInstall": "Real-life Install",
+    "doubleHandle": "Double Handle Screen Door",
+    "windows": "Window Screen",
+    "featured": {
+      "heading": "Our Featured Products"
+    },
+    "multiHandle": "Multi Handle Screen Door",
+    "singleHandle": "Single Handle Screen Door",
+    "spec": {
+      "midgeProof": "20 × 20 Midge Proof Strands",
+      "trackless": "Trackless Design",
+      "uvResistance": "UPF 50+ UV Resistance"
+    },
     "title": "Product Catalog",
     "viewDetails": "View Details"
   }

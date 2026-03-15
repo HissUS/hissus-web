@@ -1,2 +1,2 @@
-// Shadcn UI thin wrappers barrel export
-// Example: export { Button } from './Button'
+export { Button } from './Button'
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from './Card'

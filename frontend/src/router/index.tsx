@@ -32,7 +32,7 @@ const mainLayoutRoute = createRoute({
 })
 
 // /home         → English (US)
-// /home/$country → localized  (e.g. /home/tw)
+// /$country/home → localized  (e.g. /tw/home)
 const homeRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/home',
@@ -40,11 +40,11 @@ const homeRoute = createRoute({
 })
 const homeCountryRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
-  path: '/home/$country',
+  path: '/$country/home',
   component: HomePage,
 })
 
-// /products | /products/$country
+// /products | /$country/products
 const productsRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/products',
@@ -52,8 +52,42 @@ const productsRoute = createRoute({
 })
 const productsCountryRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
-  path: '/products/$country',
+  path: '/$country/products',
   component: ProductsPage,
+})
+
+// /console | /$country/console
+const consolePage = () => (
+  <div className="mx-auto max-w-7xl px-4 py-16 text-center text-gray-500">
+    Console — coming soon
+  </div>
+)
+const consoleRoute = createRoute({
+  getParentRoute: () => mainLayoutRoute,
+  path: '/console',
+  component: consolePage,
+})
+const consoleCountryRoute = createRoute({
+  getParentRoute: () => mainLayoutRoute,
+  path: '/$country/console',
+  component: consolePage,
+})
+
+// /get-a-quote | /$country/get-a-quote
+const quotePage = () => (
+  <div className="mx-auto max-w-7xl px-4 py-16 text-center text-gray-500">
+    Quote — coming soon
+  </div>
+)
+const quoteRoute = createRoute({
+  getParentRoute: () => mainLayoutRoute,
+  path: '/get-a-quote',
+  component: quotePage,
+})
+const quoteCountryRoute = createRoute({
+  getParentRoute: () => mainLayoutRoute,
+  path: '/$country/get-a-quote',
+  component: quotePage,
 })
 
 // ─── Layout: Auth ─────────────────────────────────────────────────────────────
@@ -72,7 +106,7 @@ const loginRoute = createRoute({
 })
 const loginCountryRoute = createRoute({
   getParentRoute: () => authLayoutRoute,
-  path: '/login/$country',
+  path: '/$country/login',
   component: LoginPage,
 })
 
@@ -85,6 +119,10 @@ const routeTree = rootRoute.addChildren([
     homeCountryRoute,
     productsRoute,
     productsCountryRoute,
+    consoleRoute,
+    consoleCountryRoute,
+    quoteRoute,
+    quoteCountryRoute,
   ]),
   authLayoutRoute.addChildren([loginRoute, loginCountryRoute]),
 ])

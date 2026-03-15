@@ -11,3 +11,5 @@
 services:
   db:
     platform: linux/amd64
+    ports:
+      - "5432:5432"

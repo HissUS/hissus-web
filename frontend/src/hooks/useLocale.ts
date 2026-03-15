@@ -25,10 +25,10 @@ export function useLocale() {
 
 /**
  * Returns a function to navigate to the same page in a different locale.
- * Handles adding/removing the /$country suffix automatically.
+ * Handles adding/removing the /$country prefix automatically.
  *
  * Usage: const switchLocale = useLocaleSwitcher()
- *        switchLocale('tw')        // → /home/tw
+ *        switchLocale('tw')        // → /tw/home
  *        switchLocale(undefined)   // → /home  (English)
  */
 export function useLocaleSwitcher() {
@@ -42,10 +42,10 @@ export function useLocaleSwitcher() {
         ? undefined
         : getCountryFromLocale(targetLocale)
 
-    // Strip current country suffix if present
-    const basePath = currentCountry ? pathname.replace(new RegExp(`/${currentCountry}$`), '') : pathname
+    // Strip current country prefix if present
+    const basePath = currentCountry ? pathname.replace(new RegExp(`^/${currentCountry}`), '') : pathname
 
-    const targetPath = targetCountry ? `${basePath}/${targetCountry}` : basePath
+    const targetPath = targetCountry ? `/${targetCountry}${basePath}` : basePath
     navigate({ to: targetPath })
   }
 }
