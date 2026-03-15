@@ -204,3 +204,166 @@
   * **Fail Case**: Remove a key from `zh-TW.json` and run check.
   * **Expected**: Warning listing the missing key(s).
   * **Command**: `cd frontend && pnpm check-locales`
+
+---
+
+### [FEAT-001] Homepage Feature (2026-03-12)
+
+* **Summary**: Implemented the Homepage as a thin orchestration page consuming three independent feature modules: `homepage` (HeroSection + TrustSection), `products` (FeaturedCatalogGrid with 3 static products), and `inquiry` (static contact display). Installed Shadcn UI and created Button/Card/Badge thin wrappers. All UI strings are fully i18n-keyed in English and Traditional Chinese.
+* **Affected Files**:
+  * `frontend/tsconfig.json` (added root-level `@/*` alias for Shadcn init)
+  * `frontend/components.json` (Shadcn config, generated)
+  * `frontend/src/index.css` (Shadcn CSS variables)
+  * `frontend/src/components/ui-wrapper/Button/` (Button wrapper + cta variant, 48px h, #0056b3)
+  * `frontend/src/components/ui-wrapper/Card/` (Card thin wrapper)
+  * `frontend/src/components/ui-wrapper/Badge/` (Badge thin wrapper + realLifeInstall style)
+  * `frontend/src/components/ui-wrapper/index.ts` (updated barrel)
+  * `frontend/src/locales/en.json` (added `homepage`, `inquiry`, `products.featured`, `products.spec`, product name keys)
+  * `frontend/src/locales/zh-TW.json` (mirrored all new keys in Traditional Chinese)
+  * `frontend/src/features/products/types/product.ts` (Zod schema + Product type)
+  * `frontend/src/features/products/hooks/useFeaturedProducts.ts` (static 3-product hook)
+  * `frontend/src/features/products/components/ProductCard.tsx`
+  * `frontend/src/features/products/components/FeaturedCatalogGrid.tsx`
+  * `frontend/src/features/homepage/components/HeroSection.tsx` (full-bleed, overlay, CTA)
+  * `frontend/src/features/homepage/components/TrustSection.tsx` (3 pillars + brand narrative)
+  * `frontend/src/features/inquiry/components/ContactFooter.tsx` (phone, email, social — 44px targets)
+  * `frontend/src/features/inquiry/components/InquiryForm.tsx`
+  * `frontend/src/pages/HomePage.tsx` (replaced stub with orchestrator)
+  * `frontend/src/layouts/MainLayout.tsx` (removed max-w-7xl from main for full-bleed hero)
+* **Verification**:
+  * **Action 1**: Start dev server and visit English homepage.
+  * **Expected**: Full-bleed hero image with "Modern Retractable Screens" title, 3 product cards with "Real-life Install" badges, 3 trust pillars, contact section with phone and email.
+  * **Command**: `cd frontend && pnpm dev` → `http://localhost:5173/home`
+
+  * **Action 2**: Verify TW locale renders in Chinese.
+  * **Expected**: All visible strings in Traditional Chinese.
+  * **URL**: `http://localhost:5173/tw/home`
+
+  * **Action 3**: Verify i18n completeness.
+  * **Expected**: `✓ zh-TW.json`
+  * **Command**: `cd frontend && pnpm check-locales`
+
+  * **Action 4**: Verify clean production build.
+  * **Expected**: Exit code 0, all 3 product images bundled.
+  * **Command**: `cd frontend && pnpm build`
+
+  * **Fail Case**: Switch language from TW to EN via header button.
+  * **Expected**: URL changes from `/tw/home` → `/home`, all strings revert to English.
+
+---
+
+### [FEAT-002] MainLayout Refactor — Header, Footer & Console Route (2026-03-14)
+
+* **Summary**: Decomposed the monolithic `MainLayout` into three dedicated components: `Header` (sticky 3-zone nav with Console link + Login CTA), `Footer` (dark theme with contact info from `SITE_CONFIG`, social links, language switcher), and a thin `MainLayout` orchestrator. Added `/console` and `/$country/console` routes. Language switcher moved from header to footer.
+* **Affected Files**:
+  * `frontend/src/components/layout/Header/index.tsx` (new)
+  * `frontend/src/components/layout/Footer/index.tsx` (new)
+  * `frontend/src/components/layout/MainLayout.tsx` (new)
+  * `frontend/src/layouts/MainLayout.tsx` (replaced with re-export)
+  * `frontend/src/router/index.tsx` (added console routes)
+  * `frontend/src/locales/en.json` (added `nav.console`, `footer.*` keys)
+  * `frontend/src/locales/zh-TW.json` (added mirrored keys)
+* **Verification**:
+  * **Action 1**: Start dev server and inspect header layout.
+  * **Expected**: 3-zone flex header — "Hissus" brand left, Home/Products/Console nav center (Console has lock icon), Login button right. Header is sticky on scroll with blur effect.
+  * **Command**: `cd frontend && pnpm dev` → `http://localhost:5173/home`
+
+  * **Action 2**: Verify footer renders contact info from `SITE_CONFIG`.
+  * **Expected**: Phone, Email, Line, WeChat entries with icons. Facebook link opens `https://www.facebook.com/hiss.eagle.2025/` in a new tab.
+  * **URL**: `http://localhost:5173/home` (scroll to bottom)
+
+  * **Action 3**: Switch locale via footer language toggle.
+  * **Expected**: Clicking `TW` changes URL from `/home` → `/tw/home` and all UI strings switch to Traditional Chinese.
+  * **URL**: `http://localhost:5173/home` → click TW button in footer
+
+  * **Action 4**: Verify Console route resolves.
+  * **Expected**: Page renders "Console — coming soon" placeholder without 404.
+  * **URL**: `http://localhost:5173/console` and `http://localhost:5173/tw/console`
+
+  * **Action 5**: Verify i18n completeness.
+  * **Expected**: `✓ zh-TW.json` (zero missing keys).
+  * **Command**: `cd frontend && pnpm check-locales`
+
+  * **Fail Case**: Visit `/console` and inspect Console nav link style.
+  * **Expected**: Console link is visually distinct from Home/Products (lock icon visible, muted color).
+
+---
+
+### [FEAT-003] UI Component Architecture Fix (2026-03-14)
+
+* **Summary**: Fixed `Button` component `variant="default"` having no hover effect. Root cause: the generated Shadcn `button.tsx` used `[a]:hover:bg-primary/80` — a Tailwind v4 arbitrary element selector that only fires when the rendered element itself is an `<a>` tag. Since `@base-ui/react` renders a `<button>` element, the hover never triggered. Fixed to standard `hover:bg-primary/80`.
+* **Affected Files**:
+  * `frontend/src/components/ui/button.tsx` (line 11: `[a]:hover:bg-primary/80` → `hover:bg-primary/80`)
+* **Verification**:
+  * **Action 1**: Hover over any "Get A Quote" button on the homepage.
+  * **Expected**: Button background darkens (primary/80 opacity).
+  * **URL**: `http://localhost:5173/home`
+
+---
+
+### [FEAT-004] Homepage CatalogExplorer (2026-03-14)
+
+* **Summary**: Replaced the `products` feature's `FeaturedCatalogGrid` (static product cards) with a self-contained `CatalogExplorer` inside the `homepage` feature. Features tab navigation across 4 product categories, an Embla carousel per tab (infinite loop, glassmorphism arrows), a frameless spec grid, and a locale-aware "Explore Details" CTA. Key engineering fixes: `ensureLoopBuffer()` to pad small image sets for smooth Embla loop; Embla-canonical spacing (`-ml-4 flex` + `pl-4` per slide outer wrapper, separate from `overflow-hidden rounded-2xl` inner container).
+* **Affected Files**:
+  * `frontend/package.json` (added `embla-carousel-react@8.6.0`)
+  * `frontend/src/features/homepage/components/CatalogExplorer/types.ts` (new)
+  * `frontend/src/features/homepage/components/CatalogExplorer/useCatalogData.ts` (new)
+  * `frontend/src/features/homepage/components/CatalogExplorer/GalleryCarousel.tsx` (new)
+  * `frontend/src/features/homepage/components/CatalogExplorer/SpecSection.tsx` (new)
+  * `frontend/src/features/homepage/components/CatalogExplorer/CatalogExplorer.tsx` (new)
+  * `frontend/src/features/products/components/FeaturedCatalogGrid.tsx` (deleted)
+  * `frontend/src/features/products/components/ProductCard.tsx` (deleted)
+  * `frontend/src/features/products/hooks/useFeaturedProducts.ts` (deleted)
+  * `frontend/src/pages/HomePage.tsx` (updated imports)
+  * `frontend/src/locales/en.json` (added `products.windows`, `common.explore_details`)
+  * `frontend/src/locales/zh-TW.json` (mirrored)
+* **Verification**:
+  * **Action 1**: Visit homepage and verify 4 category tabs are rendered.
+  * **Expected**: Single Handle / Multi Handle / Double Handle / Windows tabs visible.
+  * **URL**: `http://localhost:5173/home`
+
+  * **Action 2**: Switch tabs and verify carousel images change per category.
+  * **Expected**: Different images per tab; arrows appear on hover for tabs with > 3 images.
+
+  * **Action 3**: Verify infinite loop scroll works for all tabs.
+  * **Expected**: Carousel scrolls continuously without getting stuck.
+
+  * **Action 4**: Click "Explore Details".
+  * **Expected**: Navigates to `/products?tab=single-handle` (or whichever tab is active).
+
+  * **Action 5**: Clean build.
+  * **Command**: `cd frontend && pnpm build`
+  * **Expected**: Exit code 0, zero TS errors.
+
+---
+
+### [FEAT-005] HeroSection Refinement (2026-03-14)
+
+* **Summary**: Added dual CTAs below the hero subtitle ("Get A Quote" + "Explore Products"), tightened headline typography to `text-5xl font-bold tracking-tight`, added gradient overlay (`bg-linear-to-b from-transparent to-black/40`), and image fade-in animation (`animate-in fade-in duration-700`). The "Explore Products" outline button requires `bg-transparent` override since `variant="outline"` defaults to `bg-background` (white), which is invisible on the dark overlay.
+* **Affected Files**:
+  * `frontend/src/features/homepage/components/HeroSection.tsx`
+  * `frontend/src/locales/en.json` (added `homepage.hero.explore`)
+  * `frontend/src/locales/zh-TW.json` (added `homepage.hero.explore`)
+* **Verification**:
+  * **Action 1**: Visit homepage hero.
+  * **Expected**: Two buttons visible below subtitle — Hissus Blue "Get A Quote" and white-outline "Explore Products".
+  * **URL**: `http://localhost:5173/home`
+
+  * **Action 2**: Verify both buttons are visible before hover (not transparent).
+  * **Expected**: "Explore Products" shows white border and white text on the dark overlay without requiring hover.
+
+  * **Action 3**: Click "Get A Quote" on TW locale.
+  * **Expected**: Navigates to `/tw/get-a-quote`.
+  * **URL**: `http://localhost:5173/tw/home`
+
+---
+
+### [FEAT-006] TrustSection Typography Alignment (2026-03-14)
+
+* **Summary**: Replaced all hardcoded hex colors in `TrustSection` with Tailwind gray scale and CSS variables, aligning with the typography system established in CatalogExplorer. Heading scaled from `text-2xl` to `text-4xl` for visual consistency with the section above it.
+* **Affected Files**:
+  * `frontend/src/features/homepage/components/TrustSection.tsx`
+* **Verification**:
+  * **Action 1**: Inspect TrustSection visually.
+  * **Expected**: Section heading matches CatalogExplorer heading size (`text-4xl`); icon color matches primary blue; body text is consistent gray.
+  * **URL**: `http://localhost:5173/home` (scroll past CatalogExplorer)

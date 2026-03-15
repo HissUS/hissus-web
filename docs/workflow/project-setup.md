@@ -47,7 +47,7 @@ This document defines the mandatory steps to initialize the **Hissus.com** repos
 1. **Scaffolding**: Initialize a Vite + TypeScript project. Pre-create the `features/`, `components/ui-wrapper/`, `api/`, and `layouts/` directories.
 2. **Global Configuration**:
 * **Axios**: Setup interceptors for automatic `HttpOnly` cookie handling and `401 Unauthorized` redirection.
-* **Router**: Configure **TanStack Router** with language-prefixed paths (e.g., `/$lang/home`).
+* **Router**: Configure **TanStack Router** with language-prefixed paths (e.g., `/$country/home`).
 * **UI System**: Install **Tailwind CSS** and **Shadcn UI**, ensuring all Shadcn components are stored in `src/components/ui-wrapper`.
 3. **i18n Setup**: Initialize `src/locales/` with `zh-TW.json` and `en.json` using the **Key-Based** JSON format.
 

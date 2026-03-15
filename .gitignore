@@ -18,6 +18,8 @@ Thumbs.db
 node_modules/
 dist/
 dist-ssr/
+assets/images/
+assets/videos/
 *.local
 .eslintcache
 package-lock.json

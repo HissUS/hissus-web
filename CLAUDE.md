@@ -101,8 +101,7 @@
 * **Library**: **react-i18next**. Language detected from URL via `useLocale()` hook (reads `$country` param).
 * **URL Convention**: English (US) is the default — **no country code in URL**. All other locales append a 2-letter country code as the **last path segment**.
   * `/home` → `en` (English US, default)
-  * `/home/tw` → `zh-TW` (Taiwan Traditional Chinese)
-  * `/home/jp` → `ja-JP` (Japan, future)
+  * `/tw/home → `zh-TW` (Taiwan Traditional Chinese)
 * **Pattern**: Key-based JSON in `src/locales/` (`en.json` is source of truth). Zero hardcoded UI strings.
 * **Config**: Country→locale mapping lives in `src/locales/config.ts`. Adding a new locale requires only: (1) entry in `COUNTRY_TO_LOCALE`, (2) new JSON file, (3) register in `i18n.ts`.
 * **Tooling**: `pnpm check-locales` warns on missing keys. `sort-locales.mjs` auto-runs on commit via lint-staged.

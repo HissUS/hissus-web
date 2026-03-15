@@ -107,13 +107,13 @@ Disabled automatically in `prod` profile.
 |---|---|
 | `/` | Redirects to `/home` |
 | `/home` | Homepage — English (US, default) |
-| `/home/$country` | Homepage — localized (e.g. `/home/tw`) |
+| `/$country/home` | Homepage — localized (e.g. `/tw/home`) |
 | `/login` | Login page — English |
-| `/login/$country` | Login page — localized |
+| `/$country/login` | Login page — localized (e.g. `/tw/login`) |
 | `/products` | Product catalog — English |
-| `/products/$country` | Product catalog — localized |
+| `/$country/products` | Product catalog — localized (e.g. `/tw/products`) |
 
-**i18n URL convention**: English (US) has no country suffix. All other locales append a 2-letter country code as the last path segment.
+**i18n URL convention**: English (US) has no country code. All other locales prepend a 2-letter country code as the first path segment (`/$country/[page]`).
 
 | Country code | Locale |
 |---|---|
@@ -193,5 +193,5 @@ docker exec hissus_backend env | grep -iE "password|secret"  # should return not
 
 # i18n routing
 # English default:    http://localhost:5173/home
-# Taiwan (zh-TW):     http://localhost:5173/home/tw
+# Taiwan (zh-TW):     http://localhost:5173/tw/home
 ```
