@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next'
 const styles = {
   wrapper: 'flex flex-col items-center gap-6',
   contactLinks: 'flex flex-col items-center gap-3 sm:flex-row sm:gap-8',
-  link: 'flex min-h-[44px] min-w-[44px] items-center gap-2 text-[#0056b3] hover:underline text-base font-medium',
-  socialRow: 'flex items-center gap-4',
-  socialLink: 'flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 rounded-lg border border-gray-200 px-4 text-sm font-medium text-[#212529] hover:bg-gray-50',
+  link: 'flex min-h-[44px] items-center gap-2 text-[#0056b3] hover:underline text-base font-medium text-center',
+  socialRow: 'flex flex-wrap items-center justify-center gap-3',
+  socialLink:
+    'flex min-h-[44px] items-center justify-center gap-1 rounded-lg border border-gray-200 px-4 text-sm font-medium text-[#212529] hover:bg-gray-50',
 }
 
 export function ContactFooter() {
@@ -14,11 +15,19 @@ export function ContactFooter() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.contactLinks}>
-        <a href={`tel:+14692883098`} className={styles.link} aria-label={t('inquiry.contact.phone')}>
+        <a
+          href={`tel:+14692883098`}
+          className={styles.link}
+          aria-label={t('inquiry.contact.phone')}
+        >
           <span aria-hidden="true">📞</span>
           <span>{t('inquiry.contact.phone')}</span>
         </a>
-        <a href={`mailto:hiss.usatx@gmail.com`} className={styles.link} aria-label={t('inquiry.contact.email')}>
+        <a
+          href={`mailto:hiss.usatx@gmail.com`}
+          className={styles.link}
+          aria-label={t('inquiry.contact.email')}
+        >
           <span aria-hidden="true">✉</span>
           <span>{t('inquiry.contact.email')}</span>
         </a>

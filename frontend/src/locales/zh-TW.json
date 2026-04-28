@@ -76,12 +76,16 @@
   },
   "products": {
     "doubleHandle": "雙把手捲簾紗門",
+    "doubleHandleShort": "雙把手",
     "windows": "窗紗",
+    "windowsShort": "窗紗",
     "featured": {
       "heading": "精選產品"
     },
     "multiHandle": "多把手捲簾紗門",
+    "multiHandleShort": "多把手",
     "singleHandle": "單把手捲簾紗門",
+    "singleHandleShort": "單把手",
     "spec": {
       "midgeProof": "20 × 20 防蚊網格",
       "trackless": "無軌道設計",

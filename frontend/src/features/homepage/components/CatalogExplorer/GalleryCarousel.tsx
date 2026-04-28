@@ -1,6 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import useEmblaCarousel from 'embla-carousel-react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { getAssetUrl } from '@/lib/utils'
 import type { CatalogImage } from './types'
@@ -22,50 +23,119 @@ function ensureLoopBuffer(imgs: CatalogImage[]): CatalogImage[] {
 export function GalleryCarousel({ images }: GalleryCarouselProps) {
   const { t } = useTranslation()
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
+  const [selectedImage, setSelectedImage] = useState<CatalogImage | null>(null)
   const showArrows = images.length > 3
   const displayImages = showArrows ? ensureLoopBuffer(images) : images
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
 
+  useEffect(() => {
+    if (!selectedImage) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedImage(null)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedImage])
+
+  const canPortal = typeof document !== 'undefined'
+
   return (
-    <div className="group relative">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="-ml-4 flex">
-          {displayImages.map((img, i) => (
-            <div key={i} className="min-w-0 basis-1/3 shrink-0 pl-4">
-              <div className="relative overflow-hidden rounded-2xl">
-                <img
-                  src={getAssetUrl(img.src)}
-                  alt={t(img.altKey)}
-                  className="w-full aspect-4/3 object-cover hover:scale-[1.03] transition-transform duration-300"
-                />
-                {/* Subtle bottom gradient for depth */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/20 to-transparent" />
+    <>
+      <div className="group relative min-w-0 max-w-full overflow-x-clip">
+        <div className="w-full max-w-full overflow-hidden" ref={emblaRef}>
+          <div className="flex min-w-0 w-full px-4">
+            {displayImages.map((img, i) => (
+              <div
+                key={`${img.src}-${i}`}
+                className="min-w-0 shrink-0 basis-full px-2 sm:basis-1/2 lg:basis-1/3"
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedImage(img)}
+                  aria-label={t(img.altKey)}
+                  className="group/image relative block w-full overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  <img
+                    src={getAssetUrl(img.src)}
+                    alt={t(img.altKey)}
+                    className="w-full aspect-4/3 object-cover transition-transform duration-300 group-hover/image:scale-[1.03]"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/30 to-transparent" />
+                  <span className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-black/60 px-2.5 py-1 text-[11px] font-semibold text-white shadow-sm">
+                    {t('products.gallery.zoomHint')}
+                  </span>
+                  <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover/image:bg-black/5" />
+                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {showArrows && (
+          <>
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Previous images"
+              className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:left-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100"
+            >
+              <ChevronLeft className="h-5 w-5 text-gray-700" />
+            </button>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Next images"
+              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:right-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100"
+            >
+              <ChevronRight className="h-5 w-5 text-gray-700" />
+            </button>
+          </>
+        )}
       </div>
 
-      {showArrows && (
-        <>
-          <button
-            onClick={scrollPrev}
-            aria-label="Previous images"
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/60 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-0 group-hover:opacity-100"
-          >
-            <ChevronLeft className="h-5 w-5 text-gray-700" />
-          </button>
-          <button
-            onClick={scrollNext}
-            aria-label="Next images"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/80 bg-white/60 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-0 group-hover:opacity-100"
-          >
-            <ChevronRight className="h-5 w-5 text-gray-700" />
-          </button>
-        </>
-      )}
-    </div>
+      {selectedImage && canPortal
+        ? createPortal(
+            <div
+              role="presentation"
+              onClick={() => setSelectedImage(null)}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6"
+            >
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-label={t(selectedImage.altKey)}
+                onClick={(event) => event.stopPropagation()}
+                className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl md:rounded-3xl"
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedImage(null)}
+                  aria-label="Close enlarged image"
+                  className="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70 md:right-3 md:top-3 md:h-10 md:w-10"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                <img
+                  src={getAssetUrl(selectedImage.src)}
+                  alt={t(selectedImage.altKey)}
+                  className="max-h-[90vh] w-full object-contain"
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   )
 }

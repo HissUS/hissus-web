@@ -76,12 +76,16 @@
   },
   "products": {
     "doubleHandle": "Double Handle Screen Door",
+    "doubleHandleShort": "Double Handle",
     "windows": "Window Screen",
+    "windowsShort": "Window",
     "featured": {
       "heading": "Our Featured Products"
     },
     "multiHandle": "Multi Handle Screen Door",
+    "multiHandleShort": "Multi Handle",
     "singleHandle": "Single Handle Screen Door",
+    "singleHandleShort": "Single Handle",
     "spec": {
       "midgeProof": "20 × 20 Midge Proof Strands",
       "trackless": "Trackless Design",

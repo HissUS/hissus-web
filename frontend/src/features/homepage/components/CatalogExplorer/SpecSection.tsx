@@ -13,7 +13,7 @@ export function SpecSection({ specs, detailsHref }: SpecSectionProps) {
 
   return (
     <div className="mt-6">
-      <dl className="grid grid-cols-3 gap-x-8 gap-y-3">
+      <dl className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-3">
         {specs.map((spec) => {
           const Icon = spec.icon
           return (
@@ -25,9 +25,11 @@ export function SpecSection({ specs, detailsHref }: SpecSectionProps) {
         })}
       </dl>
 
-      <div className="mt-5 flex justify-end gap-3">
+      <div className="mt-5 flex justify-center gap-3 sm:justify-end">
         <Link to={detailsHref as never}>
-          <Button variant="outline">{t('common.explore_details')}</Button>
+          <Button variant="outline" className="w-full sm:w-auto">
+            {t('common.explore_details')}
+          </Button>
         </Link>
       </div>
     </div>

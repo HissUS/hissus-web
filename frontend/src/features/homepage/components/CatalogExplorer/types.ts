@@ -13,6 +13,12 @@ export interface CatalogImage {
 export interface CatalogCategory {
   id: string
   nameKey: string
+  homepageNameKey?: string
+  mobileNameKey?: string
+  summaryKey?: string
+  descriptionKey?: string
+  availabilityKey?: string
+  statusKey?: string
   images: CatalogImage[]
   specs: CatalogSpec[]
 }

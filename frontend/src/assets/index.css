@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,7 +15,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.45 0.17 261);        /* Hissus Blue ≈ #0056b3 */
+  --primary: oklch(0.45 0.17 261); /* Hissus Blue ≈ #0056b3 */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -46,7 +46,7 @@
 /* Senior-friendly: ensure min tap target size of 44x44px */
 button,
 a,
-[role="button"] {
+[role='button'] {
   min-height: 44px;
   min-width: 44px;
 }
@@ -131,10 +131,18 @@ a,
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+  }
+  body {
+    @apply m-0 min-h-screen min-w-[320px] bg-background text-foreground;
+  }
+  img {
+    display: block;
+    max-width: 100%;
+  }
+  a,
+  button {
+    touch-action: manipulation;
   }
 }
