@@ -75,17 +75,56 @@
     "getQuote": "取得報價"
   },
   "products": {
+    "updating": "更新中…",
+    "showing": "正在顯示 {{name}}",
+    "selected": "已選取",
     "doubleHandle": "雙把手捲簾紗門",
     "doubleHandleShort": "雙把手",
+    "doubleHandleSummary": "適合較大出入口的紗門選擇，外觀俐落且比例平衡。",
     "windows": "窗紗",
     "windowsShort": "窗紗",
+    "windowsSummary": "清爽的窗紗解決方案，在保持通風的同時幫助阻擋蚊蟲。",
     "featured": {
       "heading": "精選產品"
     },
+    "homepage": {
+      "singleHandle": "單把手捲簾紗門",
+      "multiHandle": "多把手捲簾紗門",
+      "doubleHandle": "雙把手捲簾紗門",
+      "windows": "窗紗"
+    },
+    "gallery": {
+      "zoomHint": "點擊放大"
+    },
+    "page": {
+      "availability": {
+        "available": "可提供"
+      },
+      "compare": "快速比較",
+      "heroSubtitle": "瀏覽所有可提供的紗門與窗紗方案，快速比較差異，並開啟任一產品查看細節。",
+      "overview": "產品總覽",
+      "status": {
+        "entry": "適合大型出入口",
+        "popular": "熱門選擇",
+        "wideSpan": "適合寬幅開口",
+        "window": "適合窗戶"
+      },
+      "helpTitle": "需要協助挑選嗎？",
+      "helpDescription": "不確定該選哪一款？我們可以推薦最適合的產品並提供快速報價。",
+      "contact": "聯絡我們",
+      "selectionHint": "選擇一個產品類型，即可查看照片、規格與可提供資訊。",
+      "sectionTitle": "可提供產品"
+    },
     "multiHandle": "多把手捲簾紗門",
     "multiHandleShort": "多把手",
+    "multiHandleSummary": "適合較寬開口的俐落方案，提供更靈活的把手配置。",
     "singleHandle": "單把手捲簾紗門",
     "singleHandleShort": "單把手",
+    "singleHandleSummary": "適合日常門扇的簡潔設計，外觀現代俐落。",
+    "singleHandleDescription": "單把手紗門為最通用的選擇，操作簡單、耐用且適合標準門洞。外觀俐落，安裝流程成熟，價格與性能兼具。\n- 適合安裝於前門與後門（後院門）出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "multiHandleDescription": "多把手紗門專為較寬開口設計，提供額外支撐與多點把手配置以提升操作便利性。適用於寬幅開口，並可支援客製化安裝需求。\n- 適合安裝於後院平台出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "doubleHandleDescription": "雙把手紗門提供雙扇對稱的出入口解決方案，方便通行並帶來大器外觀，適合大型入門或強調門面比例的場合。\n- 適合安裝於後院門以及臥室通往後院的出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "windowsDescription": "窗紗輕巧且不突兀，優化通風同時阻擋昆蟲。可搭配多種網材選項，兼顧視野與防護需求。\n- 適合安裝於住宅與商業空間的窗戶。\n- 提供 50% 與 90% UV（UPF）防護選項，滿足不同需求。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可降低灰塵與日照影響，延長使用壽命。\n- 極簡外觀可搭配各種窗框與室內風格。",
     "spec": {
       "midgeProof": "20 × 20 防蚊網格",
       "trackless": "無軌道設計",

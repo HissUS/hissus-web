@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
 import { Button } from '@/components/ui-wrapper'
-import { useLocale, useLocaleSwitcher } from '@/hooks'
+import { useLocale } from '@/hooks'
 import { getAssetUrl } from '@/lib/utils'
 
 const styles = {
@@ -18,8 +18,7 @@ const styles = {
 
 export function HeroSection() {
   const { t } = useTranslation()
-  const { country, locale } = useLocale()
-  const switchLocale = useLocaleSwitcher()
+  const { country } = useLocale()
   const prefix = country ? `/${country}` : ''
 
   return (
