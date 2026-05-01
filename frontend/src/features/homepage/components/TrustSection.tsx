@@ -24,8 +24,8 @@ const PILLARS = [
 const styles = {
   section: 'bg-white px-4 py-12 sm:py-16',
   inner: 'mx-auto max-w-7xl',
-  heading: 'mb-8 text-center text-3xl font-bold text-gray-900 sm:mb-10 sm:text-4xl',
-  grid: 'grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8',
+  heading: 'mb-8 text-center text-3xl font-bold text-gray-900 sm:mb-10 sm:text-4xl animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both',
+  grid: 'grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200 fill-mode-both',
   pillar: 'flex flex-col items-center text-center gap-3',
   icon: 'text-[--primary] text-2xl sm:text-3xl',
   pillarTitle: 'text-base font-semibold text-gray-900',

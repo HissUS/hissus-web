@@ -35,7 +35,7 @@ export function ProductsPage() {
       <section className="relative overflow-hidden bg-linear-to-b from-[#F8F9FA] via-white to-white py-12 sm:py-16">
         <div className="absolute inset-0 z-0 opacity-60 bg-[radial-gradient(circle_at_top_left,rgba(0,86,179,0.12),transparent_28%),radial-gradient(circle_at_top_right,rgba(0,86,179,0.07),transparent_24%)]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4">
-          <div className="max-w-3xl space-y-4">
+          <div className="max-w-3xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both">
             <div className="inline-flex items-center gap-2 rounded-full border border-[--primary]/20 bg-white px-3 py-1 text-xs font-semibold text-[--primary] shadow-sm">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               {t('products.page.sectionTitle')}
@@ -68,7 +68,7 @@ export function ProductsPage() {
           </div>
 
           <div className="grid gap-8 xl:grid-cols-[1.05fr_1.35fr] xl:items-start">
-            <section id="select-product" className="min-w-0 space-y-4 xl:sticky xl:top-24">
+            <section id="select-product" className="min-w-0 space-y-4 xl:sticky xl:top-24 animate-in fade-in duration-700 delay-150 fill-mode-both">
               <div className="flex items-center gap-2">
                 <LayoutGrid className="h-5 w-5 text-[--primary]" aria-hidden="true" />
                 <h2 className="text-2xl font-bold text-gray-900">
@@ -164,7 +164,7 @@ export function ProductsPage() {
               </div>
             </section>
 
-            <section className="min-w-0 space-y-8 border-t border-gray-200 pt-8 xl:border-l xl:border-t-0 xl:border-gray-200 xl:pl-8 xl:pt-0">
+            <section className="min-w-0 space-y-8 border-t border-gray-200 pt-8 xl:border-l xl:border-t-0 xl:border-gray-200 xl:pl-8 xl:pt-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[--primary]" aria-hidden="true" />
                 <h2 className="text-2xl font-bold text-gray-900">{t('products.page.overview')}</h2>
