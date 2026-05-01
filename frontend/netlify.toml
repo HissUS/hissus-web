@@ -1,6 +1,6 @@
 [build]
 command = "pnpm build"
-functions = "frontend/netlify/functions"
+functions = "netlify/functions"
 publish = "dist"
 
 [dev]
