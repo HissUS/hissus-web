@@ -32,8 +32,8 @@ export function ProductsPage() {
 
   return (
     <main className="overflow-x-hidden bg-white">
-      <section className="relative overflow-hidden bg-linear-to-b from-[#F8F9FA] via-white to-white py-12 sm:py-16">
-        <div className="absolute inset-0 z-0 opacity-60 bg-[radial-gradient(circle_at_top_left,rgba(0,86,179,0.12),transparent_28%),radial-gradient(circle_at_top_right,rgba(0,86,179,0.07),transparent_24%)]" />
+      <section className="relative overflow-hidden bg-linear-to-b from-blue-50/50 via-white to-white py-12 sm:py-16">
+        <div className="absolute inset-0 z-0 opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.15),transparent_35%),radial-gradient(circle_at_top_right,rgba(99,102,241,0.15),transparent_30%)]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4">
           <div className="max-w-3xl space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both">
             <div className="inline-flex items-center gap-2 rounded-full border border-[--primary]/20 bg-white px-3 py-1 text-xs font-semibold text-[--primary] shadow-sm">
@@ -108,8 +108,8 @@ export function ProductsPage() {
                       className={cn(
                         'group rounded-3xl border p-3 text-left shadow-sm transition-all duration-200 ring-2 ring-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2',
                         isActive
-                          ? 'border-primary bg-[--primary]/5 shadow-md ring-[--primary]/20'
-                          : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md',
+                          ? 'border-transparent bg-linear-to-br from-blue-50 to-indigo-50 shadow-md ring-2 ring-primary/50'
+                          : 'border-gray-200 bg-white hover:border-blue-200 hover:shadow-md hover:bg-blue-50/30',
                       )}
                     >
                       <div className="flex flex-col gap-3 sm:flex-row">
@@ -169,8 +169,8 @@ export function ProductsPage() {
                 <Sparkles className="h-5 w-5 text-[--primary]" aria-hidden="true" />
                 <h2 className="text-2xl font-bold text-gray-900">{t('products.page.overview')}</h2>
               </div>
-              <Card className="overflow-hidden border-gray-200 shadow-lg" id="product-details">
-                <div className="h-1 bg-[--primary]" aria-hidden="true" />
+              <Card className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5" id="product-details">
+                <div className="h-2 bg-linear-to-r from-primary via-blue-500 to-indigo-600" aria-hidden="true" />
                 <CardHeader className="space-y-4 bg-linear-to-b from-white to-gray-50">
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full border border-[--primary]/20 bg-[--primary]/10 px-3 py-1 text-xs font-semibold text-[--primary]">
@@ -189,7 +189,7 @@ export function ProductsPage() {
                     <CardDescription className="max-w-3xl text-base leading-relaxed text-gray-600 wrap-break-word">
                       <span className="block">{descriptionLead}</span>
                       {descriptionBullets.length > 0 ? (
-                        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-gray-600">
+                        <ul className="mt-3 list-disc space-y-2 pl-5 text-base text-gray-600">
                           {descriptionBullets.map((item) => (
                             <li key={item}>{item}</li>
                           ))}
@@ -214,10 +214,10 @@ export function ProductsPage() {
                           className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-colors hover:border-[--primary]/30"
                         >
                           <div className="flex items-center gap-3">
-                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[--primary]/10 text-[--primary] ring-1 ring-[--primary]/10">
-                              <Icon className="h-4 w-4" aria-hidden="true" />
+                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[--primary]/10 text-[--primary] ring-1 ring-[--primary]/10">
+                              <Icon className="h-5 w-5" aria-hidden="true" />
                             </span>
-                            <span className="text-sm font-medium text-gray-700">
+                            <span className="text-base font-medium text-gray-700 sm:text-lg">
                               {t(spec.labelKey)}
                             </span>
                           </div>

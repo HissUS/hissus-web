@@ -19,7 +19,7 @@ export function Header() {
             <img
               src={getAssetUrl(SITE_CONFIG.assets.logo)}
               alt="Hissus"
-              className="h-7 w-auto sm:h-8"
+              className="h-9 w-auto sm:h-11"
             />
           </Link>
 
@@ -30,7 +30,7 @@ export function Header() {
                   type="button"
                   aria-pressed={locale === 'en'}
                   onClick={() => switchLocale('en')}
-                  className={`px-2 py-1 text-[10px] font-medium ${
+                  className={`px-2 py-1 text-xs font-medium ${
                     locale === 'en' ? 'bg-gray-500/15' : ''
                   }`}
                 >
@@ -41,7 +41,7 @@ export function Header() {
                   type="button"
                   aria-pressed={locale === 'zh-TW'}
                   onClick={() => switchLocale('zh-TW')}
-                  className={`px-2 py-1 text-[10px] font-medium ${
+                  className={`px-2 py-1 text-xs font-medium ${
                     locale === 'zh-TW' ? 'bg-gray-500/15' : ''
                   }`}
                 >
@@ -62,7 +62,7 @@ export function Header() {
           </div>
         </div>
 
-        <nav className="flex w-full items-center justify-center gap-3 text-sm sm:gap-6 sm:absolute sm:left-1/2 sm:w-auto sm:-translate-x-1/2 ">
+        <nav className="flex w-full items-center justify-center gap-3 text-base sm:gap-6 sm:absolute sm:left-1/2 sm:w-auto sm:-translate-x-1/2 sm:text-lg">
           <Link
             to={`${prefix}/home` as never}
             className="inline-flex min-h-11 items-center px-1 text-gray-600 hover:text-gray-900"
@@ -100,7 +100,7 @@ export function Header() {
               type="button"
               aria-pressed={locale === 'en'}
               onClick={() => switchLocale('en')}
-              className={`px-3 py-1 text-xs font-medium transition-colors ${
+              className={`px-3 py-1 text-sm font-medium transition-colors ${
                 locale === 'en' ? 'bg-gray-500/15' : 'hover:bg-white/5'
               }`}
             >
@@ -111,7 +111,7 @@ export function Header() {
               type="button"
               aria-pressed={locale === 'zh-TW'}
               onClick={() => switchLocale('zh-TW')}
-              className={`px-3 py-1 text-xs font-medium transition-colors ${
+              className={`px-3 py-1 text-sm font-medium transition-colors ${
                 locale === 'zh-TW' ? 'bg-gray-500/15' : 'hover:bg-white/5'
               }`}
             >

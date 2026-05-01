@@ -1,21 +1,22 @@
 import { useTranslation } from 'react-i18next'
+import { Award, Leaf, Ruler } from 'lucide-react'
 
 const PILLARS = [
   {
     key: 'customTailored',
-    icon: '✦',
+    icon: Ruler,
     titleKey: 'homepage.trust.customTailored.title',
     descKey: 'homepage.trust.customTailored.desc',
   },
   {
     key: 'craftsmanship',
-    icon: '◈',
+    icon: Award,
     titleKey: 'homepage.trust.craftsmanship.title',
     descKey: 'homepage.trust.craftsmanship.desc',
   },
   {
     key: 'ecoConscious',
-    icon: '◉',
+    icon: Leaf,
     titleKey: 'homepage.trust.ecoConscious.title',
     descKey: 'homepage.trust.ecoConscious.desc',
   },
@@ -41,15 +42,18 @@ export function TrustSection() {
       <div className={styles.inner}>
         <h2 className={styles.heading}>{t('homepage.trust.heading')}</h2>
         <div className={styles.grid}>
-          {PILLARS.map((pillar) => (
-            <div key={pillar.key} className={styles.pillar}>
-              <span className={styles.icon} aria-hidden="true">
-                {pillar.icon}
-              </span>
+          {PILLARS.map((pillar) => {
+            const Icon = pillar.icon
+            return (
+              <div key={pillar.key} className={styles.pillar}>
+                <span className={styles.icon} aria-hidden="true">
+                  <Icon className="h-8 w-8 sm:h-10 sm:w-10" strokeWidth={1.5} />
+                </span>
               <p className={styles.pillarTitle}>{t(pillar.titleKey)}</p>
               <p className={styles.pillarDesc}>{t(pillar.descKey)}</p>
-            </div>
-          ))}
+              </div>
+            )
+          })}
         </div>
         <p className={styles.narrative}>{t('homepage.brand.narrative')}</p>
       </div>

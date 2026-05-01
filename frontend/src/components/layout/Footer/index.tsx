@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
 import { useLocale, useLocaleSwitcher } from '@/hooks'
 import { COUNTRY_TO_LOCALE, DEFAULT_LOCALE } from '@/locales/config'
+import { getAssetUrl } from '@/lib/utils'
 
 type ContactLink = { label: string; href: string }
 
@@ -45,68 +46,80 @@ export function Footer() {
   return (
     <footer className="bg-zinc-950 text-zinc-300">
       <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-          {/* Contact */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-100">
-              {t('footer.contactUs')}
-            </h3>
-            <ul className="space-y-2 text-sm">
-              {Object.entries(SITE_CONFIG.contact).map(([key, value]) => (
-                <li key={key} className="flex items-center gap-2">
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center">
-                    {CONTACT_ICONS[key]}
-                  </span>
-                  <span>
-                    {isContactLink(value) ? (
-                      <a
-                        href={value.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline-offset-2 hover:text-zinc-100 hover:underline"
-                      >
-                        {value.label}
-                      </a>
-                    ) : (
-                      value
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
+        <div className="flex flex-col gap-10 sm:flex-row sm:justify-between sm:gap-8">
+          
+          {/* Logo Section */}
+          <div className="flex justify-center sm:justify-start">
+            <img
+              src={getAssetUrl(SITE_CONFIG.assets.logo)}
+              alt="Hissus"
+              className="h-18 w-auto brightness-0 invert opacity-80 sm:h-16"
+            />
           </div>
 
-          {/* Language Switcher */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-100">
-              {t('footer.language')}
-            </h3>
-            <div className="flex flex-wrap gap-2 text-sm">
-              <button
-                onClick={() => switchLocale(DEFAULT_LOCALE)}
-                className={`rounded px-2 py-1 ${
-                  locale === DEFAULT_LOCALE
-                    ? 'bg-zinc-700 font-semibold text-zinc-100'
-                    : 'text-zinc-400 hover:text-zinc-100'
-                }`}
-                aria-label="Switch to English"
-              >
-                EN
-              </button>
-              {Object.entries(COUNTRY_TO_LOCALE).map(([code, countryLocale]) => (
+          <div className="grid grid-cols-1 gap-10 text-center sm:grid-cols-2 sm:text-left">
+            {/* Contact */}
+            <div className="flex flex-col items-center sm:items-start">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-100">
+                {t('footer.contactUs')}
+              </h3>
+              <ul className="space-y-2 text-sm">
+                {Object.entries(SITE_CONFIG.contact).map(([key, value]) => (
+                  <li key={key} className="flex items-center gap-2">
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+                      {CONTACT_ICONS[key]}
+                    </span>
+                    <span>
+                      {isContactLink(value) ? (
+                        <a
+                          href={value.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline-offset-2 hover:text-zinc-100 hover:underline"
+                        >
+                          {value.label}
+                        </a>
+                      ) : (
+                        value
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="flex flex-col items-center sm:items-start">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-100">
+                {t('footer.language')}
+              </h3>
+              <div className="flex flex-wrap justify-center gap-2 text-sm sm:justify-start">
                 <button
-                  key={code}
-                  onClick={() => switchLocale(countryLocale)}
-                  className={`rounded px-2 py-1 uppercase ${
-                    locale === countryLocale
+                  onClick={() => switchLocale(DEFAULT_LOCALE)}
+                  className={`rounded px-2 py-1 ${
+                    locale === DEFAULT_LOCALE
                       ? 'bg-zinc-700 font-semibold text-zinc-100'
                       : 'text-zinc-400 hover:text-zinc-100'
                   }`}
-                  aria-label={`Switch to ${countryLocale}`}
+                  aria-label="Switch to English"
                 >
-                  {"繁體"}
+                  EN
                 </button>
-              ))}
+                {Object.entries(COUNTRY_TO_LOCALE).map(([code, countryLocale]) => (
+                  <button
+                    key={code}
+                    onClick={() => switchLocale(countryLocale)}
+                    className={`rounded px-2 py-1 uppercase ${
+                      locale === countryLocale
+                        ? 'bg-zinc-700 font-semibold text-zinc-100'
+                        : 'text-zinc-400 hover:text-zinc-100'
+                    }`}
+                    aria-label={`Switch to ${countryLocale}`}
+                  >
+                    {"繁體"}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

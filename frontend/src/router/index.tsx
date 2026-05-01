@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLocation,
 } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
 import { HomePage } from '../pages/HomePage'
@@ -19,10 +19,17 @@ import { QuotePage } from '../pages/QuotePage'
 
 function RootComponent() {
   const location = useLocation()
+  const basePath = location.pathname.replace(/^\/(?:tw)(?=\/|$)/, '') || '/'
+  const prevBasePath = useRef(basePath)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [location.pathname])
+    if (prevBasePath.current !== basePath) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 10)
+      prevBasePath.current = basePath
+    }
+  }, [basePath])
 
   return (
     <>

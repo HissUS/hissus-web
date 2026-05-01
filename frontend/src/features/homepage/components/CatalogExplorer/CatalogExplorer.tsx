@@ -30,7 +30,7 @@ export function CatalogExplorer() {
           <div
             role="tablist"
             aria-label={t('products.featured.heading')}
-            className="grid w-full max-w-5xl grid-cols-2 gap-3 border-b border-gray-200 pb-2 sm:flex sm:flex-nowrap sm:items-center sm:justify-center sm:gap-5 sm:overflow-x-auto"
+            className="grid w-full max-w-5xl grid-cols-2 gap-3 p-1 sm:flex sm:flex-nowrap sm:items-center sm:justify-center sm:gap-4 sm:overflow-x-auto"
           >
             {categories.map((cat) => (
               <button
@@ -42,13 +42,14 @@ export function CatalogExplorer() {
                   setActiveId(cat.id)
                 }}
                 className={cn(
-                  'w-full whitespace-nowrap px-1 pb-2 text-center text-xs font-semibold tracking-wide text-gray-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2 sm:w-auto sm:text-left sm:pb-3 sm:text-sm',
+                  'w-full cursor-pointer flex items-center justify-center whitespace-normal px-2 py-2 sm:px-6 sm:py-2.5 rounded-2xl sm:rounded-full text-center text-sm leading-tight font-semibold tracking-wide transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2 sm:whitespace-nowrap sm:w-auto sm:text-base',
                   cat.id === activeId
-                    ? 'border-b-2 border-primary text-gray-900'
-                    : 'border-b-2 border-transparent hover:text-gray-800',
+                    ? 'bg-linear-to-r from-primary to-indigo-600 text-white shadow-md'
+                    : 'bg-white border border-gray-200 text-gray-600 shadow-sm hover:border-primary/40 hover:text-primary hover:shadow-md',
                 )}
               >
-                {t(cat.homepageNameKey ?? cat.nameKey)}
+                <span className="mr-1.5 text-[0.8em] opacity-80">✦</span>
+                <span>{t(cat.homepageNameKey ?? cat.nameKey)}</span>
               </button>
             ))}
           </div>

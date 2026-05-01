@@ -17,8 +17,8 @@ export function SpecSection({ specs, detailsHref }: SpecSectionProps) {
         {specs.map((spec) => {
           const Icon = spec.icon
           return (
-            <div key={spec.labelKey} className="flex items-center gap-2 text-sm text-gray-600">
-              <Icon className="h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" />
+            <div key={spec.labelKey} className="flex items-center gap-2 text-base font-medium text-gray-700 sm:text-lg">
+              <Icon className="h-5 w-5 shrink-0 text-gray-500" aria-hidden="true" />
               <span>{t(spec.labelKey)}</span>
             </div>
           )
