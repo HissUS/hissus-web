@@ -5,7 +5,9 @@ import {
   Outlet,
   redirect,
   ScrollRestoration,
+  useLocation,
 } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
 import { HomePage } from '../pages/HomePage'
@@ -15,13 +17,23 @@ import { QuotePage } from '../pages/QuotePage'
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-const rootRoute = createRootRoute({
-  component: () => (
+function RootComponent() {
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [location.pathname])
+
+  return (
     <>
       <ScrollRestoration />
       <Outlet />
     </>
-  ),
+  )
+}
+
+const rootRoute = createRootRoute({
+  component: RootComponent,
 })
 
 const indexRoute = createRoute({
