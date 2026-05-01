@@ -33,7 +33,6 @@ function buildEmailHtml(opts: {
   detailsHeading: string
   messageHeading: string
   footer: string
-  logoUrl?: string
 }) {
   const {
     lang,
@@ -46,7 +45,6 @@ function buildEmailHtml(opts: {
     detailsHeading,
     messageHeading,
     footer,
-    logoUrl,
   } = opts
 
   const rowsHtml = rows
@@ -152,8 +150,6 @@ export const handler: Handler = async (event) => {
     const lang = locale && (locale === 'zh-TW' || locale === 'en') ? locale : 'en'
     const s = lang === 'zh-TW' ? zhTW.quote.email : en.quote.email
     const fullName = `${firstName} ${lastName}`
-    const siteUrl = process.env.URL || process.env.DEPLOY_URL || ''
-    const logoUrl = siteUrl ? `${siteUrl}/logo.png` : ''
     const safeFullName = escapeHtml(fullName)
     const safeEmail = escapeHtml(email)
     const safePhone = escapeHtml(phone)
