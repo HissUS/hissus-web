@@ -165,16 +165,16 @@ export function QuotePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <h1 className="mb-4 text-3xl font-bold">{t('quote.title')}</h1>
-      <p className="mb-8 text-gray-600">{t('quote.subtitle')}</p>
+      <p className="mb-8 text-lg text-gray-600">{t('quote.subtitle')}</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.firstName')}</RequiredMark>
             </span>
             <input
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               required
@@ -183,11 +183,11 @@ export function QuotePage() {
           </label>
 
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.lastName')}</RequiredMark>
             </span>
             <input
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               required
@@ -198,12 +198,12 @@ export function QuotePage() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.emailAddress')}</RequiredMark>
             </span>
             <input
               type="email"
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -212,13 +212,13 @@ export function QuotePage() {
           </label>
 
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.phoneNumber')}</RequiredMark>
             </span>
             <input
               type="tel"
               maxLength={10}
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
               required
@@ -229,11 +229,11 @@ export function QuotePage() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.city')}</RequiredMark>
             </span>
             <select
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               required
@@ -255,11 +255,11 @@ export function QuotePage() {
           </label>
 
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-sm font-medium">
+            <span className="mb-2 text-base font-medium">
               <RequiredMark>{t('quote.productWanted')}</RequiredMark>
             </span>
             <select
-              className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
               value={product}
               onChange={(e) => setProduct(e.target.value)}
               required
@@ -278,16 +278,16 @@ export function QuotePage() {
         </div>
 
         <label className="flex w-full flex-col">
-          <span className="mb-2 text-sm font-medium">{t('quote.messageOptional')}</span>
+          <span className="mb-2 text-base font-medium">{t('quote.messageOptional')}</span>
           <textarea
-            className="min-h-30 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
+            className="min-h-30 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
         </label>
 
-        {error && <div className="text-sm text-destructive">{error}</div>}
-        {submitted && <div className="text-sm text-green-600">{t('quote.sentNotice')}</div>}
+        {error && <div className="text-base text-destructive">{error}</div>}
+        {submitted && <div className="text-base text-green-600">{t('quote.sentNotice')}</div>}
 
         <div className="flex items-center gap-3">
           <Button type="submit">{t('quote.send')}</Button>
