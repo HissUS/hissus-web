@@ -74,6 +74,7 @@ export const CATALOG_DATA: CatalogCategory[] = [
       { url: 'https://youtu.be/-A_QTFndg_A', titleKey: 'products.multiHandle' },
       { url: 'https://youtu.be/3Cwey3f95vk', titleKey: 'products.multiHandle' },
       { url: 'https://youtu.be/EEiIbfY1zBI', titleKey: 'products.multiHandle' },
+      { url: 'https://youtu.be/k7POp6pt9DE', titleKey: 'products.multiHandle' },
     ],
     specs: COMMON_SPECS,
   },
@@ -87,6 +88,7 @@ export const CATALOG_DATA: CatalogCategory[] = [
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.window',
     images: [{ src: windowsImg, altKey: 'products.windows' }],
+    videos: [{ url: 'https://youtu.be/E988XNzyi-g', titleKey: 'products.windows' }],
     specs: COMMON_SPECS,
   },
 ]
