@@ -104,7 +104,7 @@ export function Footer() {
                   }`}
                   aria-label={`Switch to ${countryLocale}`}
                 >
-                  {code}
+                  {"繁體"}
                 </button>
               ))}
             </div>

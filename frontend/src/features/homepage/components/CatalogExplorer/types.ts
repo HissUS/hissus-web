@@ -10,6 +10,11 @@ export interface CatalogImage {
   altKey: string
 }
 
+export interface CatalogVideo {
+  url: string
+  titleKey?: string
+}
+
 export interface CatalogCategory {
   id: string
   nameKey: string
@@ -20,5 +25,6 @@ export interface CatalogCategory {
   availabilityKey?: string
   statusKey?: string
   images: CatalogImage[]
+  videos?: CatalogVideo[]
   specs: CatalogSpec[]
 }

@@ -1,4 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
+import { BackToTopButton } from '../ui/BackToTopButton'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -9,6 +10,7 @@ export function MainLayout() {
       <main className="flex-1">
         <Outlet />
       </main>
+      <BackToTopButton />
       <Footer />
     </div>
   )

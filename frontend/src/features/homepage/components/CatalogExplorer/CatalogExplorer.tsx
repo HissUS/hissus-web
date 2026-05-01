@@ -55,7 +55,7 @@ export function CatalogExplorer() {
         </div>
 
         <div className="mt-8 sm:mt-10">
-          <GalleryCarousel images={active.images} />
+          <GalleryCarousel images={active.images} videos={active.videos} />
           <SpecSection specs={active.specs} detailsHref={detailsHref} />
         </div>
       </div>

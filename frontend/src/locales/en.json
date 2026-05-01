@@ -74,6 +74,83 @@
     "products": "Products",
     "getQuote": "Get A Quote"
   },
+  "quote": {
+    "title": "Get a Quote",
+    "subtitle": "Please provide your contact details, Texas city, and the product you want — we'll follow up via email.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "emailAddress": "Email address",
+    "phoneNumber": "Phone number",
+    "city": "City (Texas)",
+    "cityPlaceholder": "Select a city",
+    "productPlaceholder": "Select a product",
+    "productWanted": "Product wanted",
+    "messageOptional": "Message (optional)",
+    "send": "Send Quote",
+    "reset": "Reset",
+    "sentNotice": "Mail client opened — please send the email to complete the request.",
+    "errors": {
+      "nameRequired": "First and last name are required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "phoneRequired": "Phone number is required.",
+      "cityRequired": "Please select a Texas city.",
+      "productRequired": "Please select a product."
+    },
+    "email": {
+      "title": "Quote Request",
+      "contactSection": "Contact Information",
+      "locationSection": "Location",
+      "productSection": "Product Requested",
+      "messageSection": "Message",
+      "none": "(none)"
+    },
+    "cityGroups": {
+      "northTexas": "North Texas",
+      "middleTexas": "Middle Texas",
+      "southTexas": "South Texas"
+    },
+    "cities": {
+      "allen": "Allen",
+      "arlington": "Arlington",
+      "austin": "Austin",
+      "baytown": "Baytown",
+      "bryan": "Bryan",
+      "carrollton": "Carrollton",
+      "collegeStation": "College Station",
+      "conroe": "Conroe",
+      "corpusChristi": "Corpus Christi",
+      "dallas": "Dallas",
+      "denton": "Denton",
+      "elPaso": "El Paso",
+      "fortWorth": "Fort Worth",
+      "frisco": "Frisco",
+      "galveston": "Galveston",
+      "garland": "Garland",
+      "grandPrairie": "Grand Prairie",
+      "grapevine": "Grapevine",
+      "houston": "Houston",
+      "irving": "Irving",
+      "katy": "Katy",
+      "killeen": "Killeen",
+      "leagueCity": "League City",
+      "lewisville": "Lewisville",
+      "lubbock": "Lubbock",
+      "mckinney": "McKinney",
+      "mesquite": "Mesquite",
+      "newBraunfels": "New Braunfels",
+      "pasadena": "Pasadena",
+      "pearland": "Pearland",
+      "plano": "Plano",
+      "richardson": "Richardson",
+      "roundRock": "Round Rock",
+      "sanAntonio": "San Antonio",
+      "sugarLand": "Sugar Land",
+      "temple": "Temple",
+      "theWoodlands": "The Woodlands",
+      "victoria": "Victoria",
+      "waco": "Waco"
+    }
+  },
   "products": {
     "updating": "Updating…",
     "showing": "Showing {{name}}",
@@ -94,7 +171,11 @@
       "windows": "Window Screen"
     },
     "gallery": {
-      "zoomHint": "Click to zoom"
+      "imagesTitle": "Images",
+      "zoomHint": "Click to zoom",
+      "videosTitle": "Videos",
+      "playHint": "Click to play",
+      "videoTitle": "Product video"
     },
     "page": {
       "availability": {
@@ -121,9 +202,9 @@
     "singleHandle": "Single-Handle Retractable Pleated Screen Door",
     "singleHandleShort": "Single Handle",
     "singleHandleSummary": "A streamlined choice for everyday doors with a simple, modern profile.",
-    "singleHandleDescription": "Single-handle screens are our most versatile option, easy to operate, durable, and ideal for standard door openings. They offer a clean look, are straightforward to install, and are a great balance of price and performance.\n- Suitable for installation at front entrances and rear (backyard) doors.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
-    "multiHandleDescription": "Multi-handle screens are designed for wider openings where additional support and multiple handle points improve usability. They maintain a consistent visual across large spans and give installers flexibility for custom configurations.\n- Suitable for installation on backyard podiums.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
-    "doubleHandleDescription": "Double-handle screens provide a balanced two-door solution for large entryways. They deliver enhanced accessibility, an elegant double-door appearance, and are suited for grander openings where symmetry matters.\n- Suitable for installation on backyard doors and bedroom-to-backyard entrances.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
+    "singleHandleDescription": "Single-handle screens are our most versatile option, easy to operate, durable, and ideal for standard door openings. They offer a clean look, are straightforward to install, and are a great balance of price and performance.\n- Suitable for installation at front entrances and rear (backyard) doors.\n- Available in 50% and 90% UV (UPF) protection options to suit different needs.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
+    "multiHandleDescription": "Multi-handle screens are designed for wider openings where additional support and multiple handle points improve usability. They maintain a consistent visual across large spans and give installers flexibility for custom configurations.\n- Suitable for installation on backyard podiums.\n- Available in 50% and 90% UV (UPF) protection options to suit different needs.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
+    "doubleHandleDescription": "Double-handle screens provide a balanced two-door solution for large entryways. They deliver enhanced accessibility, an elegant double-door appearance, and are suited for grander openings where symmetry matters.\n- Suitable for installation on backyard doors and bedroom-to-backyard entrances.\n- Available in 50% and 90% UV (UPF) protection options to suit different needs.\n- Available in customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable screen stores neatly to reduce dust and sun exposure, extending lifespan.\n- Minimalist design fits various window frames and interior styles.",
     "windowsDescription": "Window screens are lightweight, unobtrusive, and optimized for ventilation while keeping insects out. They integrate with common window frames and are available in multiple mesh options to suit visibility and protection needs.\n- Suitable for installation on residential and commercial windows.\n- Available in 50% and 90% UV (UPF) protection options to suit different needs.\n- Customizable colors, sizes, and smart lock configurations.\n- Simple, secure setup reduces installation time and maintenance costs.\n- Retractable design minimizes dust and sun exposure, extending product lifespan.\n- Minimalist design complements various window frames and interior styles.",
     "spec": {
       "midgeProof": "20 × 20 Midge Proof Strands",

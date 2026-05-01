@@ -1,34 +1,69 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import useEmblaCarousel from 'embla-carousel-react'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { getAssetUrl } from '@/lib/utils'
-import type { CatalogImage } from './types'
+import type { CatalogImage, CatalogVideo } from './types'
 
 interface GalleryCarouselProps {
   images: CatalogImage[]
+  videos?: CatalogVideo[]
 }
 
 // Embla loop requires total slide width > viewport width.
 // With 3 slides visible, we need at least 2 extra slides as cloning buffer.
 // Duplicate the array until we have ≥ 7 slides to guarantee a smooth loop.
-function ensureLoopBuffer(imgs: CatalogImage[]): CatalogImage[] {
-  if (imgs.length >= 7) return imgs
-  const repeated = [...imgs]
-  while (repeated.length < 7) repeated.push(...imgs)
+function ensureLoopBuffer<T>(items: T[]): T[] {
+  if (items.length >= 7) return items
+  const repeated = [...items]
+  while (repeated.length < 7) repeated.push(...items)
   return repeated
 }
 
-export function GalleryCarousel({ images }: GalleryCarouselProps) {
+function getYouTubeId(url: string): string | null {
+  try {
+    const parsed = new URL(url)
+    if (parsed.hostname.includes('youtu.be')) {
+      return parsed.pathname.replace('/', '') || null
+    }
+
+    if (parsed.hostname.includes('youtube.com')) {
+      return parsed.searchParams.get('v')
+    }
+  } catch {
+    return null
+  }
+
+  return null
+}
+
+export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   const { t } = useTranslation()
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
+  const [videoEmblaRef, videoEmblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
   const [selectedImage, setSelectedImage] = useState<CatalogImage | null>(null)
+  const [activeVideo, setActiveVideo] = useState<string | null>(null)
   const showArrows = images.length > 3
   const displayImages = showArrows ? ensureLoopBuffer(images) : images
 
+  const videoItems = videos
+    .map((video) => ({
+      ...video,
+      id: getYouTubeId(video.url),
+    }))
+    .filter((video) => video.id)
+
+  const displayVideos = videoItems
+  const [canScrollPrev, setCanScrollPrev] = useState(false)
+  const [canScrollNext, setCanScrollNext] = useState(false)
+  const showVideoArrows = canScrollPrev || canScrollNext
+
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
+
+  const scrollVideoPrev = useCallback(() => videoEmblaApi?.scrollPrev(), [videoEmblaApi])
+  const scrollVideoNext = useCallback(() => videoEmblaApi?.scrollNext(), [videoEmblaApi])
 
   useEffect(() => {
     if (!selectedImage) return undefined
@@ -48,10 +83,31 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
     }
   }, [selectedImage])
 
+  useEffect(() => {
+    if (!videoEmblaApi) return
+
+    const update = () => {
+      setCanScrollPrev(videoEmblaApi.canScrollPrev())
+      setCanScrollNext(videoEmblaApi.canScrollNext())
+    }
+
+    update()
+    videoEmblaApi.on('select', update)
+    videoEmblaApi.on('reInit', update)
+
+    return () => {
+      videoEmblaApi.off('select', update)
+      videoEmblaApi.off('reInit', update)
+    }
+  }, [videoEmblaApi, videoItems.length])
+
   const canPortal = typeof document !== 'undefined'
 
   return (
     <>
+      <div className="flex items-center justify-between px-4 mb-3">
+        <h2 className="text-md font-semibold text-gray-800">{t('products.gallery.imagesTitle')}</h2>
+      </div>
       <div className="group relative min-w-0 max-w-full overflow-x-clip">
         <div className="w-full max-w-full overflow-hidden" ref={emblaRef}>
           <div className="flex min-w-0 w-full px-4">
@@ -103,6 +159,88 @@ export function GalleryCarousel({ images }: GalleryCarouselProps) {
           </>
         )}
       </div>
+
+      {videoItems.length > 0 ? (
+        <div className="mt-6">
+          <div className="flex items-center justify-between px-4">
+            <h2 className="text-md font-semibold text-gray-800">
+              {' '}
+              {t('products.gallery.videosTitle')}
+            </h2>
+          </div>
+          <div className="group relative mt-3 min-w-0 max-w-full overflow-x-clip">
+            <div className="w-full overflow-hidden" ref={videoEmblaRef}>
+              <div className="flex px-4">
+                {displayVideos.map((video, index) => {
+                  const id = video.id as string
+                  const isActive = activeVideo === id
+
+                  const src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=${
+                    isActive ? 0 : 1
+                  }&loop=1&playlist=${id}&controls=${isActive ? 1 : 0}&modestbranding=1&rel=0&playsinline=1`
+
+                  return (
+                    <div
+                      key={`${id}-${index}`}
+                      className="shrink-0 basis-full px-2 sm:basis-2/3 lg:basis-1/2"
+                    >
+                      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black/5 shadow-sm">
+                        <div className="relative aspect-video w-full">
+                          <iframe
+                            className={`h-full w-full ${isActive ? '' : 'pointer-events-none'}`}
+                            src={src}
+                            title={
+                              video.titleKey ? t(video.titleKey) : t('products.gallery.videoTitle')
+                            }
+                            allow="autoplay; encrypted-media; picture-in-picture"
+                            allowFullScreen
+                          />
+
+                          {!isActive && (
+                            <button
+                              type="button"
+                              onClick={() => setActiveVideo(id)}
+                              className="absolute inset-0 flex items-center justify-center bg-black/10 text-white hover:bg-black/20"
+                            >
+                              <span className="flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold shadow-sm">
+                                <Play className="h-3.5 w-3.5" />
+                                {t('products.gallery.playHint')}
+                              </span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Arrows */}
+            {showVideoArrows && (
+              <>
+                <button
+                  onClick={scrollVideoPrev}
+                  disabled={!canScrollPrev}
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100
+    ${!canScrollPrev ? 'hidden' : ''}`}
+                >
+                  <ChevronLeft className="h-5 w-5 text-gray-700" />
+                </button>
+
+                <button
+                  onClick={scrollVideoNext}
+                  disabled={!canScrollNext}
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100
+    ${!canScrollNext ? 'hidden' : ''}`}
+                >
+                  <ChevronRight className="h-5 w-5 text-gray-700" />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      ) : null}
 
       {selectedImage && canPortal
         ? createPortal(

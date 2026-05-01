@@ -34,6 +34,7 @@ export const CATALOG_DATA: CatalogCategory[] = [
       { src: shGarage, altKey: 'products.singleHandle' },
       { src: shScreendoor, altKey: 'products.singleHandle' },
     ],
+    videos: [{ url: 'https://youtu.be/YDsOInyymZI', titleKey: 'products.singleHandle' }],
     specs: COMMON_SPECS,
   },
   {
@@ -46,6 +47,11 @@ export const CATALOG_DATA: CatalogCategory[] = [
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.entry',
     images: [{ src: dhScreendoor, altKey: 'products.doubleHandle' }],
+    videos: [
+      { url: 'https://youtu.be/WVjZmSLttiM', titleKey: 'products.doubleHandle' },
+      { url: 'https://youtu.be/f-OyCptcEXI', titleKey: 'products.doubleHandle' },
+      { url: 'https://youtu.be/FvmzlKNGlFQ', titleKey: 'products.doubleHandle' },
+    ],
     specs: COMMON_SPECS,
   },
   {
@@ -63,6 +69,11 @@ export const CATALOG_DATA: CatalogCategory[] = [
       { src: mlInner, altKey: 'products.multiHandle' },
       { src: mlOutter, altKey: 'products.multiHandle' },
       { src: mlVert, altKey: 'products.multiHandle' },
+    ],
+    videos: [
+      { url: 'https://youtu.be/-A_QTFndg_A', titleKey: 'products.multiHandle' },
+      { url: 'https://youtu.be/3Cwey3f95vk', titleKey: 'products.multiHandle' },
+      { url: 'https://youtu.be/EEiIbfY1zBI', titleKey: 'products.multiHandle' },
     ],
     specs: COMMON_SPECS,
   },

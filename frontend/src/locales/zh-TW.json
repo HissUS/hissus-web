@@ -74,6 +74,83 @@
     "products": "產品目錄",
     "getQuote": "取得報價"
   },
+  "quote": {
+    "title": "取得報價",
+    "subtitle": "請填寫您的聯絡資訊、德州城市，以及您想要的產品，我們會透過電子郵件與您聯繫。",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "emailAddress": "電子郵件",
+    "phoneNumber": "電話號碼",
+    "city": "城市（德州）",
+    "cityPlaceholder": "請選擇城市",
+    "productPlaceholder": "請選擇產品",
+    "productWanted": "想要的產品",
+    "messageOptional": "訊息（選填）",
+    "send": "送出報價",
+    "reset": "重設",
+    "sentNotice": "已開啟郵件程式，請再送出電子郵件以完成需求。",
+    "errors": {
+      "nameRequired": "名字與姓氏為必填。",
+      "emailInvalid": "請輸入有效的電子郵件地址。",
+      "phoneRequired": "電話號碼為必填。",
+      "cityRequired": "請選擇一個德州城市。",
+      "productRequired": "請選擇一個產品。"
+    },
+    "email": {
+      "title": "報價需求",
+      "contactSection": "聯絡資訊",
+      "locationSection": "地點",
+      "productSection": "需求產品",
+      "messageSection": "訊息",
+      "none": "（無）"
+    },
+    "cityGroups": {
+      "northTexas": "北德州",
+      "middleTexas": "中德州",
+      "southTexas": "南德州"
+    },
+    "cities": {
+      "allen": "Allen (艾倫)",
+      "arlington": "Arlington (阿靈頓)",
+      "austin": "Austin (奧斯汀)",
+      "baytown": "Baytown (貝城)",
+      "bryan": "Bryan (布萊恩)",
+      "carrollton": "Carrollton (卡羅爾頓)",
+      "collegeStation": "College Station (大學城)",
+      "conroe": "Conroe (康羅)",
+      "corpusChristi": "Corpus Christi (科珀斯克里斯蒂)",
+      "dallas": "Dallas (達拉斯)",
+      "denton": "Denton (丹頓)",
+      "elPaso": "El Paso (埃爾帕索)",
+      "fortWorth": "Fort Worth (沃斯堡)",
+      "frisco": "Frisco (弗里斯科)",
+      "galveston": "Galveston (加爾維斯頓)",
+      "garland": "Garland (加蘭)",
+      "grandPrairie": "Grand Prairie (大草原城)",
+      "grapevine": "Grapevine (葡萄藤城)",
+      "houston": "Houston (休士頓)",
+      "irving": "Irving (厄文)",
+      "katy": "Katy (凱蒂)",
+      "killeen": "Killeen (基林)",
+      "leagueCity": "League City (聯盟城)",
+      "lewisville": "Lewisville (路易斯維爾)",
+      "lubbock": "Lubbock (拉伯克)",
+      "mckinney": "McKinney (麥金尼)",
+      "mesquite": "Mesquite (梅斯基特)",
+      "newBraunfels": "New Braunfels (新布朗費爾斯)",
+      "pasadena": "Pasadena (帕薩迪納)",
+      "pearland": "Pearland (皮爾蘭)",
+      "plano": "Plano (普萊諾)",
+      "richardson": "Richardson (理查森)",
+      "roundRock": "Round Rock (朗德羅克)",
+      "sanAntonio": "San Antonio (聖安東尼奧)",
+      "sugarLand": "Sugar Land (舒格蘭)",
+      "temple": "Temple (坦普爾)",
+      "theWoodlands": "The Woodlands (木蘭鎮)",
+      "victoria": "Victoria (維多利亞)",
+      "waco": "Waco (韋科)"
+    }
+  },
   "products": {
     "updating": "更新中…",
     "showing": "正在顯示 {{name}}",
@@ -81,8 +158,8 @@
     "doubleHandle": "雙把手捲簾紗門",
     "doubleHandleShort": "雙把手",
     "doubleHandleSummary": "適合較大出入口的紗門選擇，外觀俐落且比例平衡。",
-    "windows": "窗紗",
-    "windowsShort": "窗紗",
+    "windows": "捲簾紗窗",
+    "windowsShort": "捲簾紗窗",
     "windowsSummary": "清爽的窗紗解決方案，在保持通風的同時幫助阻擋蚊蟲。",
     "featured": {
       "heading": "精選產品"
@@ -91,10 +168,14 @@
       "singleHandle": "單把手捲簾紗門",
       "multiHandle": "多把手捲簾紗門",
       "doubleHandle": "雙把手捲簾紗門",
-      "windows": "窗紗"
+      "windows": "捲簾紗窗"
     },
     "gallery": {
-      "zoomHint": "點擊放大"
+      "imagesTitle": "相片",
+      "zoomHint": "點擊放大",
+      "videosTitle": "影片",
+      "playHint": "點擊播放",
+      "videoTitle": "產品影片"
     },
     "page": {
       "availability": {
@@ -121,9 +202,9 @@
     "singleHandle": "單把手捲簾紗門",
     "singleHandleShort": "單把手",
     "singleHandleSummary": "適合日常門扇的簡潔設計，外觀現代俐落。",
-    "singleHandleDescription": "單把手紗門為最通用的選擇，操作簡單、耐用且適合標準門洞。外觀俐落，安裝流程成熟，價格與性能兼具。\n- 適合安裝於前門與後門（後院門）出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
-    "multiHandleDescription": "多把手紗門專為較寬開口設計，提供額外支撐與多點把手配置以提升操作便利性。適用於寬幅開口，並可支援客製化安裝需求。\n- 適合安裝於後院平台出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
-    "doubleHandleDescription": "雙把手紗門提供雙扇對稱的出入口解決方案，方便通行並帶來大器外觀，適合大型入門或強調門面比例的場合。\n- 適合安裝於後院門以及臥室通往後院的出入口。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "singleHandleDescription": "單把手紗門為最通用的選擇，操作簡單、耐用且適合標準門洞。外觀俐落，安裝流程成熟，價格與性能兼具。\n- 適合安裝於前門與後門（後院門）出入口。\n- 提供 50% 與 90% UV（UPF）防護選項，滿足不同需求。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "multiHandleDescription": "多把手紗門專為較寬開口設計，提供額外支撐與多點把手配置以提升操作便利性。適用於寬幅開口，並可支援客製化安裝需求。\n- 適合安裝於後院平台出入口。\n- 提供 50% 與 90% UV（UPF）防護選項，滿足不同需求。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
+    "doubleHandleDescription": "雙把手紗門提供雙扇對稱的出入口解決方案，方便通行並帶來大器外觀，適合大型入門或強調門面比例的場合。\n- 適合安裝於後院門以及臥室通往後院的出入口。\n- 提供 50% 與 90% UV（UPF）防護選項，滿足不同需求。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可減少灰塵與日照影響，延長使用壽命。\n- 極簡外觀適合各種門框與室內風格。",
     "windowsDescription": "窗紗輕巧且不突兀，優化通風同時阻擋昆蟲。可搭配多種網材選項，兼顧視野與防護需求。\n- 適合安裝於住宅與商業空間的窗戶。\n- 提供 50% 與 90% UV（UPF）防護選項，滿足不同需求。\n- 可客製顏色、尺寸與智慧鎖配置。\n- 安裝流程簡單安全，可縮短施工時間並降低維護成本。\n- 捲收式設計可降低灰塵與日照影響，延長使用壽命。\n- 極簡外觀可搭配各種窗框與室內風格。",
     "spec": {
       "midgeProof": "20 × 20 防蚊網格",

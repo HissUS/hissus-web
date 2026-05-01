@@ -10,6 +10,7 @@ import { MainLayout } from '../layouts/MainLayout'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/LoginPage'
 import { ProductsPage } from '../pages/ProductsPage'
+import { QuotePage } from '../pages/QuotePage'
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
@@ -74,20 +75,15 @@ const consoleCountryRoute = createRoute({
 })
 
 // /get-a-quote | /$country/get-a-quote
-const quotePage = () => (
-  <div className="mx-auto max-w-7xl px-4 py-16 text-center text-gray-500">
-    Quote — coming soon
-  </div>
-)
 const quoteRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/get-a-quote',
-  component: quotePage,
+  component: QuotePage,
 })
 const quoteCountryRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/$country/get-a-quote',
-  component: quotePage,
+  component: QuotePage,
 })
 
 // ─── Layout: Auth ─────────────────────────────────────────────────────────────

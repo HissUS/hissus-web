@@ -93,6 +93,17 @@ export function ProductsPage() {
                       key={category.id}
                       to={`${prefix}/products` as never}
                       search={{ tab: category.id } as never}
+                      onClick={() => {
+                        if (typeof window === 'undefined') return
+                        if (!window.matchMedia('(max-width: 639px)').matches) return
+                        requestAnimationFrame(() => {
+                          const details = document.getElementById('product-details')
+                          if (!details) return
+                          const offset = 218
+                          const top = details.getBoundingClientRect().top + window.scrollY - offset
+                          window.scrollTo({ top, behavior: 'smooth' })
+                        })
+                      }}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
                         'group rounded-3xl border p-3 text-left shadow-sm transition-all duration-200 ring-2 ring-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2',
@@ -153,7 +164,11 @@ export function ProductsPage() {
               </div>
             </section>
 
-            <section className="min-w-0 space-y-8">
+            <section className="min-w-0 space-y-8 border-t border-gray-200 pt-8 xl:border-l xl:border-t-0 xl:border-gray-200 xl:pl-8 xl:pt-0">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-[--primary]" aria-hidden="true" />
+                <h2 className="text-2xl font-bold text-gray-900">{t('products.page.overview')}</h2>
+              </div>
               <Card className="overflow-hidden border-gray-200 shadow-lg" id="product-details">
                 <div className="h-1 bg-[--primary]" aria-hidden="true" />
                 <CardHeader className="space-y-4 bg-linear-to-b from-white to-gray-50">
@@ -170,6 +185,7 @@ export function ProductsPage() {
                     <CardTitle className="wrap-break-word text-2xl text-gray-900 sm:text-3xl">
                       {t(active.nameKey)}
                     </CardTitle>
+                    <div className="h-px w-full bg-gray-200" aria-hidden="true" />
                     <CardDescription className="max-w-3xl text-base leading-relaxed text-gray-600 wrap-break-word">
                       <span className="block">{descriptionLead}</span>
                       {descriptionBullets.length > 0 ? (
@@ -185,7 +201,7 @@ export function ProductsPage() {
 
                 <CardContent className="space-y-6 p-4 sm:p-6">
                   <div className="overflow-hidden rounded-3xl border border-gray-200 bg-gray-100 shadow-inner">
-                    <GalleryCarousel images={active.images} />
+                    <GalleryCarousel images={active.images} videos={active.videos} />
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-3">

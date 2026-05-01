@@ -13,7 +13,7 @@ export const SITE_CONFIG = {
     line: "markou071",
     wechat: "markou071",
     facebook: {
-      label: "Hiss Eagle",
+      label: "Hiss US",
       href: "https://www.facebook.com/hiss.eagle.2025/",
     },
   },

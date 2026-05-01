@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Lock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
 import { useLocale, useLocaleSwitcher } from '@/hooks'
@@ -55,11 +54,11 @@ export function Header() {
                 {t('nav.getQuote')}
               </Button>
             </Link>
-            <Link to={`${prefix}/login` as never} className="inline-flex items-center">
+            {/* <Link to={`${prefix}/login` as never} className="inline-flex items-center">
               <Button variant="outline" size="sm" className="px-3 text-xs">
                 {t('nav.login')}
               </Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
 
@@ -82,7 +81,7 @@ export function Header() {
           >
             {t('nav.products')}
           </Link>
-          <Link
+          {/* <Link
             to={`${prefix}/console` as never}
             className="inline-flex min-h-11 items-center gap-1 px-1 font-medium text-gray-400 hover:text-gray-700"
             activeProps={{
@@ -91,7 +90,7 @@ export function Header() {
           >
             <Lock className="h-3 w-3" aria-hidden="true" />
             <span>{t('nav.console')}</span>
-          </Link>
+          </Link> */}
         </nav>
 
         <div className="hidden items-center gap-3 sm:flex">
@@ -124,11 +123,11 @@ export function Header() {
             <Button size="sm">{t('nav.getQuote')}</Button>
           </Link>
 
-          <Link to={`${prefix}/login` as never} className="inline-flex items-center">
+          {/* <Link to={`${prefix}/login` as never} className="inline-flex items-center">
             <Button variant="outline" size="sm">
               {t('nav.login')}
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </header>
