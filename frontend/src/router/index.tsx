@@ -4,6 +4,7 @@ import {
   createRouter,
   Outlet,
   redirect,
+  ScrollRestoration,
 } from '@tanstack/react-router'
 import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
@@ -14,7 +15,14 @@ import { QuotePage } from '../pages/QuotePage'
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-const rootRoute = createRootRoute({ component: Outlet })
+const rootRoute = createRootRoute({
+  component: () => (
+    <>
+      <ScrollRestoration />
+      <Outlet />
+    </>
+  ),
+})
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
