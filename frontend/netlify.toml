@@ -1,0 +1,18 @@
+[build]
+command = "pnpm build"
+functions = "frontend/netlify/functions"
+publish = "dist"
+
+[dev]
+command = "pnpm dev"
+targetPort = 5173
+port = 8888
+envFiles = [".env.local"]
+
+[functions]
+node_bundler = "esbuild"
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200

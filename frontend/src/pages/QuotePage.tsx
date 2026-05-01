@@ -58,8 +58,6 @@ const TEXAS_CITY_GROUPS = [
   },
 ]
 
-const TEXAS_CITIES = TEXAS_CITY_GROUPS.flatMap((group) => group.options)
-
 const PRODUCT_OPTIONS = CATALOG_DATA.map((product) => ({
   value: product.id,
   label: product.nameKey,
@@ -74,7 +72,7 @@ function RequiredMark({ children }: { children: string }) {
 }
 
 export function QuotePage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -89,12 +87,13 @@ export function QuotePage() {
     if (!firstName.trim() || !lastName.trim()) return t('quote.errors.nameRequired')
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return t('quote.errors.emailInvalid')
     if (!phone.trim()) return t('quote.errors.phoneRequired')
+    if (!phone.match(/^\d{10}$/)) return t('quote.errors.phoneInvalid')
     if (!city) return t('quote.errors.cityRequired')
     if (!product) return t('quote.errors.productRequired')
     return null
   }
 
-  function handleSubmit(e?: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e?: FormEvent<HTMLFormElement>) {
     e?.preventDefault()
     const err = validate()
     if (err) {
@@ -102,36 +101,65 @@ export function QuotePage() {
       return
     }
 
-    const selectedProduct = PRODUCT_OPTIONS.find((item) => item.value === product)
-    const selectedCity = TEXAS_CITIES.find((item) => item.value === city)
-    const productLabel = selectedProduct?.label ?? product
+    const parseResponseBody = async (response: Response) => {
+      const contentType = response.headers.get('content-type') || ''
 
-    const subject = `HISS US Quote Request - ${firstName} ${lastName}`
-    const bodyLines = [
-      t('quote.email.title'),
-      '',
-      t('quote.email.contactSection'),
-      `  ${t('quote.firstName')}: ${firstName}`,
-      `  ${t('quote.lastName')}: ${lastName}`,
-      `  ${t('quote.emailAddress')}: ${email}`,
-      `  ${t('quote.phoneNumber')}: ${phone}`,
-      '',
-      t('quote.email.locationSection'),
-      `  ${t('quote.city')}: ${t(selectedCity?.labelKey ?? 'quote.cities.austin')}`,
-      '',
-      t('quote.email.productSection'),
-      `  ${t('quote.productWanted')}: ${t(productLabel)}`,
-      '',
-      t('quote.email.messageSection'),
-      `  ${message || t('quote.email.none')}`,
-    ]
-    const body = bodyLines.join('\n')
-    const mailto = `mailto:ivanou0814@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      if (contentType.includes('application/json')) {
+        try {
+          return await response.json()
+        } catch {
+          return null
+        }
+      }
 
-    // open user's mail client with prefilled email
-    window.location.href = mailto
-    setSubmitted(true)
-    setError(null)
+      try {
+        const text = await response.text()
+        return text ? { error: text } : null
+      } catch {
+        return null
+      }
+    }
+
+    try {
+      const response = await fetch('/.netlify/functions/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          city,
+          product,
+          message,
+          locale: i18n.language,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await parseResponseBody(response)
+        const fallbackError =
+          response.status === 404 ? t('quote.errors.submitFailed') : t('quote.errors.submitFailed')
+        setError(errorData?.error || fallbackError)
+        return
+      }
+
+      setSubmitted(true)
+      setError(null)
+      // Reset form after successful submission
+      setFirstName('')
+      setLastName('')
+      setEmail('')
+      setPhone('')
+      setCity('')
+      setProduct('')
+      setMessage('')
+    } catch (err) {
+      setError(t('quote.errors.submitFailed'))
+      console.error('Quote submission error:', err)
+    }
   }
 
   return (
@@ -189,9 +217,10 @@ export function QuotePage() {
             </span>
             <input
               type="tel"
+              maxLength={10}
               className="h-11 rounded-md border px-3 py-2 shadow-sm focus:ring-2 focus:ring-primary/40"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
               required
               aria-required
             />

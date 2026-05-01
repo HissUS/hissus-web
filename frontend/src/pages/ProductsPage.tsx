@@ -261,12 +261,6 @@ export function ProductsPage() {
                     >
                       <Button className="w-full sm:w-auto">{t('nav.getQuote')}</Button>
                     </Link>
-                    <a
-                      href="mailto:hiss.usatx@gmail.com"
-                      className="inline-flex w-full items-center justify-center rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 sm:w-auto"
-                    >
-                      {t('products.page.contact')}
-                    </a>
                   </div>
                 </CardContent>
               </Card>
