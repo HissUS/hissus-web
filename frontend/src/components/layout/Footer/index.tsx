@@ -1,4 +1,4 @@
-import { Facebook, Mail, Phone } from 'lucide-react'
+import { Facebook, Mail, MapPinned, Phone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
 import { useLocale, useLocaleSwitcher } from '@/hooks'
@@ -31,6 +31,7 @@ const CONTACT_ICONS: Record<string, React.ReactNode> = {
   line: <LineIcon className="h-4 w-4" />,
   wechat: <WeChatIcon className="h-4 w-4" />,
   facebook: <Facebook className="h-4 w-4" aria-hidden="true" />,
+  address: <MapPinned className="h-4 w-4" aria-hidden="true" />,
 }
 
 function isContactLink(value: unknown): value is ContactLink {

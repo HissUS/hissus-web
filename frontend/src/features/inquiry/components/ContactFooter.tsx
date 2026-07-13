@@ -42,6 +42,9 @@ export function ContactFooter() {
         <a href="#" className={styles.socialLink} aria-label={t('inquiry.social.facebook')}>
           <span>{t('inquiry.social.facebook')}</span>
         </a>
+        <a href="#" className={styles.socialLink} aria-label={t('inquiry.social.address')}>
+          <span>{t('inquiry.social.address')}</span>
+        </a>
       </div>
     </div>
   )
