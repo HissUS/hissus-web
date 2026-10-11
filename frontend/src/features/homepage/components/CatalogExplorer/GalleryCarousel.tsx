@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight, Play, X } from 'lucide-react'
@@ -24,11 +24,11 @@ function ensureLoopBuffer<T>(items: T[]): T[] {
 function getYouTubeId(url: string): string | null {
   try {
     const parsed = new URL(url)
-    if (parsed.hostname.includes('youtu.be')) {
+    if (parsed.hostname === 'youtu.be') {
       return parsed.pathname.replace('/', '') || null
     }
 
-    if (parsed.hostname.includes('youtube.com')) {
+    if (['youtube.com', 'www.youtube.com'].includes(parsed.hostname)) {
       return parsed.searchParams.get('v')
     }
   } catch {
@@ -40,6 +40,7 @@ function getYouTubeId(url: string): string | null {
 
 export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   const { t } = useTranslation()
+  const dialogRef = useRef<HTMLDivElement>(null)
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
   const [videoEmblaRef, videoEmblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
   const [selectedImage, setSelectedImage] = useState<CatalogImage | null>(null)
@@ -68,17 +69,24 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   useEffect(() => {
     if (!selectedImage) return undefined
 
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    dialogRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setSelectedImage(null)
+      if (event.key === 'Tab') {
+        event.preventDefault()
+        dialogRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
       document.body.style.overflow = previousOverflow
+      previouslyFocused?.focus()
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [selectedImage])
@@ -125,6 +133,10 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                   <img
                     src={getAssetUrl(img.src)}
                     alt={t(img.altKey)}
+                    width="1200"
+                    height="900"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full aspect-4/3 object-cover transition-transform duration-300 group-hover/image:scale-[1.03]"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/30 to-transparent" />
@@ -143,18 +155,20 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
             <button
               type="button"
               onClick={scrollPrev}
-              aria-label="Previous images"
-              className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:left-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100"
+              aria-label={t('gallery.previous')}
+              className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:left-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
             >
-              <ChevronLeft className="h-5 w-5 text-gray-700" />
+              <ChevronLeft className="h-5 w-5 text-gray-700" aria-hidden="true" />
+              <span className="sr-only">{t('gallery.previous')}</span>
             </button>
             <button
               type="button"
               onClick={scrollNext}
-              aria-label="Next images"
-              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:right-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100"
+              aria-label={t('gallery.next')}
+              className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md transition-opacity duration-200 opacity-100 md:right-3 md:h-9 md:w-9 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
             >
-              <ChevronRight className="h-5 w-5 text-gray-700" />
+              <ChevronRight className="h-5 w-5 text-gray-700" aria-hidden="true" />
+              <span className="sr-only">{t('gallery.next')}</span>
             </button>
           </>
         )}
@@ -175,9 +189,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                   const id = video.id as string
                   const isActive = activeVideo === id
 
-                  const src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=${
-                    isActive ? 0 : 1
-                  }&loop=1&playlist=${id}&controls=${isActive ? 1 : 0}&modestbranding=1&rel=0&playsinline=1`
+                  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=0&controls=1&rel=0&playsinline=1`
 
                   return (
                     <div
@@ -186,23 +198,31 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                     >
                       <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black/5 shadow-sm">
                         <div className="relative aspect-video w-full">
-                          <iframe
-                            className={`h-full w-full ${isActive ? '' : 'pointer-events-none'}`}
-                            src={src}
-                            title={
-                              video.titleKey ? t(video.titleKey) : t('products.gallery.videoTitle')
-                            }
-                            allow="autoplay; encrypted-media; picture-in-picture"
-                            allowFullScreen
-                          />
+                          {isActive && (
+                            <iframe
+                              className={`h-full w-full ${isActive ? '' : 'pointer-events-none'}`}
+                              src={src}
+                              title={
+                                video.titleKey
+                                  ? t(video.titleKey)
+                                  : t('products.gallery.videoTitle')
+                              }
+                              allow="encrypted-media; picture-in-picture"
+                              referrerPolicy="strict-origin-when-cross-origin"
+                              allowFullScreen
+                            />
+                          )}
 
                           {!isActive && (
                             <button
                               type="button"
                               onClick={() => setActiveVideo(id)}
-                              className="absolute inset-0 flex items-center justify-center bg-black/10 text-white hover:bg-black/20"
+                              className="absolute inset-0 flex flex-col gap-4 items-center justify-center bg-gray-100 text-gray-900 hover:bg-gray-200"
                             >
-                              <span className="flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold shadow-sm">
+                              <span className="text-sm font-medium">
+                                {t(video.titleKey ?? 'products.gallery.videoTitle')}
+                              </span>
+                              <span className="flex items-center gap-2 rounded-full bg-primary text-white px-3 py-1.5 text-xs font-semibold shadow-sm">
                                 <Play className="h-3.5 w-3.5" />
                                 {t('products.gallery.playHint')}
                               </span>
@@ -220,21 +240,25 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
             {showVideoArrows && (
               <>
                 <button
+                  aria-label={t('gallery.previousVideo')}
                   onClick={scrollVideoPrev}
                   disabled={!canScrollPrev}
-                  className={`absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100
     ${!canScrollPrev ? 'hidden' : ''}`}
                 >
-                  <ChevronLeft className="h-5 w-5 text-gray-700" />
+                  <ChevronLeft className="h-5 w-5 text-gray-700" aria-hidden="true" />
+                  <span className="sr-only">{t('gallery.previous')}</span>
                 </button>
 
                 <button
+                  aria-label={t('gallery.nextVideo')}
                   onClick={scrollVideoNext}
                   disabled={!canScrollNext}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/70 shadow-md backdrop-blur-md md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100
     ${!canScrollNext ? 'hidden' : ''}`}
                 >
-                  <ChevronRight className="h-5 w-5 text-gray-700" />
+                  <ChevronRight className="h-5 w-5 text-gray-700" aria-hidden="true" />
+                  <span className="sr-only">{t('gallery.next')}</span>
                 </button>
               </>
             )}
@@ -250,6 +274,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
               className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-6"
             >
               <div
+                ref={dialogRef}
                 role="dialog"
                 aria-modal="true"
                 aria-label={t(selectedImage.altKey)}
@@ -259,7 +284,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                 <button
                   type="button"
                   onClick={() => setSelectedImage(null)}
-                  aria-label="Close enlarged image"
+                  aria-label={t('gallery.close')}
                   className="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/70 md:right-3 md:top-3 md:h-10 md:w-10"
                 >
                   <X className="h-5 w-5" />

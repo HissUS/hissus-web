@@ -31,7 +31,7 @@ export function ProductsPage() {
       : t(active.statusKey ?? 'products.page.status.popular')
 
   return (
-    <main className="overflow-x-hidden bg-white">
+    <div className="overflow-x-hidden bg-white">
       <section className="relative overflow-hidden bg-linear-to-b from-blue-50/50 via-white to-white py-12 sm:py-16">
         <div className="absolute inset-0 z-0 opacity-100 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.15),transparent_35%),radial-gradient(circle_at_top_right,rgba(99,102,241,0.15),transparent_30%)]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4">
@@ -68,7 +68,10 @@ export function ProductsPage() {
           </div>
 
           <div className="grid gap-8 xl:grid-cols-[1.05fr_1.35fr] xl:items-start">
-            <section id="select-product" className="min-w-0 space-y-4 xl:sticky xl:top-24 animate-in fade-in duration-700 delay-150 fill-mode-both">
+            <section
+              id="select-product"
+              className="min-w-0 space-y-4 xl:sticky xl:top-24 animate-in fade-in duration-700 delay-150 fill-mode-both"
+            >
               <div className="flex items-center gap-2">
                 <LayoutGrid className="h-5 w-5 text-[--primary]" aria-hidden="true" />
                 <h2 className="text-2xl font-bold text-gray-900">
@@ -169,8 +172,14 @@ export function ProductsPage() {
                 <Sparkles className="h-5 w-5 text-[--primary]" aria-hidden="true" />
                 <h2 className="text-2xl font-bold text-gray-900">{t('products.page.overview')}</h2>
               </div>
-              <Card className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5" id="product-details">
-                <div className="h-2 bg-linear-to-r from-primary via-blue-500 to-indigo-600" aria-hidden="true" />
+              <Card
+                className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5"
+                id="product-details"
+              >
+                <div
+                  className="h-2 bg-linear-to-r from-primary via-blue-500 to-indigo-600"
+                  aria-hidden="true"
+                />
                 <CardHeader className="space-y-4 bg-linear-to-b from-white to-gray-50">
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full border border-[--primary]/20 bg-[--primary]/10 px-3 py-1 text-xs font-semibold text-[--primary]">
@@ -201,7 +210,11 @@ export function ProductsPage() {
 
                 <CardContent className="space-y-6 p-4 sm:p-6">
                   <div className="overflow-hidden rounded-3xl border border-gray-200 bg-gray-100 shadow-inner">
-                    <GalleryCarousel images={active.images} videos={active.videos} />
+                    <GalleryCarousel
+                      key={active.id}
+                      images={active.images}
+                      videos={active.videos}
+                    />
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-3">
@@ -268,6 +281,6 @@ export function ProductsPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

@@ -32,3 +32,6 @@ dist-ssr
 
 # Stray lock files
 deno.lock
+
+# Project-local pnpm cache for restricted cloud workspaces
+.pnpm-store/

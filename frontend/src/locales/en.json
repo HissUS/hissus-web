@@ -72,7 +72,19 @@
     "login": "Login",
     "logout": "Logout",
     "products": "Products",
-    "getQuote": "Get A Quote"
+    "getQuote": "Get A Quote",
+    "services": "Factory & Facility Services",
+    "experience": "Experience",
+    "screens": "Window & Screen Solutions",
+    "about": "About",
+    "contact": "Contact",
+    "discuss": "Discuss Your Project",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "primary": "Main navigation",
+    "skip": "Skip to content",
+    "english": "English",
+    "chinese": "繁體中文"
   },
   "quote": {
     "title": "Get a Quote",
@@ -95,7 +107,8 @@
       "phoneRequired": "Phone number is required.",
       "phoneInvalid": "Please enter a valid phone number.",
       "cityRequired": "Please select a Texas city.",
-      "productRequired": "Please select a product."
+      "productRequired": "Please select a product.",
+      "submitFailed": "We could not send your request. Please try again or contact us by email."
     },
     "email": {
       "adminSubject": "HISS US Quote Request - {{name}}",
@@ -224,5 +237,140 @@
     },
     "title": "Product Catalog",
     "viewDetails": "View Details"
+  },
+  "company": {
+    "eyebrow": "HISSUS · FACTORIES & FACILITIES",
+    "heroTitle": "A clear foundation for your next facility.",
+    "heroDesc": "Factory setup and construction services, informed by our team’s hospital and cleanroom experience. A considered approach to quality, cost, and risk.",
+    "heroLink": "Explore our approach",
+    "photoPending": "Project photography pending",
+    "photoNote": "Factory and facility images will be added after project details and publication permissions are confirmed.",
+    "introLabel": "WHAT WE DO",
+    "introTitle": "Spaces for the work ahead.",
+    "introDesc": "We help companies establish factories and facilities. We start with a conversation about your needs and define the construction scope and cooperation terms together.",
+    "introLink": "Factory & facility services",
+    "experienceLabel": "OUR TEAM’S EXPERIENCE",
+    "experienceTitle": "Experience in demanding environments.",
+    "experienceDesc": "Our team brings hospital and cleanroom construction experience to conversations about your facility. Every project has its own requirements; the scope and responsibilities are agreed before work begins.",
+    "hospital": "Hospital construction",
+    "cleanroom": "Cleanroom construction",
+    "experienceNote": "Talk with our team about how this experience relates to your facility needs.",
+    "gmpLabel": "A PROPOSED COOPERATION MODEL",
+    "gmpTitle": "Clear costs. Shared interests.",
+    "gmpIntro": "We recommend considering GMP — Guaranteed Maximum Price — to help manage construction quality, cost, and risk. The budget ceiling, open-book reporting, and savings arrangements are defined in the project agreement.",
+    "gmpFull": "Guaranteed Maximum Price",
+    "gmpNote": "GMP refers to a pricing model, not Good Manufacturing Practice or a certification. The maximum price applies to the defined scope, subject to the contract and approved changes.",
+    "gmp": {
+      "ceiling": {
+        "title": "Budget ceiling",
+        "desc": "Establish an agreed maximum price for the defined project scope, subject to the contract and approved changes."
+      },
+      "transparent": {
+        "title": "Transparent costs",
+        "desc": "Open-book cost reporting helps you understand actual project expenses."
+      },
+      "savings": {
+        "title": "Shared savings",
+        "desc": "Savings below the agreed budget are shared between you and our team according to the agreed terms."
+      }
+    },
+    "photosLabel": "PROJECT PHOTOGRAPHY",
+    "photosTitle": "A closer look, with context.",
+    "photosDesc": "We are preparing a selection of relevant project images. Each will be accompanied by verified context, without assumptions about ownership or certification.",
+    "screensLabel": "ALSO AT HISSUS",
+    "screensTitle": "Open to light. Closed to insects.",
+    "screensDesc": "Our window and screen solutions remain a dedicated part of HISSUS. Explore the full product range, installation galleries, demonstrations, and quote service.",
+    "screensLink": "Explore window & screen solutions",
+    "screenAlt": "Retractable screens across a residential patio opening",
+    "screenCaption": "Residential screen installation shown in our existing product gallery.",
+    "contactLabel": "LET’S START A CONVERSATION",
+    "contactTitle": "Tell us what you’re building.",
+    "contactDesc": "Share your facility needs and questions. We can discuss the project scope and whether a GMP cooperation model is suitable.",
+    "email": "Email our team",
+    "phone": "Call our team",
+    "servicesTitle": "Factory & facility services",
+    "servicesDesc": "Helping companies establish spaces for their operations, with a construction approach shaped by our team’s hospital and cleanroom experience.",
+    "scopeTitle": "Begin with a defined scope.",
+    "scopeDesc": "Your facility needs, construction scope, responsibilities, budget, and cooperation terms form the basis of the project discussion. Specific services and deliverables are confirmed in the project agreement.",
+    "aboutTitle": "One team. A thoughtful approach.",
+    "aboutDesc": "HISSUS is expanding its focus to factory setup and construction services while continuing to offer window and screen solutions. Our team brings hospital and cleanroom construction experience.",
+    "aboutPrinciple": "We believe a clear scope, transparent costs, and aligned interests are a useful foundation for a working relationship.",
+    "contactPageTitle": "Discuss your project",
+    "contactPageDesc": "Tell us about your factory or facility needs. For window and screen pricing, use our existing product quote form.",
+    "quoteLink": "Request a window & screen quote",
+    "facilityCity": "Project location",
+    "facilityProduct": "Factory & facility construction",
+    "facilityPhoneHint": "Include your country code.",
+    "sentNotice": "Thank you. Your project inquiry has been sent to our team.",
+    "copyFailed": "Your request reached our team, but the confirmation email could not be sent. Please keep a copy of your details.",
+    "sending": "Sending…",
+    "honeypot": "Leave this field empty",
+    "service": "Service",
+    "sendInquiry": "Send project inquiry",
+    "privacy": "We use these contact details to respond to your inquiry. Please do not include confidential project information.",
+    "metadata": {
+      "home": {
+        "title": "Factory Setup & Construction | HISSUS",
+        "desc": "Discuss factory and facility construction with HISSUS. Our team brings hospital and cleanroom experience and recommends considering Guaranteed Maximum Price cooperation."
+      },
+      "services": {
+        "title": "Factory & Facility Services | HISSUS",
+        "desc": "Explore our construction approach and proposed Guaranteed Maximum Price model: a defined budget ceiling, transparent costs, and shared savings."
+      },
+      "about": {
+        "title": "About HISSUS",
+        "desc": "Meet HISSUS: factory and facility construction informed by our team’s experience, alongside our window and screen solutions."
+      },
+      "contact": {
+        "title": "Discuss Your Project | HISSUS",
+        "desc": "Contact HISSUS to discuss your factory or facility needs."
+      },
+      "screens": {
+        "title": "Window & Screen Solutions | HISSUS",
+        "desc": "Browse HISSUS retractable screen products, real installation galleries, and demonstrations."
+      },
+      "products": {
+        "title": "Window & Screen Product Catalog | HISSUS",
+        "desc": "Explore single-handle, double-handle, multi-handle, and window screen solutions."
+      },
+      "quote": {
+        "title": "Request a Screen Quote | HISSUS",
+        "desc": "Send a window or screen product inquiry to HISSUS."
+      },
+      "login": {
+        "title": "Login | HISSUS",
+        "desc": "HISSUS account login."
+      },
+      "console": {
+        "title": "Console | HISSUS",
+        "desc": "HISSUS console."
+      }
+    },
+    "console": "Console — coming soon",
+    "notFoundTitle": "Page not found",
+    "notFoundDesc": "Use the navigation to find our services or screen solutions."
+  },
+  "gallery": {
+    "previous": "Previous images",
+    "next": "Next images",
+    "previousVideo": "Previous videos",
+    "nextVideo": "Next videos",
+    "close": "Close image",
+    "top": "Back to top"
+  },
+  "contactLabels": {
+    "phone": "Phone",
+    "email": "Email",
+    "line": "LINE ID",
+    "wechat": "WeChat ID",
+    "facebook": "Facebook",
+    "address": "Address"
+  },
+  "quoteErrors": {
+    "submitFailed": "We could not send your request. Please try again or contact us by email.",
+    "invalid": "Please check your contact details and selections.",
+    "tooLarge": "Your message is too long. Please shorten it and try again.",
+    "rateLimited": "Too many requests. Please wait before trying again.",
+    "unavailable": "The inquiry service is temporarily unavailable. Please contact us by email."
   }
 }

@@ -1,0 +1,11 @@
+# Retain the environment's 24-hour package-release safety window.
+minimumReleaseAge: 1440
+# Permit only the native bundler's supported install step.
+allowBuilds:
+  esbuild: true
+  msw: false
+# 10.7.4 was released inside the safety window; 10.7.3 includes current fixes.
+overrides:
+  ip-address: 10.7.3
+# Keep the cache writable in cloud tasks and portable on developer machines.
+storeDir: .pnpm-store

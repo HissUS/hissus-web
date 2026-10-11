@@ -15,6 +15,7 @@ export function useLocale() {
   const locale = getLocaleFromCountry(country)
 
   useEffect(() => {
+    document.documentElement.lang = locale
     if (i18n.language !== locale) {
       i18n.changeLanguage(locale)
     }
@@ -33,7 +34,7 @@ export function useLocale() {
  */
 export function useLocaleSwitcher() {
   const navigate = useNavigate()
-  const { pathname } = useRouterState({ select: (s) => s.location })
+  const { pathname, hash } = useRouterState({ select: (s) => s.location })
   const { country: currentCountry } = useLocale()
 
   return (targetLocale: string | undefined) => {
@@ -43,9 +44,11 @@ export function useLocaleSwitcher() {
         : getCountryFromLocale(targetLocale)
 
     // Strip current country prefix if present
-    const basePath = currentCountry ? pathname.replace(new RegExp(`^/${currentCountry}`), '') : pathname
+    const basePath = currentCountry
+      ? pathname.replace(new RegExp(`^/${currentCountry}`), '')
+      : pathname
 
     const targetPath = targetCountry ? `/${targetCountry}${basePath}` : basePath
-    navigate({ to: targetPath })
+    navigate({ to: targetPath, search: true, hash })
   }
 }

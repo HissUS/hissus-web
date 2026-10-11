@@ -20,4 +20,9 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    // Shadcn variant exports and the code-based router are intentional boundaries.
+    files: ['src/components/ui/button.tsx', 'src/components/ui/badge.tsx', 'src/router/index.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ])

@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 
 const SHOW_AFTER_PX = 240
 
 export function BackToTopButton() {
+  const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -19,13 +21,23 @@ export function BackToTopButton() {
   return (
     <button
       type="button"
-      aria-label="Back to top"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className={`fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 ${
+      aria-label={t('gallery.top')}
+      aria-hidden={!isVisible}
+      tabIndex={isVisible ? 0 : -1}
+      onClick={() =>
+        window.scrollTo({
+          top: 0,
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'instant'
+            : 'smooth',
+        })
+      }
+      className={`fixed bottom-6 right-6 z-40 gap-2 px-4 min-h-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 ${
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
       }`}
     >
-      <ArrowRight className="h-6 w-6 -rotate-90" aria-hidden="true" />
+      <ArrowRight className="h-4 w-4 -rotate-90" aria-hidden="true" />
+      <span className="text-sm">{t('gallery.top')}</span>
     </button>
   )
 }

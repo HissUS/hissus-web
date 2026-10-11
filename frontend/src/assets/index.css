@@ -146,3 +146,125 @@ a,
     touch-action: manipulation;
   }
 }
+
+/* Company marketing pages; product layouts retain their existing styles. */
+.company-container {
+  width: min(100% - 3rem, 80rem);
+  margin-inline: auto;
+}
+.company-section {
+  padding-block: 6rem;
+  scroll-margin-top: 7rem;
+}
+.company-hero {
+  background: var(--color-gray-50);
+  padding-block: 3rem;
+}
+.company-title {
+  font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.company-heading {
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.company-eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+}
+.company-copy {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--color-gray-600);
+}
+.company-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+  transition: opacity 200ms;
+}
+.company-button:hover {
+  opacity: 0.9;
+}
+.company-button-light {
+  background: white;
+  color: var(--primary);
+}
+.company-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.5rem;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 0.5rem;
+}
+.company-contact {
+  background: var(--primary);
+  color: white;
+}
+.photo-placeholder {
+  min-height: 32rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  border: 1px dashed var(--color-gray-400);
+  color: var(--color-gray-700);
+  background: var(--color-gray-100);
+}
+.photo-placeholder-compact {
+  min-height: 20rem;
+}
+:lang(zh-TW) .company-title,
+:lang(zh-TW) .company-heading {
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+.company-contact :focus-visible,
+footer :focus-visible {
+  outline-color: white;
+}
+#main-content {
+  scroll-margin-top: 6rem;
+}
+@media (max-width: 767px) {
+  .company-container {
+    width: calc(100% - 2rem);
+  }
+  .company-section {
+    padding-block: 4rem;
+  }
+  .photo-placeholder {
+    min-height: 20rem;
+    padding: 2rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

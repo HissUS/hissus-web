@@ -1,4 +1,5 @@
-import type { Handler } from '@netlify/functions'
+import { inquirySchema } from '../inquiry'
+import type { Config, Handler } from '@netlify/functions'
 import { Resend } from 'resend'
 import en from '../../src/locales/en.json'
 import zhTW from '../../src/locales/zh-TW.json'
@@ -115,103 +116,144 @@ function buildEmailHtml(opts: {
 // ---------------------------------------------------------------------------
 // Handler
 // ---------------------------------------------------------------------------
-export const handler: Handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' }),
-    }
-  }
+type Mail = { from: string; to: string; subject: string; html: string }
+type MailResult = { error: unknown; data?: unknown }
+type Dependencies = {
+  getConfig: () => { apiKey?: string; recipientEmail: string; origins: string[] }
+  sendMail: (apiKey: string, mail: Mail) => Promise<MailResult>
+}
 
-  try {
-    const apiKey = process.env.RESEND_API_KEY
-    const recipientEmail = process.env.QUOTE_RECIPIENT_EMAIL || 'hiss.usatx@gmail.com'
+const dependencies: Dependencies = {
+  getConfig: () => ({
+    apiKey: process.env.RESEND_API_KEY,
+    recipientEmail: process.env.QUOTE_RECIPIENT_EMAIL || 'hiss.usatx@gmail.com',
+    origins: [
+      'https://hissus.com',
+      'https://www.hissus.com',
+      process.env.URL,
+      process.env.DEPLOY_PRIME_URL,
+    ].filter((value): value is string => Boolean(value)),
+  }),
+  sendMail: (apiKey, mail) =>
+    new Resend(apiKey).emails.send(mail, { signal: AbortSignal.timeout(8000) }),
+}
 
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'RESEND_API_KEY not configured' }),
-      }
-    }
+// Netlify enforces this at the edge after deployment; local code is not DDoS protection.
+export const config: Config = {
+  rateLimit: { windowLimit: 5, windowSize: 60, aggregateBy: ['ip', 'domain'] },
+}
 
-    const resend = new Resend(apiKey)
-
-    const { firstName, lastName, email, phone, city, product, message, locale } = JSON.parse(
-      event.body || '{}',
+export function createInquiryHandler(deps: Dependencies = dependencies): Handler {
+  return async (event) => {
+    const response = (statusCode: number, body: Record<string, unknown>) => ({
+      statusCode,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+        ...(statusCode === 405 ? { Allow: 'POST' } : {}),
+      },
+      body: JSON.stringify(body),
+    })
+    if (event.httpMethod !== 'POST') return response(405, { code: 'METHOD_NOT_ALLOWED' })
+    const headers = Object.fromEntries(
+      Object.entries(event.headers).map(([key, value]) => [key.toLowerCase(), value]),
     )
-
-    if (!firstName || !lastName || !email || !phone || !city || !product) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Missing required fields' }),
-      }
+    if (!headers['content-type']?.toLowerCase().startsWith('application/json'))
+      return response(415, { code: 'INVALID_INPUT' })
+    // Bound encoded input before decoding and parsing.
+    if ((event.body || '').length > 22000) return response(413, { code: 'TOO_LARGE' })
+    const body = event.isBase64Encoded
+      ? Buffer.from(event.body || '', 'base64').toString('utf8')
+      : event.body || '{}'
+    if (Buffer.byteLength(body) > 16384) return response(413, { code: 'TOO_LARGE' })
+    let parsed
+    try {
+      parsed = inquirySchema.safeParse(JSON.parse(body))
+    } catch {
+      return response(400, { code: 'INVALID_INPUT' })
     }
-
-    const lang = locale && (locale === 'zh-TW' || locale === 'en') ? locale : 'en'
-    const s = lang === 'zh-TW' ? zhTW.quote.email : en.quote.email
+    if (!parsed.success) return response(400, { code: 'INVALID_INPUT' })
+    const settings = deps.getConfig()
+    if (headers.origin && !settings.origins.includes(headers.origin))
+      return response(403, { code: 'ORIGIN_DENIED' })
+    if (!settings.apiKey) return response(503, { code: 'UNAVAILABLE' })
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      city,
+      product,
+      message,
+      locale: lang,
+      kind,
+    } = parsed.data
+    const dictionary = lang === 'zh-TW' ? zhTW : en
+    const s = dictionary.quote.email
     const fullName = `${firstName} ${lastName}`
-    const safeFullName = escapeHtml(fullName)
-    const safeEmail = escapeHtml(email)
-    const safePhone = escapeHtml(phone)
-    const safeCity = escapeHtml(city)
-    const safeProduct = escapeHtml(product)
-    const safeMessage = escapeHtml(message || '')
-
     const rows: [string, string][] = [
-      [s.labelName, safeFullName],
-      [s.labelEmail, safeEmail],
-      [s.labelPhone, safePhone],
-      [s.labelCity, safeCity],
-      [s.labelProduct, safeProduct],
+      [s.labelName, escapeHtml(fullName)],
+      [s.labelEmail, escapeHtml(email)],
+      [s.labelPhone, escapeHtml(phone)],
+      [kind === 'facility' ? dictionary.company.facilityCity : s.labelCity, escapeHtml(city)],
+      [
+        kind === 'facility' ? dictionary.company.service : s.labelProduct,
+        kind === 'facility' ? dictionary.company.facilityProduct : escapeHtml(product),
+      ],
     ]
-
-    // Admin notification email
-    await resend.emails.send({
-      from: 'HISS US - Pleated Screen Quote Form <quotes@hissus.com>',
-      to: recipientEmail,
-      subject: normalizeSubjectValue(fill(s.adminSubject, { name: fullName })),
-      html: buildEmailHtml({
-        lang,
-        badge: s.adminBadge,
-        heading: s.adminHeading,
-        rows,
-        message: safeMessage,
-        noneLabel: s.none,
-        detailsHeading: s.detailsHeading,
-        messageHeading: s.messageHeading,
-        footer: s.adminFooter,
-      }),
-    })
-
-    // User confirmation copy
-    await resend.emails.send({
-      from: 'HISS US - Pleated Screen Quote Form <quotes@hissus.com>',
-      to: email,
-      subject: s.userSubject,
-      html: buildEmailHtml({
-        lang,
-        badge: s.userSubject,
-        heading: s.userHeading,
-        intro: fill(s.userIntro, { name: firstName }),
-        rows,
-        message: safeMessage,
-        noneLabel: s.none,
-        detailsHeading: s.detailsHeading,
-        messageHeading: s.messageHeading,
-        footer: s.userFooter,
-      }),
-    })
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true }),
+    const common = {
+      lang,
+      rows,
+      message: escapeHtml(message),
+      noneLabel: s.none,
+      detailsHeading: s.detailsHeading,
+      messageHeading: s.messageHeading,
     }
-  } catch (err) {
-    console.error('FUNCTION ERROR:', err)
-
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Server error' }),
+    const from = 'HISSUS <quotes@hissus.com>'
+    try {
+      const admin = await deps.sendMail(settings.apiKey, {
+        from,
+        to: settings.recipientEmail,
+        subject: normalizeSubjectValue(
+          kind === 'facility'
+            ? `HISSUS — ${dictionary.company.facilityProduct} — ${fullName}`
+            : fill(s.adminSubject, { name: fullName }),
+        ),
+        html: buildEmailHtml({
+          ...common,
+          badge: kind === 'facility' ? dictionary.company.facilityProduct : s.adminBadge,
+          heading: kind === 'facility' ? dictionary.company.contactPageTitle : s.adminHeading,
+          footer: s.adminFooter,
+        }),
+      })
+      if (admin.error) return response(502, { code: 'SEND_FAILED' })
+    } catch {
+      console.error('Inquiry notification failed')
+      return response(502, { code: 'SEND_FAILED' })
     }
+    // Once the team has received the inquiry, do not encourage a duplicate submission
+    // merely because the optional customer copy fails.
+    let confirmationSent = false
+    try {
+      const confirmation = await deps.sendMail(settings.apiKey, {
+        from,
+        to: email,
+        subject:
+          kind === 'facility' ? `HISSUS — ${dictionary.company.contactPageTitle}` : s.userSubject,
+        html: buildEmailHtml({
+          ...common,
+          badge: kind === 'facility' ? dictionary.company.facilityProduct : s.userSubject,
+          heading: s.userHeading,
+          intro: fill(s.userIntro, { name: escapeHtml(firstName) }),
+          footer: s.userFooter,
+        }),
+      })
+      confirmationSent = !confirmation.error
+    } catch {
+      console.error('Inquiry confirmation failed')
+    }
+    return response(200, { success: true, confirmationSent })
   }
 }
+
+export const handler = createInquiryHandler()

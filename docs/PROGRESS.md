@@ -452,3 +452,89 @@
   - **Action 1**: Inspect TrustSection visually.
   - **Expected**: Section heading matches CatalogExplorer heading size (`text-4xl`); icon color matches primary blue; body text is consistent gray.
   - **URL**: `http://localhost:5173/home` (scroll past CatalogExplorer)
+
+---
+
+### [FEAT-010] Factory & Facility Website with Preserved Screen Business (2026-10-11)
+
+- **Summary**: Repositioned the bilingual company homepage around factory/facility construction and a proposed GMP cooperation model. Preserved the full screen homepage/catalog/media and quote flow, added facility inquiries, hardened the Netlify mail handler, refreshed dependencies within existing major ranges, and prepared hosting controls without deployment.
+- **Affected Files**:
+  - `README.md`
+  - `docs/PROGRESS.md`
+  - `docs/factory-website-review.md`
+  - `docs/features/homepage.md`
+  - `docs/security-review.md`
+  - `frontend/eslint.config.js`
+  - `frontend/netlify.toml`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/netlify/inquiry.ts`
+  - `frontend/package.json`
+  - `frontend/pnpm-lock.yaml`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/csp-regression.mjs`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/src/api/axios.ts`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-1600.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-800.webp`
+  - `frontend/src/assets/index.css`
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `frontend/src/components/layout/Header/index.tsx`
+  - `frontend/src/components/layout/MainLayout.tsx`
+  - `frontend/src/components/ui/BackToTopButton.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/CatalogExplorer.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/GalleryCarousel.tsx`
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/features/inquiry/index.ts`
+  - `frontend/src/features/inquiry/useInquiry.ts`
+  - `frontend/src/hooks/useLocale.ts`
+  - `frontend/src/hooks/usePageMetadata.ts`
+  - `frontend/src/layouts/AuthLayout.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/pages/AboutPage.tsx`
+  - `frontend/src/pages/ContactPage.tsx`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/LoginPage.tsx`
+  - `frontend/src/pages/ProductsPage.tsx`
+  - `frontend/src/pages/QuotePage.tsx`
+  - `frontend/src/pages/ServicesPage.tsx`
+  - `frontend/src/pages/WindowScreenPage.tsx`
+  - `frontend/src/router/index.tsx`
+  - `package.json`
+  - `pnpm-lock.yaml`
+- **Verification**:
+  - **Action**: Build, lint, validate locale parity, and run server regression tests.
+  - **Expected**: Build/TypeScript, lint, locale parity pass; all 7 server tests pass (mail stubbed).
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run a production preview and browser/CSP regressions.
+  - **Expected**: 110 browser checks pass across 1440/390/320 widths and both languages; 6 CSP pages report no violations. Real mail and external video playback remain unverified.
+  - **Command/URL**: `cd frontend && pnpm preview --host 0.0.0.0 --port 4173`; another terminal: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Action**: Exercise failure cases in the actual bundled function: invalid types/products/cities, malformed JSON, excessive body, untrusted Origin, provider failure, and confirmation failure.
+  - **Expected**: 400/413/403/502 as appropriate; no false success on team-mail failure; optional confirmation failure reports team receipt. No messages actually sent.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+  - **Action**: Compare security and content delivery review.
+  - **Expected**: One remaining frontend tooling advisory explained; no claim of deployed protections, live email verification, or confirmed factory photography.
+  - **Command/URL**: `cat docs/factory-website-review.md docs/security-review.md`; `cd frontend && pnpm audit`
+
+### [FIX-003] pnpm Release-Age Policy and Writable Cache (2026-10-11)
+
+- **Summary**: Replaced too-recent Query, Zod and ip-address resolutions with eligible releases and rebuilt the lockfile under pnpm 11's active safety policy. Added a portable ignored store and explicit install-script permissions so standard install/run commands work in the cloud workspace without bypassing verification.
+- **Affected Files**:
+  - `frontend/package.json`
+  - `frontend/pnpm-lock.yaml`
+  - `frontend/pnpm-workspace.yaml`
+  - `frontend/.gitignore`
+  - `docs/security-review.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Install the frozen lockfile using default pnpm 11 and run normal scripts.
+  - **Expected**: Release-age checks pass; no SQLite/cache permission failures; build, lint, locales and seven handler regressions pass.
+  - **Command/URL**: `cd frontend && pnpm install --frozen-lockfile && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Repeat production browser/CSP checks against the rebuilt assets.
+  - **Expected**: 110 browser checks and six CSP pages pass, with external mail/video stubbed.
+  - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Resolve a package published inside the configured 1440-minute window in an isolated reproduction.
+  - **Expected**: pnpm rejects it. Original user log documented rejection; no production dependency downgrade of protections or age-policy exception was added.

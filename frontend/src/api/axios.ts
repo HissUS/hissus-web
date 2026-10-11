@@ -17,8 +17,8 @@ apiClient.interceptors.response.use(
       const { useUiStore } = await import('@/store/uiStore')
       useUiStore.getState().clearAuthState()
       // Redirect preserving current language prefix
-      const lang = window.location.pathname.split('/')[1] || 'zh-TW'
-      window.location.href = `/${lang}/login`
+      const prefix = window.location.pathname.startsWith('/tw/') ? '/tw' : ''
+      window.location.href = `${prefix}/login`
     }
     return Promise.reject(error)
   },

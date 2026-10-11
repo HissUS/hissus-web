@@ -2,6 +2,7 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
   Outlet,
   redirect,
   ScrollRestoration,
@@ -10,26 +11,47 @@ import {
 import { useEffect, useRef } from 'react'
 import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
+import { useTranslation } from 'react-i18next'
+import { Link } from '@tanstack/react-router'
 import { HomePage } from '../pages/HomePage'
-import { LoginPage } from '../pages/LoginPage'
-import { ProductsPage } from '../pages/ProductsPage'
-import { QuotePage } from '../pages/QuotePage'
+const ServicesPage = lazyRouteComponent(() => import('../pages/ServicesPage'), 'ServicesPage')
+const WindowScreenPage = lazyRouteComponent(
+  () => import('../pages/WindowScreenPage'),
+  'WindowScreenPage',
+)
+const AboutPage = lazyRouteComponent(() => import('../pages/AboutPage'), 'AboutPage')
+const ContactPage = lazyRouteComponent(() => import('../pages/ContactPage'), 'ContactPage')
+const LoginPage = lazyRouteComponent(() => import('../pages/LoginPage'), 'LoginPage')
+const ProductsPage = lazyRouteComponent(() => import('../pages/ProductsPage'), 'ProductsPage')
+const QuotePage = lazyRouteComponent(() => import('../pages/QuotePage'), 'QuotePage')
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
 function RootComponent() {
   const location = useLocation()
+  const { i18n } = useTranslation()
+  const locale = location.pathname.startsWith('/tw/') ? 'zh-TW' : 'en'
+  useEffect(() => {
+    document.documentElement.lang = locale
+    if (i18n.language !== locale) void i18n.changeLanguage(locale)
+  }, [locale, i18n])
   const basePath = location.pathname.replace(/^\/(?:tw)(?=\/|$)/, '') || '/'
   const prevBasePath = useRef(basePath)
 
   useEffect(() => {
     if (prevBasePath.current !== basePath) {
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        if (location.hash) return
+        window.scrollTo({
+          top: 0,
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'instant'
+            : 'smooth',
+        })
       }, 10)
       prevBasePath.current = basePath
     }
-  }, [basePath])
+  }, [basePath, location.hash])
 
   return (
     <>
@@ -41,6 +63,7 @@ function RootComponent() {
 
 const rootRoute = createRootRoute({
   component: RootComponent,
+  notFoundComponent: NotFoundPage,
 })
 
 const indexRoute = createRoute({
@@ -85,20 +108,19 @@ const productsCountryRoute = createRoute({
 })
 
 // /console | /$country/console
-const consolePage = () => (
-  <div className="mx-auto max-w-7xl px-4 py-16 text-center text-gray-500">
-    Console — coming soon
-  </div>
-)
+function ConsolePage() {
+  const { t } = useTranslation()
+  return <h1 className="company-container py-16 text-2xl">{t('company.console')}</h1>
+}
 const consoleRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/console',
-  component: consolePage,
+  component: ConsolePage,
 })
 const consoleCountryRoute = createRoute({
   getParentRoute: () => mainLayoutRoute,
   path: '/$country/console',
-  component: consolePage,
+  component: ConsolePage,
 })
 
 // /get-a-quote | /$country/get-a-quote
@@ -133,11 +155,36 @@ const loginCountryRoute = createRoute({
   component: LoginPage,
 })
 
+function NotFoundPage() {
+  const { t } = useTranslation()
+  const prefix = window.location.pathname.startsWith('/tw/') ? '/tw' : ''
+  return (
+    <div className="company-container py-16">
+      <h1 className="company-heading">{t('company.notFoundTitle')}</h1>
+      <p className="company-copy mt-8">{t('company.notFoundDesc')}</p>
+      <Link to={`${prefix}/home` as never} className="company-text-link">
+        {t('nav.home')}
+      </Link>
+    </div>
+  )
+}
+
+const companyRoutes = [
+  { path: '/services', component: ServicesPage },
+  { path: '/window-screen-solutions', component: WindowScreenPage },
+  { path: '/about', component: AboutPage },
+  { path: '/contact', component: ContactPage },
+].flatMap(({ path, component }) => [
+  createRoute({ getParentRoute: () => mainLayoutRoute, path, component }),
+  createRoute({ getParentRoute: () => mainLayoutRoute, path: `/$country${path}`, component }),
+])
+
 // ─── Route tree ───────────────────────────────────────────────────────────────
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
   mainLayoutRoute.addChildren([
+    ...companyRoutes,
     homeRoute,
     homeCountryRoute,
     productsRoute,

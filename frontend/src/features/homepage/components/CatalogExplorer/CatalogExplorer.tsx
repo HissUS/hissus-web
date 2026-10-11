@@ -56,7 +56,7 @@ export function CatalogExplorer() {
         </div>
 
         <div className="mt-8 sm:mt-10 animate-in fade-in duration-700 delay-300 fill-mode-both">
-          <GalleryCarousel images={active.images} videos={active.videos} />
+          <GalleryCarousel key={active.id} images={active.images} videos={active.videos} />
           <SpecSection specs={active.specs} detailsHref={detailsHref} />
         </div>
       </div>

@@ -72,7 +72,19 @@
     "login": "登入",
     "logout": "登出",
     "products": "產品目錄",
-    "getQuote": "取得報價"
+    "getQuote": "取得報價",
+    "services": "工廠與設施建置",
+    "experience": "團隊經驗",
+    "screens": "門窗與紗窗解決方案",
+    "about": "關於我們",
+    "contact": "聯絡我們",
+    "discuss": "洽談您的專案",
+    "menu": "選單",
+    "closeMenu": "關閉選單",
+    "primary": "主要導覽",
+    "skip": "跳至主要內容",
+    "english": "English",
+    "chinese": "繁體中文"
   },
   "quote": {
     "title": "取得報價",
@@ -95,7 +107,8 @@
       "phoneRequired": "電話號碼為必填。",
       "phoneInvalid": "請輸入有效的電話號碼。",
       "cityRequired": "請選擇一個德州城市。",
-      "productRequired": "請選擇一個產品。"
+      "productRequired": "請選擇一個產品。",
+      "submitFailed": "目前無法寄送您的詢問，請稍後再試或以電子郵件聯絡我們。"
     },
     "email": {
       "adminSubject": "HISS US 報價需求 - {{name}}",
@@ -224,5 +237,140 @@
     },
     "title": "產品目錄",
     "viewDetails": "查看詳情"
+  },
+  "company": {
+    "eyebrow": "HISSUS · 工廠與設施建置",
+    "heroTitle": "為下一座設施，打好基礎。",
+    "heroDesc": "協助企業建置工廠與設施，結合團隊的醫院與無塵室工程經驗，以務實的合作方式掌握品質、成本與風險。",
+    "heroLink": "了解我們的合作方式",
+    "photoPending": "專案照片待補",
+    "photoNote": "確認專案資訊與照片公開授權後，將加入工廠與設施相關影像。",
+    "introLabel": "我們的服務",
+    "introTitle": "為企業的下一步，打造合適空間。",
+    "introDesc": "我們協助企業建置工廠與設施。從了解您的需求開始，共同釐清工程範圍與合作條件。",
+    "introLink": "了解工廠與設施建置",
+    "experienceLabel": "團隊經驗",
+    "experienceTitle": "來自高要求環境的工程經驗。",
+    "experienceDesc": "我們團隊具備醫院與無塵室的建廠經驗，將這些經驗帶入設施建置的討論。每個專案都有不同需求；實際工程範圍與雙方責任，會在開工前共同確認。",
+    "hospital": "醫院工程經驗",
+    "cleanroom": "無塵室工程經驗",
+    "experienceNote": "歡迎與團隊討論，這些工程經驗如何對應您的設施需求。",
+    "gmpLabel": "建議的合作模式",
+    "gmpTitle": "成本透明，利益共享。",
+    "gmpIntro": "我們推薦採用 GMP（Guaranteed Maximum Price，最高限價）合作模式。透過預算上限、透明成本及節省費用共享機制，協助客戶掌握工程品質、成本與風險。具體條件由專案合約約定。",
+    "gmpFull": "Guaranteed Maximum Price · 最高限價",
+    "gmpNote": "此處 GMP 指工程計價合作模式，並非 Good Manufacturing Practice（優良製造規範）或製造認證。最高限價適用於約定工程範圍，仍須依合約及經核准的變更辦理。",
+    "gmp": {
+      "ceiling": {
+        "title": "預算上限",
+        "desc": "針對明確約定的工程範圍，建立雙方同意的最高價格；實際執行依合約及經核准的變更辦理。"
+      },
+      "transparent": {
+        "title": "成本透明",
+        "desc": "透過公開帳目與成本報告，協助您了解專案的實際支出。"
+      },
+      "savings": {
+        "title": "節省共享",
+        "desc": "低於約定預算的節省費用，由客戶與我們團隊依雙方約定的條件共享。"
+      }
+    },
+    "photosLabel": "專案影像",
+    "photosTitle": "有脈絡的影像，呈現工程細節。",
+    "photosDesc": "我們正在整理合適的專案照片。每張照片將搭配經確認的說明，不以影像推定專案歸屬或認證。",
+    "screensLabel": "HISSUS 的另一項服務",
+    "screensTitle": "引入光與風，阻隔蚊蟲。",
+    "screensDesc": "門窗與紗窗解決方案仍是 HISSUS 的重要業務。完整產品介紹、安裝圖庫、操作示範與詢價服務，皆可在專區瀏覽。",
+    "screensLink": "探索門窗與紗窗解決方案",
+    "screenAlt": "住宅露台開口安裝的可收折紗門",
+    "screenCaption": "既有產品圖庫中的住宅紗門安裝照片。",
+    "contactLabel": "從一場對話開始",
+    "contactTitle": "與我們聊聊您的建置需求。",
+    "contactDesc": "歡迎分享設施需求與問題，一起討論工程範圍，以及 GMP 合作模式是否適合您的專案。",
+    "email": "寄信給我們",
+    "phone": "致電我們",
+    "servicesTitle": "工廠與設施建置",
+    "servicesDesc": "協助企業打造營運空間，結合團隊的醫院與無塵室工程經驗，討論合適的建置方式。",
+    "scopeTitle": "先釐清範圍，再展開合作。",
+    "scopeDesc": "以您的設施需求、工程範圍、雙方責任、預算與合作條件為討論基礎。具體服務內容及交付項目，將於專案合約中確認。",
+    "aboutTitle": "用心合作，務實建置。",
+    "aboutDesc": "HISSUS 正將業務重心拓展至工廠建置與工程服務，同時持續提供門窗與紗窗解決方案。我們團隊具備醫院與無塵室工程經驗。",
+    "aboutPrinciple": "我們相信，明確的工程範圍、透明的成本與一致的合作目標，是建立良好合作關係的基礎。",
+    "contactPageTitle": "洽談您的專案",
+    "contactPageDesc": "歡迎分享工廠或設施建置需求。門窗與紗窗的價格詢問，請使用既有產品詢價表單。",
+    "quoteLink": "門窗與紗窗詢價",
+    "facilityCity": "專案地點",
+    "facilityProduct": "工廠與設施建置",
+    "facilityPhoneHint": "請包含國際電話區碼。",
+    "sentNotice": "謝謝您，專案詢問已寄送至我們團隊。",
+    "copyFailed": "團隊已收到您的詢問，但確認信寄送失敗。請自行保留需求內容。",
+    "sending": "寄送中…",
+    "honeypot": "請保留此欄空白",
+    "service": "服務項目",
+    "sendInquiry": "送出專案詢問",
+    "privacy": "您提供的聯絡資料將用於回覆此次詢問。請勿填入機密專案資訊。",
+    "metadata": {
+      "home": {
+        "title": "工廠建置與工程服務 | HISSUS",
+        "desc": "與 HISSUS 洽談工廠與設施建置。團隊具備醫院與無塵室工程經驗，並推薦最高限價（GMP）合作模式。"
+      },
+      "services": {
+        "title": "工廠與設施建置 | HISSUS",
+        "desc": "了解工程合作方式與最高限價（GMP）模式：預算上限、成本透明、節省共享。"
+      },
+      "about": {
+        "title": "關於我們 | HISSUS",
+        "desc": "認識 HISSUS 的工廠與設施工程服務，以及持續提供的門窗與紗窗解決方案。"
+      },
+      "contact": {
+        "title": "洽談您的專案 | HISSUS",
+        "desc": "聯絡 HISSUS，分享您的工廠與設施建置需求。"
+      },
+      "screens": {
+        "title": "門窗與紗窗解決方案 | HISSUS",
+        "desc": "瀏覽 HISSUS 可收折紗門產品、實際安裝圖庫與操作示範。"
+      },
+      "products": {
+        "title": "門窗與紗窗產品目錄 | HISSUS",
+        "desc": "探索單把手、雙把手、多把手紗門及紗窗解決方案。"
+      },
+      "quote": {
+        "title": "門窗與紗窗詢價 | HISSUS",
+        "desc": "向 HISSUS 提交門窗與紗窗產品詢問。"
+      },
+      "login": {
+        "title": "登入 | HISSUS",
+        "desc": "HISSUS 帳戶登入。"
+      },
+      "console": {
+        "title": "管理介面 | HISSUS",
+        "desc": "HISSUS 管理介面。"
+      }
+    },
+    "console": "管理介面 — 即將推出",
+    "notFoundTitle": "找不到此頁面",
+    "notFoundDesc": "請使用導覽選單瀏覽工程服務或門窗與紗窗解決方案。"
+  },
+  "gallery": {
+    "previous": "上一組照片",
+    "next": "下一組照片",
+    "previousVideo": "上一組影片",
+    "nextVideo": "下一組影片",
+    "close": "關閉照片",
+    "top": "回到頁首"
+  },
+  "contactLabels": {
+    "phone": "電話",
+    "email": "電子郵件",
+    "line": "LINE 帳號",
+    "wechat": "微信帳號",
+    "facebook": "Facebook",
+    "address": "地址"
+  },
+  "quoteErrors": {
+    "submitFailed": "目前無法寄送您的詢問，請稍後再試或以電子郵件聯絡我們。",
+    "invalid": "請確認聯絡資料與選擇的項目。",
+    "tooLarge": "訊息過長，請縮短後再試。",
+    "rateLimited": "送出次數過多，請稍候再試。",
+    "unavailable": "詢問服務暫時無法使用，請以電子郵件聯絡我們。"
   }
 }

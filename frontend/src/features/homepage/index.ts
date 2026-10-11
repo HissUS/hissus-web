@@ -1,1 +1,1 @@
-export { HeroSection, TrustSection, CatalogExplorer } from './components'
+export { HeroSection, TrustSection, CatalogExplorer, CompanyContact, ExperienceSection, GmpSection, PhotoPlaceholder } from './components'

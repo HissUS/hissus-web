@@ -1,6 +1,7 @@
-import { useState, type FormEvent } from 'react'
+import { useInquiry } from '@/features/inquiry'
 import { useTranslation } from 'react-i18next'
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/ui-wrapper'
+import { SITE_CONFIG } from '@/config/site'
 import { CATALOG_DATA } from '../features/homepage/constants/catalog'
 
 const TEXAS_CITY_GROUPS = [
@@ -71,244 +72,230 @@ function RequiredMark({ children }: { children: string }) {
   )
 }
 
-export function QuotePage() {
-  const { t, i18n } = useTranslation()
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [city, setCity] = useState('')
-  const [product, setProduct] = useState('')
-  const [message, setMessage] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  function validate() {
-    if (!firstName.trim() || !lastName.trim()) return t('quote.errors.nameRequired')
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return t('quote.errors.emailInvalid')
-    if (!phone.trim()) return t('quote.errors.phoneRequired')
-    if (!phone.match(/^\d{10}$/)) return t('quote.errors.phoneInvalid')
-    if (!city) return t('quote.errors.cityRequired')
-    if (!product) return t('quote.errors.productRequired')
-    return null
-  }
-
-  async function handleSubmit(e?: FormEvent<HTMLFormElement>) {
-    e?.preventDefault()
-    const err = validate()
-    if (err) {
-      setError(err)
-      return
-    }
-
-    const parseResponseBody = async (response: Response) => {
-      const contentType = response.headers.get('content-type') || ''
-
-      if (contentType.includes('application/json')) {
-        try {
-          return await response.json()
-        } catch {
-          return null
-        }
-      }
-
-      try {
-        const text = await response.text()
-        return text ? { error: text } : null
-      } catch {
-        return null
-      }
-    }
-
-    try {
-      const response = await fetch('/.netlify/functions/quote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          phone,
-          city,
-          product,
-          message,
-          locale: i18n.language,
-        }),
-      })
-
-      if (!response.ok) {
-        const errorData = await parseResponseBody(response)
-        const fallbackError =
-          response.status === 404 ? t('quote.errors.submitFailed') : t('quote.errors.submitFailed')
-        setError(errorData?.error || fallbackError)
-        return
-      }
-
-      setSubmitted(true)
-      setError(null)
-      // Reset form after successful submission
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setPhone('')
-      setCity('')
-      setProduct('')
-      setMessage('')
-    } catch (err) {
-      setError(t('quote.errors.submitFailed'))
-      console.error('Quote submission error:', err)
-    }
-  }
+export function QuotePage({ facility = false }: { facility?: boolean }) {
+  const { t } = useTranslation()
+  const {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    phone,
+    setPhone,
+    city,
+    setCity,
+    product,
+    setProduct,
+    message,
+    setMessage,
+    website,
+    setWebsite,
+    pending,
+    submitted,
+    copyFailed,
+    error,
+    handleSubmit,
+    reset,
+  } = useInquiry(facility)
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-4 text-3xl font-bold">{t('quote.title')}</h1>
-      <p className="mb-8 text-lg text-gray-600">{t('quote.subtitle')}</p>
+      {!facility && <h1 className="mb-4 text-3xl font-bold">{t('quote.title')}</h1>}
+      {!facility && <p className="mb-8 text-lg text-gray-600">{t('quote.subtitle')}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.firstName')}</RequiredMark>
-            </span>
+      <form onSubmit={handleSubmit} className="space-y-6" aria-busy={pending}>
+        <div hidden aria-hidden="true">
+          <label>
+            {t('company.honeypot')}
             <input
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-              aria-required
-            />
-          </label>
-
-          <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.lastName')}</RequiredMark>
-            </span>
-            <input
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-              aria-required
+              name="website"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              autoComplete="off"
+              tabIndex={-1}
             />
           </label>
         </div>
+        <fieldset disabled={pending} className="space-y-6">
+          <legend className="sr-only">
+            {t(facility ? 'company.contactPageTitle' : 'quote.title')}
+          </legend>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>{t('quote.firstName')}</RequiredMark>
+              </span>
+              <input
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                autoComplete="given-name"
+                maxLength={80}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                aria-required
+              />
+            </label>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.emailAddress')}</RequiredMark>
-            </span>
-            <input
-              type="email"
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              aria-required
-            />
-          </label>
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>{t('quote.lastName')}</RequiredMark>
+              </span>
+              <input
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                autoComplete="family-name"
+                maxLength={80}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                aria-required
+              />
+            </label>
+          </div>
 
-          <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.phoneNumber')}</RequiredMark>
-            </span>
-            <input
-              type="tel"
-              maxLength={10}
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-              required
-              aria-required
-            />
-          </label>
-        </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>{t('quote.emailAddress')}</RequiredMark>
+              </span>
+              <input
+                type="email"
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                autoComplete="email"
+                maxLength={254}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                aria-required
+              />
+            </label>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.city')}</RequiredMark>
-            </span>
-            <select
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-              aria-required
-            >
-              <option value="" disabled>
-                {t('quote.cityPlaceholder')}
-              </option>
-              {TEXAS_CITY_GROUPS.map((group) => (
-                <optgroup key={group.labelKey} label={t(group.labelKey)}>
-                  {group.options.map((c) => (
-                    <option key={c.value} value={c.value}>
-                      {t(c.labelKey)}
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>{t('quote.phoneNumber')}</RequiredMark>
+              </span>
+              <input
+                type="tel"
+                autoComplete="tel"
+                maxLength={facility ? 25 : 10}
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                value={phone}
+                onChange={(e) =>
+                  setPhone(facility ? e.target.value : e.target.value.replace(/\D/g, ''))
+                }
+                required
+                aria-required
+              />
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>{t(facility ? 'company.facilityCity' : 'quote.city')}</RequiredMark>
+              </span>
+              {facility ? (
+                <input
+                  required
+                  maxLength={120}
+                  className="h-11 rounded-md border px-3 py-2 text-base"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+              ) : (
+                <select
+                  className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                  aria-required
+                >
+                  <option value="" disabled>
+                    {t('quote.cityPlaceholder')}
+                  </option>
+                  {TEXAS_CITY_GROUPS.map((group) => (
+                    <optgroup key={group.labelKey} label={t(group.labelKey)}>
+                      {group.options.map((c) => (
+                        <option key={c.value} value={c.value}>
+                          {t(c.labelKey)}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              )}
+            </label>
+
+            <label className="flex w-full flex-col">
+              <span className="mb-2 text-base font-medium">
+                <RequiredMark>
+                  {t(facility ? 'company.service' : 'quote.productWanted')}
+                </RequiredMark>
+              </span>
+              {facility ? (
+                <p className="flex min-h-11 items-center border-b border-gray-200">
+                  {t('company.facilityProduct')}
+                </p>
+              ) : (
+                <select
+                  className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                  required
+                  aria-required
+                >
+                  <option value="" disabled>
+                    {t('quote.productPlaceholder')}
+                  </option>
+                  {PRODUCT_OPTIONS.map((item) => (
+                    <option key={item.value} value={item.value}>
+                      {t(item.label)}
                     </option>
                   ))}
-                </optgroup>
-              ))}
-            </select>
-          </label>
+                </select>
+              )}
+            </label>
+          </div>
 
           <label className="flex w-full flex-col">
-            <span className="mb-2 text-base font-medium">
-              <RequiredMark>{t('quote.productWanted')}</RequiredMark>
-            </span>
-            <select
-              className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-              value={product}
-              onChange={(e) => setProduct(e.target.value)}
-              required
-              aria-required
-            >
-              <option value="" disabled>
-                {t('quote.productPlaceholder')}
-              </option>
-              {PRODUCT_OPTIONS.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {t(item.label)}
-                </option>
-              ))}
-            </select>
+            <span className="mb-2 text-base font-medium">{t('quote.messageOptional')}</span>
+            <textarea
+              className="min-h-30 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+              maxLength={4000}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
           </label>
-        </div>
-
-        <label className="flex w-full flex-col">
-          <span className="mb-2 text-base font-medium">{t('quote.messageOptional')}</span>
-          <textarea
-            className="min-h-30 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </label>
-
-        {error && <div className="text-base text-destructive">{error}</div>}
-        {submitted && <div className="text-base text-green-600">{t('quote.sentNotice')}</div>}
+        </fieldset>
+        {error && (
+          <div role="alert" className="text-base text-destructive">
+            {t(error)}
+          </div>
+        )}
+        {submitted && (
+          <div role="status" className="text-base text-green-800">
+            {t(
+              copyFailed
+                ? 'company.copyFailed'
+                : facility
+                  ? 'company.sentNotice'
+                  : 'quote.sentNotice',
+            )}
+          </div>
+        )}
 
         <div className="flex items-center gap-3">
-          <Button type="submit">{t('quote.send')}</Button>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => {
-              setFirstName('')
-              setLastName('')
-              setEmail('')
-              setPhone('')
-              setCity('')
-              setProduct('')
-              setMessage('')
-              setError(null)
-              setSubmitted(false)
-            }}
-          >
+          <Button type="submit" disabled={pending}>
+            {t(pending ? 'company.sending' : facility ? 'company.sendInquiry' : 'quote.send')}
+          </Button>
+          <Button disabled={pending} variant="outline" type="button" onClick={reset}>
             {t('quote.reset')}
           </Button>
         </div>
+        <p className="text-sm leading-relaxed text-gray-600">{t('company.privacy')}</p>
+        <a className="company-text-link" href={`mailto:${SITE_CONFIG.contact.email}`}>
+          {SITE_CONFIG.contact.email}
+        </a>
       </form>
     </div>
   )

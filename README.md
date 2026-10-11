@@ -1,6 +1,6 @@
 # Hissus.com
 
-A SaaS platform for browsing products and generating automated quotations.
+HISSUS company website for factory/facility setup and construction services, alongside the preserved window and screen product catalog and inquiries. The repository also contains a Spring Boot platform scaffold. See [factory website delivery](docs/factory-website-review.md) and [security review](docs/security-review.md) for route mapping, validation, outstanding photography, and deployment steps.
 
 ## Prerequisites
 
@@ -106,8 +106,13 @@ Disabled automatically in `prod` profile.
 | Route | Description |
 |---|---|
 | `/` | Redirects to `/home` |
-| `/home` | Homepage — English (US, default) |
-| `/$country/home` | Homepage — localized (e.g. `/tw/home`) |
+| `/home` | Company homepage — English (US, default) |
+| `/$country/home` | Company homepage — localized (e.g. `/tw/home`) |
+| `/services`, `/tw/services` | Factory/facility services, experience section and GMP |
+| `/about`, `/tw/about` | Company introduction |
+| `/contact`, `/tw/contact` | Facility inquiry form |
+| `/window-screen-solutions`, `/tw/window-screen-solutions` | Complete former screen homepage |
+| `/get-a-quote`, `/tw/get-a-quote` | Preserved screen quote form |
 | `/login` | Login page — English |
 | `/$country/login` | Login page — localized (e.g. `/tw/login`) |
 | `/products` | Product catalog — English |
@@ -137,12 +142,17 @@ cd backend
 
 ### Frontend
 
-> Unit test framework (Vitest) not yet configured. Available locale tooling:
+> Vitest is not configured. Focused server regressions use Node test; browser and CSP regressions use Playwright:
 
 ```bash
 cd frontend
 # Check all locale files for missing/extra keys vs en.json
 pnpm check-locales
+pnpm test:inquiry
+# Start production preview in another terminal: pnpm preview --host 0.0.0.0 --port 4173
+# Install Chromium if needed: pnpm exec playwright install chromium
+pnpm test:browser
+pnpm test:csp
 ```
 
 ## Commit Convention
