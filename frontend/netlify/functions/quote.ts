@@ -211,7 +211,7 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
         to: settings.recipientEmail,
         subject: normalizeSubjectValue(
           kind === 'facility'
-            ? `HISSUS — ${dictionary.company.facilityProduct} — ${fullName}`
+            ? `HISSUS - ${dictionary.company.facilityProduct} - ${fullName}`
             : fill(s.adminSubject, { name: fullName }),
         ),
         html: buildEmailHtml({
@@ -234,7 +234,7 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
         from,
         to: email,
         subject:
-          kind === 'facility' ? `HISSUS — ${dictionary.company.contactPageTitle}` : s.userSubject,
+          kind === 'facility' ? `HISSUS - ${dictionary.company.contactPageTitle}` : s.userSubject,
         html: buildEmailHtml({
           ...common,
           badge: kind === 'facility' ? dictionary.company.facilityProduct : s.userSubject,

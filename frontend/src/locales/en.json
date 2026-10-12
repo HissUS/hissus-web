@@ -63,7 +63,8 @@
     "contactUs": "Contact Us",
     "followUs": "Follow Us",
     "language": "Language",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "businesses": "Our businesses"
   },
   "nav": {
     "admin": "Admin",
@@ -84,7 +85,8 @@
     "primary": "Main navigation",
     "skip": "Skip to content",
     "english": "English",
-    "chinese": "繁體中文"
+    "chinese": "繁體中文",
+    "servicesShort": "Services"
   },
   "quote": {
     "title": "Get a Quote",
@@ -257,7 +259,7 @@
     "experienceNote": "Talk with our team about how this experience relates to your facility needs.",
     "gmpLabel": "A PROPOSED COOPERATION MODEL",
     "gmpTitle": "Clear costs. Shared interests.",
-    "gmpIntro": "We recommend considering GMP — Guaranteed Maximum Price — to help manage construction quality, cost, and risk. The budget ceiling, open-book reporting, and savings arrangements are defined in the project agreement.",
+    "gmpIntro": "We recommend considering GMP (Guaranteed Maximum Price) to help manage construction quality, cost, and risk. The budget ceiling, open-book reporting, and savings arrangements are defined in the project agreement.",
     "gmpFull": "Guaranteed Maximum Price",
     "gmpNote": "GMP refers to a pricing model, not Good Manufacturing Practice or a certification. The maximum price applies to the defined scope, subject to the contract and approved changes.",
     "gmp": {
@@ -296,7 +298,7 @@
     "aboutDesc": "HISSUS is expanding its focus to factory setup and construction services while continuing to offer window and screen solutions. Our team brings hospital and cleanroom construction experience.",
     "aboutPrinciple": "We believe a clear scope, transparent costs, and aligned interests are a useful foundation for a working relationship.",
     "contactPageTitle": "Discuss your project",
-    "contactPageDesc": "Tell us about your factory or facility needs. For window and screen pricing, use our existing product quote form.",
+    "contactPageDesc": "Tell us about your factory or facility needs and what you would like to discuss.",
     "quoteLink": "Request a window & screen quote",
     "facilityCity": "Project location",
     "facilityProduct": "Factory & facility construction",
@@ -346,7 +348,7 @@
         "desc": "HISSUS console."
       }
     },
-    "console": "Console — coming soon",
+    "console": "Console: coming soon",
     "notFoundTitle": "Page not found",
     "notFoundDesc": "Use the navigation to find our services or screen solutions.",
     "form": {

@@ -2,7 +2,7 @@
 
 ## 🎯 Business Intent
 
-The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with a clearly labeled photography placeholder and a permanent introduction to the screen business. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
+The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with a clearly labeled photography placeholder and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
 
 The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/window-screen-solutions` and `/tw/window-screen-solutions`, using the original HeroSection, CatalogExplorer, and TrustSection. The product catalog and quote URLs remain unchanged. The section below documents those preserved components.
 

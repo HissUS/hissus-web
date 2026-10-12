@@ -70,6 +70,65 @@ try {
           'missing asset',
         )
         assert.deepEqual(errors, [], `${prefix}/${path} browser errors`)
+        assert.equal(
+          (await page.locator('body').innerText()).includes('\u2014'),
+          false,
+          'visible copy must not contain em dashes',
+        )
+        if (await page.locator('header').count()) {
+          const translations = dictionaries[prefix ? 'zh-TW' : 'en']
+          const windowSite = ['window-screen-solutions', 'products', 'get-a-quote'].includes(
+            path.split('?')[0],
+          )
+          const expectedLinks = windowSite
+            ? [translations.nav.home, translations.nav.products]
+            : [translations.nav.home, translations.nav.servicesShort, translations.nav.contact]
+          const expectedSwitch = windowSite ? translations.nav.services : translations.nav.screens
+          const switchButton = page
+            .locator('header')
+            .getByRole('link', { name: expectedSwitch, exact: true })
+          assert.equal(
+            await switchButton.getAttribute('href'),
+            `${prefix}/${windowSite ? 'home' : 'window-screen-solutions'}`,
+          )
+          assert.equal(
+            await page
+              .locator('header')
+              .getByRole('link', { name: 'HISSUS', exact: true })
+              .getAttribute('href'),
+            `${prefix}/${windowSite ? 'window-screen-solutions' : 'home'}`,
+          )
+          if (width < 1024)
+            await page
+              .locator('header')
+              .getByRole('button', { name: translations.nav.menu, exact: true })
+              .click()
+          const navigation =
+            width < 1024 ? page.locator('#mobile-navigation') : page.locator('header nav').first()
+          assert.deepEqual(
+            (await navigation.getByRole('link').allTextContents()).map((text) => text.trim()),
+            expectedLinks,
+          )
+          assert.equal(
+            await navigation
+              .getByRole('link')
+              .first()
+              .evaluate((element) => getComputedStyle(element).fontSize),
+            '18px',
+          )
+          if (width < 1024)
+            await page
+              .locator('header')
+              .getByRole('button', { name: translations.nav.closeMenu, exact: true })
+              .click()
+          assert.equal(await page.locator('footer li svg').count(), 6)
+          assert.equal(await page.locator('footer nav').getByRole('link').count(), 2)
+          if (path === 'contact')
+            assert.equal(await page.locator('main a[href$="/get-a-quote"]').count(), 0)
+          if (path === 'home') assert.equal(await page.locator('#screens-heading').count(), 0)
+          checks++
+        }
+
         if (
           screenshotDirectory &&
           ['home', 'services', 'contact', 'window-screen-solutions'].includes(path)
@@ -79,6 +138,13 @@ try {
               image.loading = 'eager'
               await image.decode()
             }
+          })
+          await page.locator('[class*="animate-in"]').evaluateAll(async (elements) => {
+            await Promise.all(
+              elements.flatMap((element) =>
+                element.getAnimations().map((animation) => animation.finished.catch(() => {})),
+              ),
+            )
           })
           await page.screenshot({
             path: `${screenshotDirectory}/${width}-${prefix ? 'tw' : 'en'}-${path}.png`,
@@ -90,12 +156,10 @@ try {
         checks++
       }
       await page.goto(`${base}${prefix}/home`, { waitUntil: 'domcontentloaded' })
-      const screenButton = page
-        .locator('header')
-        .getByRole('link', {
-          name: prefix ? '門窗與紗窗解決方案' : 'Window & Screen Solutions',
-          exact: true,
-        })
+      const screenButton = page.locator('header').getByRole('link', {
+        name: prefix ? '門窗與紗窗解決方案' : 'Window & Screen Solutions',
+        exact: true,
+      })
       await screenButton.waitFor()
       assert.equal(
         await page
@@ -119,6 +183,14 @@ try {
       assert.ok(buttonBox.x + buttonBox.width <= englishBox.x)
       await screenButton.click()
       await page.waitForURL('**/window-screen-solutions')
+      await page.locator('h1').waitFor()
+      checks++
+      const factoryButton = page.locator('header').getByRole('link', {
+        name: prefix ? '工廠與設施建置' : 'Factory & Facility Services',
+        exact: true,
+      })
+      await factoryButton.click()
+      await page.waitForURL(`**${prefix}/home`)
       await page.locator('h1').waitFor()
       checks++
       for (const [tab, translationKey, imageCount, videoCount] of [
@@ -183,11 +255,42 @@ try {
       await page.keyboard.press('Escape')
       assert.equal(await page.getByRole('dialog').count(), 0)
       checks++
+      await page.evaluate(() => window.scrollTo({ top: 500, behavior: 'instant' }))
+      const topButton = page.getByRole('button', {
+        name: prefix ? 'Back to top' : '回到頁首',
+        exact: true,
+      })
+      await topButton.waitFor()
+      assert.equal(await topButton.evaluate((element) => getComputedStyle(element).width), '56px')
+      assert.equal(await topButton.evaluate((element) => getComputedStyle(element).height), '56px')
+      assert.equal((await topButton.textContent()).trim(), '')
+      await topButton.click()
+      await page.waitForFunction(() => window.scrollY < 1)
+      checks++
       if (width < 768) {
-        await page.getByRole('button', { name: prefix ? 'Menu' : '選單', exact: true }).click()
+        const translations = dictionaries[prefix ? 'en' : 'zh-TW']
+        // The previous language switch leaves this page in the opposite locale.
+        await page
+          .locator('header')
+          .getByRole('button', { name: translations.nav.menu, exact: true })
+          .click()
         await page
           .locator('#mobile-navigation')
-          .getByRole('link', { name: prefix ? 'Factory & Facility Services' : '工廠與設施建置' })
+          .getByRole('link', { name: translations.nav.home, exact: true })
+          .click()
+        await page.waitForURL('**/window-screen-solutions')
+        await page
+          .locator('header')
+          .getByRole('link', { name: translations.nav.services, exact: true })
+          .click()
+        await page.waitForURL('**/home')
+        await page
+          .locator('header')
+          .getByRole('button', { name: translations.nav.menu, exact: true })
+          .click()
+        await page
+          .locator('#mobile-navigation')
+          .getByRole('link', { name: translations.nav.servicesShort, exact: true })
           .click()
         await page.waitForURL('**/services')
         assert.equal(await page.locator('#mobile-navigation').count(), 0)

@@ -89,6 +89,7 @@ test('Chinese facility inquiry accepts a company name, international phone and i
   assert.ok(sent[0].html.includes('詢問最高限價 &lt;script&gt;test&lt;/script&gt;'))
   assert.ok(sent[1].html.includes('測試公司 &lt;b&gt;Test&lt;/b&gt;'))
   assert.ok(!sent[0].html.includes('專案地點'))
+  assert.ok(sent.every((mail) => !mail.subject.includes('\u2014')))
 })
 test('invalid fields, types, product, city, JSON and honeypot are rejected before email', async () => {
   const { handler, sent } = fixture()

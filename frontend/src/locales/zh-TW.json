@@ -63,7 +63,8 @@
     "contactUs": "聯絡我們",
     "followUs": "關注我們",
     "language": "語言",
-    "rights": "版權所有。"
+    "rights": "版權所有。",
+    "businesses": "業務專區"
   },
   "nav": {
     "admin": "管理後台",
@@ -84,7 +85,8 @@
     "primary": "主要導覽",
     "skip": "跳至主要內容",
     "english": "English",
-    "chinese": "繁體中文"
+    "chinese": "繁體中文",
+    "servicesShort": "工程服務"
   },
   "quote": {
     "title": "取得報價",
@@ -296,7 +298,7 @@
     "aboutDesc": "HISSUS 正將業務重心拓展至工廠建置與工程服務，同時持續提供門窗與紗窗解決方案。我們團隊具備醫院與無塵室工程經驗。",
     "aboutPrinciple": "我們相信，明確的工程範圍、透明的成本與一致的合作目標，是建立良好合作關係的基礎。",
     "contactPageTitle": "洽談您的專案",
-    "contactPageDesc": "歡迎分享工廠或設施建置需求。門窗與紗窗的價格詢問，請使用既有產品詢價表單。",
+    "contactPageDesc": "歡迎分享工廠或設施建置需求，以及您想詢問的主題。",
     "quoteLink": "門窗與紗窗詢價",
     "facilityCity": "專案地點",
     "facilityProduct": "工廠與設施建置",
@@ -346,7 +348,7 @@
         "desc": "HISSUS 管理介面。"
       }
     },
-    "console": "管理介面 — 即將推出",
+    "console": "管理介面: 即將推出",
     "notFoundTitle": "找不到此頁面",
     "notFoundDesc": "請使用導覽選單瀏覽工程服務或門窗與紗窗解決方案。",
     "form": {

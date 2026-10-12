@@ -8,9 +8,6 @@ import {
   PhotoPlaceholder,
 } from '@/features/homepage'
 import { useLocale } from '@/hooks'
-import screenImage from '@/assets/images/multi_handle/ML_screendoor_hori.jpg'
-import screenImageSmall from '@/assets/images/multi_handle/ML_screendoor_hori-800.webp'
-import screenImageLarge from '@/assets/images/multi_handle/ML_screendoor_hori-1600.webp'
 
 export function HomePage() {
   const { t } = useTranslation()
@@ -69,40 +66,6 @@ export function HomePage() {
             <p className="company-copy mt-8">{t('company.photosDesc')}</p>
           </div>
           <PhotoPlaceholder compact />
-        </div>
-      </section>
-      <section className="company-section" aria-labelledby="screens-heading">
-        <div className="company-container grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-          <figure>
-            <img
-              src={screenImage}
-              srcSet={`${screenImageSmall} 800w, ${screenImageLarge} 1600w`}
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              width="2048"
-              height="1536"
-              loading="lazy"
-              decoding="async"
-              alt={t('company.screenAlt')}
-              className="aspect-4/3 w-full object-cover"
-            />
-            <figcaption className="mt-4 text-sm leading-relaxed text-gray-600">
-              {t('company.screenCaption')}
-            </figcaption>
-          </figure>
-          <div>
-            <p className="company-eyebrow">{t('company.screensLabel')}</p>
-            <h2 id="screens-heading" className="company-heading mt-8">
-              {t('company.screensTitle')}
-            </h2>
-            <p className="company-copy mt-8">{t('company.screensDesc')}</p>
-            <Link
-              to={`${prefix}/window-screen-solutions` as never}
-              className="company-text-link mt-8"
-            >
-              {t('company.screensLink')}
-              <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-            </Link>
-          </div>
         </div>
       </section>
       <CompanyContact />

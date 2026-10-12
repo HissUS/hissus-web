@@ -570,3 +570,35 @@
   - **Expected**: Server rejects with 400 and sends no email; provider failures still produce truthful localized errors.
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **Photo access**: Google Photos retry returned a proxy 403. Google Photos/redirect/image domains were saved in the environment network draft; review/save/publication is still needed before runtime access can be rechecked. No album images were viewed or substituted.
+
+### [FEAT-012] Separate Business Navigation and Original Screen Styling (2026-10-11)
+
+- **Summary**: Simplified factory navigation to Home/Services/Contact and screen navigation to Home/Products, with 18px links and a context-sensitive switch to the other business on the same hostname. Restored the original icon-based footer and circular back-to-top control; removed the contact quote link, homepage cross-promotion, and visible/emailable em dashes.
+- **Affected Files**:
+  - `frontend/src/hooks/useSiteSection.ts`
+  - `frontend/src/hooks/index.ts`
+  - `frontend/src/components/layout/Header/index.tsx`
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `frontend/src/components/ui/BackToTopButton.tsx`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/ContactPage.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-800.webp` (removed unused derivative)
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-1600.webp` (removed unused derivative)
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build and run lint, locale parity and mail regressions.
+  - **Expected**: Build/TypeScript, lint/locales and 8 handler tests pass; screen inquiry requirements remain intact, and email subjects contain no em dashes.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run browser and CSP checks with a production preview on port 4173.
+  - **Expected**: 178 browser checks pass in EN/zh-TW at 1440/390/320px. Exact factory/window link sets, 18px font size, both switch directions, section-aware logo/home destination, footer contact icons/business links, removed contact/home links, and original 56px circular back-to-top behavior are verified. Existing screen products/media/form behavior still passes. Six CSP pages have zero violations; external mail/video are stubbed.
+  - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Navigate directly to `/products` or `/tw/get-a-quote` and use Home, language switching, and the business switch.
+  - **Expected**: Window navigation stays within the screen section; factory button returns to the corresponding localized company homepage. Product query selection survives language switching.
+- **External blocker**: The uploaded ZIP exceeds the tool's 32 MiB transfer limit. No photos or document instructions from it were inspected. Photo selection remains pending smaller archives or individual images.

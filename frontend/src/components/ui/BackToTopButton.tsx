@@ -32,12 +32,11 @@ export function BackToTopButton() {
             : 'smooth',
         })
       }
-      className={`fixed bottom-6 right-6 z-40 gap-2 px-4 min-h-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 ${
+      className={`fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 ${
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
       }`}
     >
-      <ArrowRight className="h-4 w-4 -rotate-90" aria-hidden="true" />
-      <span className="text-sm">{t('gallery.top')}</span>
+      <ArrowRight className="h-6 w-6 -rotate-90" aria-hidden="true" />
     </button>
   )
 }
