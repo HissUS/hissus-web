@@ -775,3 +775,29 @@
   - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && pnpm test:inquiry`
 - **Email and credential status**: Eight actual-handler previews were regenerated; 16 viewport/language renderings were checked without overflow. The supplied credential was not installed or persisted because this workspace has no Netlify account binding. Manual sending requires secure `RESEND_API_KEY` entry in the site's Functions environment and redeployment, plus the previously documented sender-domain verification. No real mail, secret, deployment or DNS change was made.
 - **Visual review**: Factory heroes and horizontal gallery were reviewed at desktop/mobile widths in `/tmp/hissus-photos-review`. The gallery retains the six real photos; the generated hero source/provenance remains documented after removing its visible caption.
+
+### [FIX-004] Discoverable Netlify Production Build Configuration (2026-10-12)
+
+- **Summary**: Moved Netlify configuration to the repository root and explicitly selected `frontend` as the build base. This fixes the supplied production log's missing-config/root `pnpm dev` failure while retaining function bundling, redirects and security headers; Node 24 and the tested pnpm version are pinned.
+- **Affected Files**:
+  - `netlify.toml` (moved from `frontend/netlify.toml`; added build base and Node version)
+  - `frontend/netlify.toml` (removed from old location)
+  - `frontend/package.json`
+  - `frontend/scripts/csp-regression.mjs`
+  - `README.md`
+  - `docs/factory-website-review.md`
+  - `docs/inquiry-email-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Install with the frozen frontend lockfile and run the production build from the configured base.
+  - **Expected**: pnpm 11.25.0 verifies the supply-chain policy, preserves the lockfile, and TypeScript/Vite build emits `frontend/dist/index.html` successfully on Node 24.
+  - **Command/URL**: `cd frontend && CI=true pnpm install --frozen-lockfile && pnpm build`
+  - **Action**: Parse the root config and resolve paths beneath its base.
+  - **Expected**: Base is `frontend`, build command is `pnpm build`, publish is `frontend/dist`, and function entry is `frontend/netlify/functions/quote.ts`. All 20 HTTP aliases, API/SPA rewrites, security headers, caching and local-dev settings match the previous config.
+  - **Command/URL**: `python -c "import tomllib; from pathlib import Path; c=tomllib.loads(Path('netlify.toml').read_text()); b=c['build']; assert b['base']=='frontend' and b['command']=='pnpm build'; assert (Path(b['base'])/b['publish']/'index.html').is_file(); assert (Path(b['base'])/b['functions']/'quote.ts').is_file()"`
+  - **Action**: Run bundled inquiry regressions, scoped lint and CSP checks against a production preview.
+  - **Expected**: Eight inquiry tests pass, scoped script lint passes, and six canonical production pages have zero CSP violations using the relocated config. Mail and external player responses remain stubbed.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry && pnpm exec eslint scripts/csp-regression.mjs && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Configure the Netlify UI with root base, root `dist`, and `pnpm dev` on a branch without the root config.
+  - **Expected**: The supplied log's `Command "dev" not found` failure is reproducible from the root package manifest. Deploy the branch containing the root config and align dashboard fields with it; the next log should discover `netlify.toml` and run `pnpm build` from `frontend`.
+- **Deployment status**: This workspace cannot edit the live Netlify site. Source configuration and local build are verified; the next live build remains unverified. The supplied log lists Resend variable names, but this failure occurs before Functions execute and does not establish key validity or delivery.

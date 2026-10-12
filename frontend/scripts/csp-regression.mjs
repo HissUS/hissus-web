@@ -2,7 +2,7 @@ import { chromium } from 'playwright'
 import { readFileSync } from 'node:fs'
 const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
 ;(async () => {
-  const policy = readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8').match(
+  const policy = readFileSync(new URL('../../netlify.toml', import.meta.url), 'utf8').match(
     /Content-Security-Policy = "([^"]+)"/,
   )[1]
   const browser = await chromium.launch({

@@ -118,6 +118,8 @@ Disabled automatically in `prod` profile.
 
 Business roots (`/factory`, `/windows`) lead to their homepages. Old public paths (`/home`, `/services`, `/about`, `/contact`, `/window-screen-solutions`, `/products`, `/get-a-quote`) redirect to the corresponding business routes. Their `/tw` variants redirect as well. Client redirects retain query selections and hashes; Netlify is configured with HTTP 301 aliases before the SPA fallback. Production redirect behavior must be verified after deployment.
 
+For Netlify deployment, the repository-root `netlify.toml` selects base directory `frontend`, build command `pnpm build`, publish directory `dist`, and functions directory `netlify/functions`. These directories resolve beneath `frontend`. Keep dashboard settings consistent with the file and deploy the branch containing it. Node 24 and pnpm 11.25.0 are pinned for the build. `pnpm dev` is for local development only.
+
 Both forms use the existing Netlify quote function. See [email previews and Resend setup](docs/inquiry-email-review.md) before testing delivery. A plain Vite development server does not run Netlify Functions.
 
 **i18n URL convention**: English (US) has no country code. All other locales prepend a 2-letter country code as the first path segment (`/$country/[business]/[page]` for public business pages).

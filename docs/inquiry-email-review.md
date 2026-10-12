@@ -39,7 +39,7 @@ Code inspection and the bundled handler tests verify the server-side Resend call
 
 For sending on the existing Netlify site:
 
-1. Confirm its base directory is `frontend`, with the checked-in Netlify configuration active, build command `pnpm build`, publish directory `dist`, and functions directory `netlify/functions`.
+1. Confirm its base directory is `frontend`, with the repository-root `netlify.toml` active, build command `pnpm build`, publish directory `dist`, and functions directory `netlify/functions`.
 2. In Resend, verify the `hissus.com` domain and its required DNS records so `quotes@hissus.com` can send to real visitors.
 3. Add an authorized sending key as **RESEND_API_KEY** to the site's server-side Functions environment for the relevant deploy context, then redeploy. `QUOTE_RECIPIENT_EMAIL` is optional because the inbox already has a default.
 4. Once authorized to send real messages, submit one controlled factory inquiry and one window quote. Confirm team receipt, customer confirmation, and replies reaching the right inbox. Verify these on the deployed site, not plain Vite development.
@@ -53,3 +53,11 @@ A plain `pnpm dev` runs Vite and does not run Netlify Functions. Use Netlify's d
 Open `/factory/contact` for a facility inquiry and `/windows/quote` for a screen quote (prepend `/tw` for Traditional Chinese). Factory and window emails use the same HTML shell; factory admin headings now include HISSUS branding and customer badges use their own confirmation subject, matching the window structure. The fields remain specific to each business. Preview files were regenerated from the actual handler without sending messages.
 
 The supplied Resend credential was not copied into tracked files, documentation, previews, logs, or frontend code. No Netlify account binding is available in this workspace, so it was not installed in the live site. Add it securely as `RESEND_API_KEY` in the site's Functions environment for the deployment you will test, and redeploy. Sender-domain verification is still required. Plain Vite development remains insufficient for a real mail submission; use the Netlify development workflow or the deployed site.
+
+## Deployment build configuration
+
+The repository-root `netlify.toml` now declares `base = "frontend"`, `command = "pnpm build"`, `publish = "dist"`, and `functions = "netlify/functions"`. Netlify can discover this file even when the dashboard initially points at the repository root. It retains redirects, CSP/security headers, asset caching, and function bundling from the original frontend config. The build uses Node 24 and the frontend pins the tested pnpm 11.25.0 version.
+
+The supplied failed deployment log ran `pnpm dev` in `/opt/build/repo`, found no configuration file, and published root `dist`. That root package has no dev script. Dashboard settings should agree with the root file: base `frontend`, build `pnpm build`, publish `dist`, functions `netlify/functions`. `pnpm dev` is a local server command and is not a production build.
+
+The log lists `RESEND_API_KEY` and `QUOTE_RECIPIENT_EMAIL` as configured environment variable names. Their values, scopes, provider permissions and actual delivery were not verified; this build failure occurs before the function runs. Deploy the branch containing the new root config, then inspect the next build's resolved settings before testing mail.
