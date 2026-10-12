@@ -19,6 +19,16 @@ buildSync({
   outfile: output,
 })
 const { createInquiryHandler, config } = require(output)
+const diagnosticsOutput = join(temporary, 'diagnostics.cjs')
+buildSync({
+  entryPoints: ['netlify/inquiryDiagnostics.ts'],
+  bundle: true,
+  platform: 'node',
+  format: 'cjs',
+  outfile: diagnosticsOutput,
+})
+const { getAllowedOrigins, getMailFailureDetails } = require(diagnosticsOutput)
+
 process.on('exit', () => rmSync(temporary, { recursive: true, force: true }))
 const valid = {
   firstName: 'Test',
@@ -145,8 +155,11 @@ test('facility input requires only its own bounded name/contact/subject fields',
 })
 test('method, media type, body size, origin and missing configuration have explicit errors', async () => {
   const { handler, sent } = fixture()
+  const getResponse = await run(handler, event(valid, { httpMethod: 'GET' }))
+  assert.equal(getResponse.statusCode, 405)
+  assert.equal(JSON.parse(getResponse.body).code, 'METHOD_NOT_ALLOWED')
+  assert.equal(getResponse.headers.Allow, 'POST')
   for (const [extras, status] of [
-    [{ httpMethod: 'GET' }, 405],
     [{ headers: { 'content-type': 'text/plain' } }, 415],
     [{ body: 'x'.repeat(22001) }, 413],
     [{ headers: { 'content-type': 'application/json', origin: 'https://untrusted.example' } }, 403],
@@ -186,4 +199,116 @@ test('Netlify edge limits are declared; this test does not establish deployed en
   assert.equal(config.rateLimit.windowLimit, 5)
   assert.equal(config.rateLimit.windowSize, 60)
   assert.deepEqual(config.rateLimit.aggregateBy, ['ip', 'domain'])
+})
+
+test('Netlify deploy permalink accepts inquiries while unrelated sites remain rejected', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const permalink = 'https://6acd53d1b651dd7826ee16cc--hissus.netlify.app'
+  const origins = getAllowedOrigins({
+    URL: 'https://hissus.netlify.app/',
+    DEPLOY_PRIME_URL: 'https://preview--hissus.netlify.app/',
+    DEPLOY_URL: `${permalink}/factory/contact`,
+  })
+  assert.ok(origins.includes(permalink))
+  const sent = []
+  const handler = createInquiryHandler({
+    getConfig: () => ({ apiKey: 'test-only', recipientEmail: 'team@example.com', origins }),
+    sendMail: async (_, mail) => {
+      sent.push(mail)
+      return { error: null }
+    },
+  })
+  const body = {
+    kind: 'facility',
+    name: 'Sample Company',
+    subject: 'Facility setup',
+    email: valid.email,
+    phone: '+1 469 288 3098',
+    locale: 'en',
+  }
+  const allowed = await run(
+    handler,
+    event(body, { headers: { 'content-type': 'application/json', origin: permalink } }),
+  )
+  assert.equal(allowed.statusCode, 200)
+  assert.equal(sent.length, 2)
+  for (const origin of [
+    'https://other.netlify.app',
+    'https://fake--hissus.netlify.app',
+    `${permalink}.untrusted.example`,
+  ]) {
+    const denied = await run(
+      handler,
+      event(body, { headers: { 'content-type': 'application/json', origin } }),
+    )
+    assert.equal(denied.statusCode, 403)
+    assert.equal(JSON.parse(denied.body).code, 'ORIGIN_DENIED')
+  }
+  assert.equal(sent.length, 2)
+})
+
+test('origin configuration normalizes trusted URLs and excludes malformed settings', () => {
+  assert.deepEqual(
+    getAllowedOrigins({
+      URL: 'not a URL',
+      DEPLOY_URL: 'file:///tmp/test',
+      DEPLOY_PRIME_URL: 'https://hissus.com/',
+    }),
+    ['https://hissus.com', 'https://www.hissus.com'],
+  )
+})
+
+test('provider rejection logs only safe categories and a correlatable request ID', async (context) => {
+  const entries = []
+  context.mock.method(console, 'error', (...args) => entries.push(args))
+  const { handler } = fixture([
+    {
+      error: {
+        name: 'validation_error',
+        statusCode: 403,
+        message:
+          'The hissus.com domain is not verified. Customer private@example.com, credential example-private-token.',
+      },
+    },
+  ])
+  const result = await run(handler, event(valid))
+  assert.equal(result.statusCode, 502)
+  const requestId = JSON.parse(result.body).requestId
+  assert.match(requestId, /^[0-9a-f-]{36}$/)
+  assert.equal(result.headers['X-Request-ID'], requestId)
+  assert.deepEqual(entries[0][1], {
+    requestId,
+    phase: 'notification',
+    reason: 'sender_domain_unverified',
+    providerCode: 'validation_error',
+    providerStatus: 403,
+  })
+  const logs = JSON.stringify(entries)
+  assert.equal(
+    logs.includes('private@example.com') ||
+      logs.includes('example-private-token') ||
+      logs.includes(valid.email) ||
+      logs.includes(valid.phone),
+    false,
+  )
+  assert.equal(result.body.includes('domain') || result.body.includes('credential'), false)
+})
+
+test('diagnostics distinguish access, quota, transport and timeout without exposing raw errors', () => {
+  for (const [name, reason] of [
+    ['invalid_api_key', 'api_key_rejected'],
+    ['restricted_api_key', 'sending_access_denied'],
+    ['rate_limit_exceeded', 'provider_rate_limited'],
+    ['daily_quota_exceeded', 'provider_quota_exceeded'],
+    ['TimeoutError', 'mail_timeout'],
+  ]) {
+    assert.equal(getMailFailureDetails({ name, message: 'private-token' }).reason, reason)
+  }
+  const unknown = getMailFailureDetails({
+    name: 'private@example.com',
+    message: 'private-token',
+    statusCode: 999,
+  })
+  assert.deepEqual(unknown, { reason: 'provider_rejected', providerCode: 'unknown' })
+  assert.equal(getMailFailureDetails(new TypeError('private-token')).reason, 'mail_transport_error')
 })

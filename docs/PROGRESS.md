@@ -801,3 +801,26 @@
   - **Fail Case**: Configure the Netlify UI with root base, root `dist`, and `pnpm dev` on a branch without the root config.
   - **Expected**: The supplied log's `Command "dev" not found` failure is reproducible from the root package manifest. Deploy the branch containing the root config and align dashboard fields with it; the next log should discover `netlify.toml` and run `pnpm build` from `frontend`.
 - **Deployment status**: This workspace cannot edit the live Netlify site. Source configuration and local build are verified; the next live build remains unverified. The supplied log lists Resend variable names, but this failure occurs before Functions execute and does not establish key validity or delivery.
+
+### [FIX-005] Inquiry Deploy Origins and Safe Failure Diagnostics (2026-10-12)
+
+- **Summary**: Included Netlify's exact deploy permalink in the trusted inquiry origins to address a possible pre-Resend 403 on the supplied deploy address. Added request IDs and safe failure categories for diagnosing remaining provider/configuration errors without logging submitted fields or credentials.
+- **Affected Files**:
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/netlify/inquiryDiagnostics.ts`
+  - `frontend/netlify/index.ts`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `docs/inquiry-email-review.md`
+  - `docs/security-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build the application, lint and exercise the bundled handler with a stub sender.
+  - **Expected**: TypeScript/Vite build and lint pass; all 12 inquiry tests pass. The supplied immutable deploy origin is accepted; trusted server URLs are normalized without adding a wildcard. No real mail is sent.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm test:inquiry`
+  - **Action**: Simulate Resend rejecting an unverified sender domain, with sensitive text in the synthetic provider message.
+  - **Expected**: HTTP 502 `SEND_FAILED` includes a request ID matching the response header/log. The log records `sender_domain_unverified`, provider code/status and phase; raw messages, credentials and form fields are absent.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+  - **Fail Case**: Simulate an unrelated Netlify origin, invalid server URL, or GET request.
+  - **Expected**: Unrelated origins return 403 `ORIGIN_DENIED` before mail; malformed/non-HTTP settings add no origins; GET returns 405 `METHOD_NOT_ALLOWED` with `Allow: POST`. Existing missing-key, invalid-input, notification-failure and partial-success behavior remains covered.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **Live status**: The user's deploy URL fits the missing-origin case, but its exact response JSON was not supplied. The environment proxy blocked a read-only request, so live HTTP behavior and real sending remain unverified. Test the newest deployment or main site address after redeploying; older immutable permalinks retain their old code. No actual email, live secret, dashboard or DNS change was made.

@@ -61,3 +61,20 @@ The repository-root `netlify.toml` now declares `base = "frontend"`, `command = 
 The supplied failed deployment log ran `pnpm dev` in `/opt/build/repo`, found no configuration file, and published root `dist`. That root package has no dev script. Dashboard settings should agree with the root file: base `frontend`, build `pnpm build`, publish `dist`, functions `netlify/functions`. `pnpm dev` is a local server command and is not a production build.
 
 The log lists `RESEND_API_KEY` and `QUOTE_RECIPIENT_EMAIL` as configured environment variable names. Their values, scopes, provider permissions and actual delivery were not verified; this build failure occurs before the function runs. Deploy the branch containing the new root config, then inspect the next build's resolved settings before testing mail.
+
+## Diagnosing a failed submission
+
+Inspect the **POST** to `/.netlify/functions/quote` in the browser's Network tab. Opening that endpoint in the address bar sends GET and correctly returns 405; use the contact or quote form to test sending.
+
+| HTTP status and response code | Meaning and next check |
+| --- | --- |
+| 403 `ORIGIN_DENIED` | The website origin is outside the function's allowlist. It includes hissus.com/www and the exact server-configured `URL`, `DEPLOY_PRIME_URL`, and `DEPLOY_URL`. Deploy permalinks are now included, with no wildcard for other Netlify sites. |
+| 405 `METHOD_NOT_ALLOWED` | The endpoint accepts POST. Inspect the actual form request rather than a direct browser GET. |
+| 503 `UNAVAILABLE` | The function cannot read a nonempty `RESEND_API_KEY`. Check the Functions scope and deploy context, then redeploy. |
+| 502 `SEND_FAILED` | The team notification failed. In Netlify's `quote` function logs, match the response's `requestId` to the failure entry. |
+
+Failures include a request ID in the JSON response and `X-Request-ID` header. Logs contain fixed categories such as `sender_domain_unverified`, `api_key_rejected`, `sending_access_denied`, `provider_rate_limited`, `provider_quota_exceeded`, or `mail_timeout`, plus a recognized provider code/status when available. They omit raw provider messages, credentials, and submitted fields. A failed customer confirmation is logged separately after team receipt; the form still reports team receipt to avoid duplicate inquiries.
+
+The supplied Resend key screenshot shows sending access restricted to hissus.com, matching `quotes@hissus.com`. It does not establish that the domain is verified. A rejected origin occurs before Resend is called, so adding a key does not resolve that rejection.
+
+After deploying this fix, test the **newest deployment** or the main site address. An older deploy permalink remains tied to its old code. Twelve bundled-handler checks cover the supplied permalink, unrelated-origin rejection, method errors, safe diagnostics, and existing sending behavior with a stubbed sender. Real delivery remains unverified here; the environment proxy blocked a read-only request to the public deploy URL, so that attempt did not measure the site's response.

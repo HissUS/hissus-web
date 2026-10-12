@@ -1,4 +1,5 @@
-import { inquirySchema } from '../inquiry'
+import { randomUUID } from 'node:crypto'
+import { inquirySchema, getAllowedOrigins, getMailFailureDetails } from '..'
 import type { Config, Handler } from '@netlify/functions'
 import { Resend } from 'resend'
 import en from '../../src/locales/en.json'
@@ -125,14 +126,9 @@ type Dependencies = {
 
 const dependencies: Dependencies = {
   getConfig: () => ({
-    apiKey: process.env.RESEND_API_KEY,
-    recipientEmail: process.env.QUOTE_RECIPIENT_EMAIL || 'hiss.usatx@gmail.com',
-    origins: [
-      'https://hissus.com',
-      'https://www.hissus.com',
-      process.env.URL,
-      process.env.DEPLOY_PRIME_URL,
-    ].filter((value): value is string => Boolean(value)),
+    apiKey: process.env.RESEND_API_KEY?.trim(),
+    recipientEmail: process.env.QUOTE_RECIPIENT_EMAIL?.trim() || 'hiss.usatx@gmail.com',
+    origins: getAllowedOrigins(process.env),
   }),
   sendMail: (apiKey, mail) =>
     new Resend(apiKey).emails.send(mail, { signal: AbortSignal.timeout(8000) }),
@@ -145,14 +141,18 @@ export const config: Config = {
 
 export function createInquiryHandler(deps: Dependencies = dependencies): Handler {
   return async (event) => {
+    const requestId = randomUUID()
+    const logMailFailure = (phase: 'notification' | 'confirmation', error: unknown) =>
+      console.error('Inquiry mail failed', { requestId, phase, ...getMailFailureDetails(error) })
     const response = (statusCode: number, body: Record<string, unknown>) => ({
       statusCode,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-store',
+        'X-Request-ID': requestId,
         ...(statusCode === 405 ? { Allow: 'POST' } : {}),
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(statusCode >= 400 ? { ...body, requestId } : body),
     })
     if (event.httpMethod !== 'POST') return response(405, { code: 'METHOD_NOT_ALLOWED' })
     const headers = Object.fromEntries(
@@ -174,9 +174,14 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
     }
     if (!parsed.success) return response(400, { code: 'INVALID_INPUT' })
     const settings = deps.getConfig()
-    if (headers.origin && !settings.origins.includes(headers.origin))
+    if (headers.origin && !settings.origins.includes(headers.origin)) {
+      console.error('Inquiry rejected', { requestId, reason: 'origin_denied' })
       return response(403, { code: 'ORIGIN_DENIED' })
-    if (!settings.apiKey) return response(503, { code: 'UNAVAILABLE' })
+    }
+    if (!settings.apiKey) {
+      console.error('Inquiry configuration unavailable', { requestId, reason: 'missing_api_key' })
+      return response(503, { code: 'UNAVAILABLE' })
+    }
     const inquiry = parsed.data
     const { email, phone, message, locale: lang, kind } = inquiry
     const dictionary = lang === 'zh-TW' ? zhTW : en
@@ -233,9 +238,12 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
           footer: copy.adminFooter,
         }),
       })
-      if (admin.error) return response(502, { code: 'SEND_FAILED' })
-    } catch {
-      console.error('Inquiry notification failed')
+      if (admin.error) {
+        logMailFailure('notification', admin.error)
+        return response(502, { code: 'SEND_FAILED' })
+      }
+    } catch (error) {
+      logMailFailure('notification', error)
       return response(502, { code: 'SEND_FAILED' })
     }
     // Once the team has received the inquiry, do not encourage a duplicate submission
@@ -258,8 +266,9 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
         }),
       })
       confirmationSent = !confirmation.error
-    } catch {
-      console.error('Inquiry confirmation failed')
+      if (confirmation.error) logMailFailure('confirmation', confirmation.error)
+    } catch (error) {
+      logMailFailure('confirmation', error)
     }
     return response(200, { success: true, confirmationSent })
   }

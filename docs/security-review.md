@@ -197,3 +197,9 @@ The generated hero is a labeled architectural concept; the original uploaded pho
 Canonical business routes now use `/factory/...` and `/windows/...`, with explicit legacy redirects in the client and prepared Netlify HTTP config. Redirect destinations are static application paths and retain query/hash; no user-supplied external destination is accepted. Forms still post to the same bounded Netlify function. No CSP origin or dependency was added. The factory carousel reuses Embla, keeps the native full-size dialog, honors reduced motion and restores focus without scrolling.
 
 The hero's visible illustration caption was removed at the user's request. Its generated provenance remains documented; the gallery still uses the original selected photos. The supplied Resend credential was not embedded in source or previews. Live Netlify secret installation, sender-domain verification and real sending remain unverified because this workspace has no Netlify account connection.
+
+## Inquiry origin and diagnostic fix (2026-10-12)
+
+The origin allowlist now includes the exact Netlify `DEPLOY_URL` alongside `URL`, `DEPLOY_PRIME_URL` and the existing custom domains. Trusted server URLs are normalized to their origins, deduplicated, and malformed/non-HTTP values are ignored. No wildcard trusts arbitrary Netlify sites. Helpers remain outside the deployed function directory.
+
+Each response has a generated request ID; failure responses include it in JSON for matching server logs. Rejected origins, missing configuration and provider failures log only fixed reason categories, a recognized provider code and bounded HTTP status. Raw error text, keys and form values are excluded. Twelve no-send regressions verify permitted/rejected origins, response behavior and diagnostic privacy. Build and lint pass; no dependency or CSP change was needed. Live sending and provider/domain settings remain unverified.
