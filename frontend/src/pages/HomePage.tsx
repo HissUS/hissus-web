@@ -28,7 +28,7 @@ export function HomePage() {
           </div>
           <div className="lg:pt-8">
             <p className="company-copy">{t('company.introDesc')}</p>
-            <Link to={`${prefix}/services` as never} className="company-text-link mt-8">
+            <Link to={`${prefix}/factory/services` as never} className="company-text-link mt-8">
               {t('company.introLink')}
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </Link>

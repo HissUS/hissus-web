@@ -94,7 +94,7 @@ export function ProductsPage() {
                   return (
                     <Link
                       key={category.id}
-                      to={`${prefix}/products` as never}
+                      to={`${prefix}/windows/products` as never}
                       search={{ tab: category.id } as never}
                       resetScroll={false}
                       hashScrollIntoView={false}
@@ -235,7 +235,7 @@ export function ProductsPage() {
                       {t('products.page.selectionHint')}
                     </p>
                     <Link
-                      to={`${prefix}/get-a-quote` as never}
+                      to={`${prefix}/windows/quote` as never}
                       className="inline-flex w-full sm:w-auto"
                     >
                       <Button className="w-full sm:w-auto">
@@ -260,7 +260,7 @@ export function ProductsPage() {
                   </p>
                   <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                     <Link
-                      to={`${prefix}/get-a-quote` as never}
+                      to={`${prefix}/windows/quote` as never}
                       className="inline-flex w-full sm:w-auto"
                     >
                       <Button className="w-full sm:w-auto">{t('nav.getQuote')}</Button>

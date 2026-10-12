@@ -1,16 +1,16 @@
 import { useLocation } from '@tanstack/react-router'
+import { SITE_PATHS, getSiteSection } from '@/lib'
 
-const SCREEN_ROUTES = new Set(['/window-screen-solutions', '/products', '/get-a-quote'])
-
-/** One hostname, with navigation that follows the current business section. */
+/** Navigation follows the current business namespace on one hostname. */
 export function useSiteSection() {
   const { pathname } = useLocation()
-  const basePath = pathname.replace(/^\/tw(?=\/|$)/, '')
-  const isWindowSite = SCREEN_ROUTES.has(basePath)
+  const section = getSiteSection(pathname)
+  const isWindowSite = section === 'windows'
   return {
+    section,
     isWindowSite,
-    homePath: isWindowSite ? '/window-screen-solutions' : '/home',
-    switchPath: isWindowSite ? '/home' : '/window-screen-solutions',
+    homePath: SITE_PATHS[section].home,
+    switchPath: isWindowSite ? SITE_PATHS.factory.home : SITE_PATHS.windows.home,
     switchLabel: isWindowSite ? 'nav.services' : 'nav.screens',
   }
 }

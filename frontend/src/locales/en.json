@@ -244,7 +244,7 @@
   "company": {
     "eyebrow": "HISSUS · FACTORIES & FACILITIES",
     "heroTitle": "A clear foundation for your next facility.",
-    "heroDesc": "Factory setup and construction services, informed by our team’s hospital and cleanroom experience. A considered approach to quality, cost, and risk.",
+    "heroDesc": "Factory setup and construction, informed by our team’s hospital and cleanroom experience.",
     "heroLink": "Explore our approach",
     "introLabel": "WHAT WE DO",
     "introTitle": "Spaces for the work ahead.",
@@ -365,11 +365,10 @@
       "1366": "Stairwell and circulation space"
     },
     "viewPhoto": "View photo: {{caption}}",
-    "heroImageNote": "Illustrative architectural concept",
     "facilityEmail": {
       "adminSubject": "HISSUS Facility Inquiry - {{name}}",
       "adminBadge": "Factory & Facility Services",
-      "adminHeading": "New Facility Inquiry",
+      "adminHeading": "HISSUS - New Facility Inquiry",
       "adminFooter": "Submitted via the HISSUS factory and facility inquiry form.",
       "userSubject": "Your Facility Inquiry - HISSUS",
       "userHeading": "We've Received Your Inquiry",
@@ -383,7 +382,8 @@
     "previousVideo": "Previous videos",
     "nextVideo": "Next videos",
     "close": "Close image",
-    "top": "Back to top"
+    "top": "Back to top",
+    "carousel": "carousel"
   },
   "contactLabels": {
     "phone": "Phone",

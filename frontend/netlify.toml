@@ -18,6 +18,126 @@ to = "/.netlify/functions/:splat"
 status = 200
 
 [[redirects]]
+from = "/"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/factory"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/windows"
+to = "/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/factory"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows"
+to = "/tw/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/home"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/services"
+to = "/factory/services"
+status = 301
+force = true
+
+[[redirects]]
+from = "/about"
+to = "/factory/about"
+status = 301
+force = true
+
+[[redirects]]
+from = "/contact"
+to = "/factory/contact"
+status = 301
+force = true
+
+[[redirects]]
+from = "/window-screen-solutions"
+to = "/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/products"
+to = "/windows/products"
+status = 301
+force = true
+
+[[redirects]]
+from = "/get-a-quote"
+to = "/windows/quote"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/home"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/services"
+to = "/tw/factory/services"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/about"
+to = "/tw/factory/about"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/contact"
+to = "/tw/factory/contact"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/window-screen-solutions"
+to = "/tw/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/products"
+to = "/tw/windows/products"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/get-a-quote"
+to = "/tw/windows/quote"
+status = 301
+force = true
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200

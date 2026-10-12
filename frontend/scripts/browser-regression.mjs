@@ -8,9 +8,13 @@ const dictionaries = Object.fromEntries(
   ]),
 )
 const metadataKeys = {
-  'window-screen-solutions': 'screens',
-  products: 'products',
-  'get-a-quote': 'quote',
+  'factory/home': 'home',
+  'factory/services': 'services',
+  'factory/about': 'about',
+  'factory/contact': 'contact',
+  'windows/home': 'screens',
+  'windows/products': 'products',
+  'windows/quote': 'quote',
 }
 const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
 const browser = await chromium.launch({
@@ -19,13 +23,13 @@ const browser = await chromium.launch({
   args: ['--disable-dev-shm-usage'],
 })
 const paths = [
-  'home',
-  'services',
-  'about',
-  'contact',
-  'window-screen-solutions',
-  'products?tab=windows',
-  'get-a-quote',
+  'factory/home',
+  'factory/services',
+  'factory/about',
+  'factory/contact',
+  'windows/home',
+  'windows/products?tab=windows',
+  'windows/quote',
   'login',
   'console',
 ]
@@ -47,6 +51,7 @@ try {
   for (const width of [1440, 390, 320])
     for (const prefix of ['', '/tw']) {
       const page = await newPage({ viewport: { width, height: 900 } })
+      let factoryHeroHeight
       const errors = []
       page.on('pageerror', (error) => errors.push(error.message))
       page.on('console', (message) => {
@@ -66,6 +71,19 @@ try {
           await page.locator('meta[name="description"]').getAttribute('content'),
           expected.desc,
         )
+        assert.deepEqual(
+          await page
+            .locator('link[data-hissus-locale]')
+            .evaluateAll((links) =>
+              links.map((link) => ({ lang: link.hreflang, href: link.href })),
+            ),
+          [
+            { lang: 'en', href: `https://hissus.com/${path.split('?')[0]}` },
+            { lang: 'zh-TW', href: `https://hissus.com/tw/${path.split('?')[0]}` },
+            { lang: 'x-default', href: `https://hissus.com/${path.split('?')[0]}` },
+          ],
+        )
+
         assert.equal(
           await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
           false,
@@ -88,9 +106,7 @@ try {
         )
         if (await page.locator('header').count()) {
           const translations = dictionaries[prefix ? 'zh-TW' : 'en']
-          const windowSite = ['window-screen-solutions', 'products', 'get-a-quote'].includes(
-            path.split('?')[0],
-          )
+          const windowSite = path.startsWith('windows/')
           const expectedLinks = windowSite
             ? [translations.nav.home, translations.nav.products, translations.nav.quote]
             : [translations.nav.home, translations.nav.servicesShort, translations.nav.contact]
@@ -100,14 +116,14 @@ try {
             .getByRole('link', { name: expectedSwitch, exact: true })
           assert.equal(
             await switchButton.getAttribute('href'),
-            `${prefix}/${windowSite ? 'home' : 'window-screen-solutions'}`,
+            `${prefix}/${windowSite ? 'factory/home' : 'windows/home'}`,
           )
           assert.equal(
             await page
               .locator('header')
               .getByRole('link', { name: 'HISSUS', exact: true })
               .getAttribute('href'),
-            `${prefix}/${windowSite ? 'window-screen-solutions' : 'home'}`,
+            `${prefix}/${windowSite ? 'windows/home' : 'factory/home'}`,
           )
           if (width < 1024)
             await page
@@ -132,7 +148,7 @@ try {
               await navigation
                 .getByRole('link', { name: translations.nav.quote, exact: true })
                 .getAttribute('href'),
-              `${prefix}/get-a-quote`,
+              `${prefix}/windows/quote`,
             )
           if (width < 1024)
             await page
@@ -158,10 +174,11 @@ try {
           )
 
           assert.equal(await page.locator('footer nav').getByRole('link').count(), 2)
-          if (path === 'contact')
-            assert.equal(await page.locator('main a[href$="/get-a-quote"]').count(), 0)
-          if (path === 'home') assert.equal(await page.locator('#screens-heading').count(), 0)
-          if (['home', 'services', 'about'].includes(path))
+          if (path === 'factory/contact')
+            assert.equal(await page.locator('main a[href$="/windows/quote"]').count(), 0)
+          if (path === 'factory/home')
+            assert.equal(await page.locator('#screens-heading').count(), 0)
+          if (['factory/home', 'factory/services', 'factory/about'].includes(path))
             assert.equal(
               await page
                 .locator(
@@ -170,9 +187,9 @@ try {
                 .count(),
               0,
             )
-          if (path === 'home')
+          if (path === 'factory/home')
             assert.equal(await page.locator('h1').innerText(), translations.company.heroTitle)
-          if (path === 'window-screen-solutions')
+          if (path === 'windows/home')
             assert.equal(
               await page
                 .getByRole('link', { name: translations.common.explore_details, exact: true })
@@ -180,12 +197,33 @@ try {
               0,
             )
 
+          if (path === 'factory/home') {
+            factoryHeroHeight = (await page.locator('.factory-hero').boundingBox()).height
+            assert.equal(
+              await page
+                .getByText(
+                  translations.company.heroImageNote || 'Illustrative architectural concept',
+                  { exact: true },
+                )
+                .count(),
+              0,
+            )
+          }
+          if (path === 'windows/home') {
+            const windowsHeight = (await page.locator('main section').first().boundingBox()).height
+            assert.ok(
+              Math.abs(factoryHeroHeight - windowsHeight) < 1,
+              `hero heights match ${width} ${prefix}: ${factoryHeroHeight} / ${windowsHeight}`,
+            )
+            assert.equal(windowsHeight, width < 640 ? 520 : 600)
+            checks++
+          }
           checks++
         }
 
         if (
           screenshotDirectory &&
-          ['home', 'services', 'contact', 'window-screen-solutions'].includes(path)
+          ['factory/home', 'factory/services', 'factory/contact', 'windows/home'].includes(path)
         ) {
           await page.locator('img').evaluateAll(async (images) => {
             for (const image of images) {
@@ -205,7 +243,7 @@ try {
           await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
           await page.waitForTimeout(700)
           await page.screenshot({
-            path: `${screenshotDirectory}/${width}-${prefix ? 'tw' : 'en'}-${path}.png`,
+            path: `${screenshotDirectory}/${width}-${prefix ? 'tw' : 'en'}-${path.replaceAll('/', '-')}.png`,
             fullPage: true,
           })
         }
@@ -213,7 +251,7 @@ try {
         await page.waitForFunction((title) => document.title === title, expected.title)
         checks++
       }
-      await page.goto(`${base}${prefix}/home`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${base}${prefix}/factory/home`, { waitUntil: 'domcontentloaded' })
       const screenButton = page.locator('header').getByRole('link', {
         name: prefix ? '門窗與紗窗解決方案' : 'Window & Screen Solutions',
         exact: true,
@@ -240,7 +278,7 @@ try {
         .boundingBox()
       assert.ok(buttonBox.x + buttonBox.width <= englishBox.x)
       await screenButton.click()
-      await page.waitForURL('**/window-screen-solutions')
+      await page.waitForURL('**/windows/home')
       await page.locator('h1').waitFor()
       checks++
       const factoryButton = page.locator('header').getByRole('link', {
@@ -248,10 +286,12 @@ try {
         exact: true,
       })
       await factoryButton.click()
-      await page.waitForURL(`**${prefix}/home`)
+      await page.waitForURL(`**${prefix}/factory/home`)
       await page.locator('h1').waitFor()
       checks++
-      await page.goto(`${base}${prefix}/products?tab=windows`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${base}${prefix}/windows/products?tab=windows`, {
+        waitUntil: 'domcontentloaded',
+      })
       for (const [tab, translationKey, imageCount, videoCount] of [
         ['multi-handle', 'multiHandle', 5, 4],
         ['double-handle', 'doubleHandle', 1, 3],
@@ -263,7 +303,7 @@ try {
         await page.waitForTimeout(150)
         const selectionY = await page.evaluate(() => window.scrollY)
         await productLink.click()
-        await page.waitForURL(`**/products?tab=${tab}`)
+        await page.waitForURL(`**/windows/products?tab=${tab}`)
         await page.waitForTimeout(400)
         assert.ok(
           Math.abs((await page.evaluate(() => window.scrollY)) - selectionY) < 2,
@@ -290,7 +330,7 @@ try {
         )
         checks++
       }
-      await page.goto(`${base}${prefix}/products?tab=single-handle`, {
+      await page.goto(`${base}${prefix}/windows/products?tab=single-handle`, {
         waitUntil: 'domcontentloaded',
       })
       await page.locator('#product-details').waitFor()
@@ -300,7 +340,7 @@ try {
         .getByRole('button', { name: prefix ? 'English' : '繁體中文', exact: true })
         .first()
         .click()
-      await page.waitForURL(`**/${prefix ? '' : 'tw/'}products?tab=single-handle`)
+      await page.waitForURL(`**/${prefix ? '' : 'tw/'}windows/products?tab=single-handle`)
       await page.waitForTimeout(750)
       assert.ok(
         Math.abs((await page.evaluate(() => window.scrollY)) - previousY) < 2,
@@ -365,12 +405,12 @@ try {
           .locator('#mobile-navigation')
           .getByRole('link', { name: translations.nav.home, exact: true })
           .click()
-        await page.waitForURL('**/window-screen-solutions')
+        await page.waitForURL('**/windows/home')
         await page
           .locator('header')
           .getByRole('link', { name: translations.nav.services, exact: true })
           .click()
-        await page.waitForURL('**/home')
+        await page.waitForURL('**/factory/home')
         await page
           .locator('header')
           .getByRole('button', { name: translations.nav.menu, exact: true })
@@ -379,7 +419,7 @@ try {
           .locator('#mobile-navigation')
           .getByRole('link', { name: translations.nav.servicesShort, exact: true })
           .click()
-        await page.waitForURL('**/services')
+        await page.waitForURL('**/factory/services')
         assert.equal(await page.locator('#mobile-navigation').count(), 0)
         checks++
       }
@@ -389,7 +429,7 @@ try {
     const media = await newPage({ viewport: { width, height: 900 } })
     for (const prefix of ['', '/tw']) {
       for (const hash of ['', '#factory-gallery']) {
-        await media.goto(`${base}${prefix}/home${hash}`, { waitUntil: 'domcontentloaded' })
+        await media.goto(`${base}${prefix}/factory/home${hash}`, { waitUntil: 'domcontentloaded' })
         await media.locator('#factory-gallery').waitFor()
         await media.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }))
         await media.waitForTimeout(200)
@@ -398,7 +438,7 @@ try {
           .locator('header')
           .getByRole('button', { name: prefix ? 'English' : '繁體中文', exact: true })
           .click()
-        await media.waitForURL(`**/${prefix ? '' : 'tw/'}home${hash}`)
+        await media.waitForURL(`**/${prefix ? '' : 'tw/'}factory/home${hash}`)
         await media.waitForTimeout(750)
         assert.ok(
           Math.abs((await media.evaluate(() => window.scrollY)) - before) < 2,
@@ -408,6 +448,43 @@ try {
       }
       const gallery = media.locator('#factory-gallery')
       assert.equal(await gallery.locator('figure').count(), 6)
+      const carousel = gallery.locator('[data-factory-carousel]')
+      const next = carousel.getByRole('button', {
+        name: dictionaries[prefix ? 'en' : 'zh-TW'].gallery.next,
+        exact: true,
+      })
+      const previous = carousel.getByRole('button', {
+        name: dictionaries[prefix ? 'en' : 'zh-TW'].gallery.previous,
+        exact: true,
+      })
+      await next.scrollIntoViewIfNeeded()
+      await media.waitForFunction(
+        () =>
+          getComputedStyle(document.querySelector('[data-factory-carousel]').parentElement)
+            .opacity === '1',
+      )
+      await next.scrollIntoViewIfNeeded()
+      assert.equal(await previous.isDisabled(), true)
+      const initialX = (await gallery.locator('figure').first().boundingBox()).x
+      const initialY = await media.evaluate(() => window.scrollY)
+      await next.click()
+      await media.waitForTimeout(900)
+      assert.ok(
+        (await gallery.locator('figure').first().boundingBox()).x < initialX - 100,
+        'carousel scrolls horizontally',
+      )
+      assert.ok(
+        Math.abs((await media.evaluate(() => window.scrollY)) - initialY) < 2,
+        `carousel keeps page position ${width} ${prefix}: ${initialY} / ${await media.evaluate(() => window.scrollY)}`,
+      )
+      assert.equal(await previous.isDisabled(), false)
+      await media.keyboard.press('ArrowLeft')
+      await media.waitForTimeout(900)
+      assert.ok(
+        Math.abs((await gallery.locator('figure').first().boundingBox()).x - initialX) < 2,
+        'carousel keyboard returns to first photo',
+      )
+      checks++
       const trigger = gallery.locator('figure button').first()
       await trigger.click()
       const dialog = media.getByRole('dialog')
@@ -451,10 +528,50 @@ try {
     }
     await media.close()
   }
+  const redirects = await newPage()
+  for (const prefix of ['', '/tw']) {
+    for (const [oldPath, destination] of [
+      ['/home', '/factory/home'],
+      ['/services', '/factory/services'],
+      ['/about', '/factory/about'],
+      ['/contact', '/factory/contact'],
+      ['/window-screen-solutions', '/windows/home'],
+      ['/products', '/windows/products'],
+      ['/get-a-quote', '/windows/quote'],
+      ['/factory', '/factory/home'],
+      ['/windows', '/windows/home'],
+    ]) {
+      await redirects.goto(`${base}${prefix}${oldPath}?tab=single-handle#details`, {
+        waitUntil: 'domcontentloaded',
+      })
+      await redirects.waitForURL(`${base}${prefix}${destination}?tab=single-handle#details`)
+      await redirects.locator('h1').waitFor()
+      checks++
+    }
+    await redirects.goto(`${base}${prefix || '/'}?campaign=sample#intro`, {
+      waitUntil: 'domcontentloaded',
+    })
+    await redirects.waitForURL(`${base}${prefix}/factory/home?campaign=sample#intro`)
+    checks++
+    for (const section of ['factory', 'windows']) {
+      await redirects.goto(`${base}${prefix}/${section}/unknown`, { waitUntil: 'domcontentloaded' })
+      await redirects
+        .getByRole('link', { name: dictionaries[prefix ? 'zh-TW' : 'en'].nav.home, exact: true })
+        .waitFor()
+      assert.equal(
+        await redirects
+          .getByRole('link', { name: dictionaries[prefix ? 'zh-TW' : 'en'].nav.home, exact: true })
+          .getAttribute('href'),
+        `${prefix}/${section}/home`,
+      )
+      checks++
+    }
+  }
+  await redirects.close()
   const page = await newPage()
   for (const prefix of ['', '/tw'])
     for (const facility of [false, true]) {
-      await page.goto(`${base}${prefix}/${facility ? 'contact' : 'get-a-quote'}`, {
+      await page.goto(`${base}${prefix}/${facility ? 'factory/contact' : 'windows/quote'}`, {
         waitUntil: 'domcontentloaded',
       })
       assert.equal(
@@ -526,7 +643,7 @@ try {
       await page.unroute('**/.netlify/functions/quote')
     }
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto(`${base}/home`, { waitUntil: 'domcontentloaded' })
+  await page.goto(`${base}/factory/home`, { waitUntil: 'domcontentloaded' })
   await page.locator('h1').waitFor()
   assert.equal(
     await page.evaluate(() => getComputedStyle(document.querySelector('a')).transitionDuration),
@@ -553,7 +670,7 @@ try {
   checks++
   await page.unroute('https://i.ytimg.com/**')
   await page.route('https://i.ytimg.com/**', (route) => route.abort('failed'))
-  await page.goto(`${base}/products?tab=single-handle`, { waitUntil: 'domcontentloaded' })
+  await page.goto(`${base}/windows/products?tab=single-handle`, { waitUntil: 'domcontentloaded' })
   const poster = page.locator('img[src*="i.ytimg.com"]').first()
   await poster.scrollIntoViewIfNeeded()
   await page.waitForFunction(

@@ -17,13 +17,13 @@ export function Header() {
   const links = isWindowSite
     ? [
         { path: homePath, key: 'home' },
-        { path: '/products', key: 'products' },
-        { path: '/get-a-quote', key: 'quote' },
+        { path: '/windows/products', key: 'products' },
+        { path: '/windows/quote', key: 'quote' },
       ]
     : [
         { path: homePath, key: 'home' },
-        { path: '/services', key: 'servicesShort' },
-        { path: '/contact', key: 'contact' },
+        { path: '/factory/services', key: 'servicesShort' },
+        { path: '/factory/contact', key: 'contact' },
       ]
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">

@@ -14,7 +14,7 @@ export function FactoryHero() {
   const prefix = country ? `/${country}` : ''
   return (
     <section
-      className="factory-hero relative isolate flex min-h-[600px] items-center overflow-hidden bg-gray-950 py-24 text-white sm:min-h-[640px]"
+      className="factory-hero relative isolate flex min-h-[520px] items-center overflow-hidden bg-gray-950 py-4 text-white sm:py-12 sm:min-h-[600px]"
       aria-labelledby="company-hero-heading"
     >
       <img
@@ -39,19 +39,25 @@ export function FactoryHero() {
           <p className="text-sm font-semibold tracking-widest text-blue-100">
             {t('company.eyebrow')}
           </p>
-          <h1 id="company-hero-heading" className="company-title mt-8">
+          <h1
+            id="company-hero-heading"
+            className="mt-6 text-balance text-3xl font-medium leading-tight tracking-tight sm:text-5xl"
+          >
             {t('company.heroTitle')}
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/90">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
             {t('company.heroDesc')}
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link to={`${prefix}/contact` as never} className="company-button company-button-light">
+          <div className="mt-6 flex flex-wrap gap-4">
+            <Link
+              to={`${prefix}/factory/contact` as never}
+              className="company-button company-button-light"
+            >
               {t('nav.discuss')}
               <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
             </Link>
             <Link
-              to={`${prefix}/services` as never}
+              to={`${prefix}/factory/services` as never}
               className="inline-flex items-center gap-4 px-2 py-2 text-white underline underline-offset-8"
             >
               {t('company.heroLink')}
@@ -60,9 +66,6 @@ export function FactoryHero() {
           </div>
         </Reveal>
       </div>
-      <p className="absolute bottom-4 right-4 rounded bg-gray-950/60 px-3 py-2 text-xs text-white/85">
-        {t('company.heroImageNote')}
-      </p>
     </section>
   )
 }

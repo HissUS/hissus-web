@@ -249,7 +249,7 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
         subject: copy.userSubject,
         html: buildEmailHtml({
           ...common,
-          badge: kind === 'facility' ? copy.adminBadge : copy.userSubject,
+          badge: copy.userSubject,
           heading: copy.userHeading,
           intro: fill(copy.userIntro, {
             name: escapeHtml(inquiry.kind === 'facility' ? inquiry.name : inquiry.firstName),

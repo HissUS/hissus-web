@@ -722,3 +722,56 @@
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **External readiness**: No API key or Netlify credential exists in this workspace. Live site settings, Resend sender-domain verification and delivery remain unverified. `docs/inquiry-email-review.md` explains how to confirm whether the key/redeploy are the final prerequisites. No real mail, secret, deployment, dashboard or DNS change was made.
 - **Visual review**: Factory hero, Services blend, footer, Chinese copy and gallery were inspected in desktop/mobile screenshots under `/tmp/hissus-photos-review`. Hero WebPs are 640/1200/1672px wide and total 304,356 bytes. The original generated PNG and uploaded photos remain intact outside the checkout; the real gallery is separate from the illustrative hero.
+
+### [FEAT-015] Business Route Namespaces, Scrolling Gallery, and Matched Heroes (2026-10-12)
+
+- **Summary**: Grouped public pages under `/factory` and `/windows`, with factory home as the default, localized aliases, preserved search/hash, updated navigation/CTAs/metadata and prepared HTTP redirects. Changed the factory gallery to a horizontal carousel, removed the hero caption and matched both heroes' heights; factory mail retains the window mail shell with business-specific fields and branding.
+- **Affected Files**:
+  - `README.md`
+  - `docs/PROGRESS.md`
+  - `docs/email-previews/facility-client-en.html`
+  - `docs/email-previews/facility-client-zh-TW.html`
+  - `docs/email-previews/facility-team-en.html`
+  - `docs/email-previews/facility-team-zh-TW.html`
+  - `docs/factory-website-review.md`
+  - `docs/features/homepage.md`
+  - `docs/inquiry-email-review.md`
+  - `docs/security-review.md`
+  - `frontend/netlify.toml`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/csp-regression.mjs`
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `frontend/src/components/layout/Header/index.tsx`
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/FactoryGallery.tsx`
+  - `frontend/src/features/homepage/components/FactoryHero.tsx`
+  - `frontend/src/features/homepage/components/HeroSection.tsx`
+  - `frontend/src/features/homepage/hooks/index.ts`
+  - `frontend/src/features/homepage/hooks/useFactoryCarousel.ts`
+  - `frontend/src/hooks/useLocale.ts`
+  - `frontend/src/hooks/usePageMetadata.ts`
+  - `frontend/src/hooks/useSiteSection.ts`
+  - `frontend/src/lib/index.ts`
+  - `frontend/src/lib/siteRoutes.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/ProductsPage.tsx`
+  - `frontend/src/router/index.tsx`
+
+- **Verification**:
+  - **Action**: Build, lint, check locale parity and run the bundled inquiry regressions.
+  - **Expected**: Build/TypeScript, lint/locales and all 8 inquiry tests pass. Factory emails share the window HTML layout with their own fields; previews regenerate without sending messages. Page components load lazily, keeping the main production chunk under the default Vite warning threshold.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry && node scripts/preview-inquiry-emails.mjs`
+  - **Action**: Run production browser/CSP checks.
+  - **Expected**: 269 browser checks pass in EN/zh-TW at 1440/390/320px, including canonical navigation and refresh, legacy/default redirects preserving query/hash, updated hreflang, product/language scroll retention, carousel arrows/keyboard, native viewer focus return, and matching 520px mobile/600px desktop heroes. Six CSP pages have zero violations. External media/mail remain stubbed.
+  - **Command/URL**: With a production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Action**: Parse and inspect Netlify redirect configuration.
+  - **Expected**: 20 prepared HTTP 301 rules point to the correct business routes; API rewrite remains first and SPA fallback last. Live HTTP responses remain unverified until deployment.
+  - **Command/URL**: `python -c "import tomllib; from pathlib import Path; c=tomllib.loads(Path('frontend/netlify.toml').read_text()); assert c['redirects'][0]['from']=='/api/*'; assert c['redirects'][-1]['from']=='/*'; assert len([r for r in c['redirects'] if r['status']==301])==20"`
+  - **Fail Case**: Open `/products?tab=single-handle#details`, its `/tw` variant, or an unknown path under either business.
+  - **Expected**: Old product paths resolve to the correct localized `/windows/products` with query/hash intact. Unknown business paths show a localized link to that business's home. Invalid inquiry payloads still return 400 before mail calls; missing key returns 503.
+  - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && pnpm test:inquiry`
+- **Email and credential status**: Eight actual-handler previews were regenerated; 16 viewport/language renderings were checked without overflow. The supplied credential was not installed or persisted because this workspace has no Netlify account binding. Manual sending requires secure `RESEND_API_KEY` entry in the site's Functions environment and redeployment, plus the previously documented sender-domain verification. No real mail, secret, deployment or DNS change was made.
+- **Visual review**: Factory heroes and horizontal gallery were reviewed at desktop/mobile widths in `/tmp/hissus-photos-review`. The gallery retains the six real photos; the generated hero source/provenance remains documented after removing its visible caption.

@@ -14,20 +14,18 @@ Retain HISSUS logo and blue identity, with restrained editorial typography, whit
 
 For every route below, Traditional Chinese uses the existing `/tw` prefix. English remains unprefixed and is the default; there was no localStorage language persistence to replace. URL language survives refresh. Switching preserves the equivalent page, query selection, section hash, and current scroll position without navigating to that hash again. Document lang, page title, description, and hreflang now follow language/page. Metadata is client-updated in this SPA; social crawlers that do not execute JavaScript still see the shared HTML shell. No SSR/SEO-rendering migration was introduced.
 
-| Existing URL | Result | Preservation/redirect |
+| Canonical URL | Result | Legacy alias |
 | --- | --- | --- |
-| `/` | `/home` | Existing client-side TanStack redirect retained; not an HTTP 301 |
-| `/home`, `/tw/home` | New company homepage | URLs retained; former screen homepage fully available at `/window-screen-solutions`, `/tw/window-screen-solutions` |
-| `/products`, `/tw/products` and `?tab=...` | Existing full screen catalog | URLs and product IDs retained |
-| `/get-a-quote`, `/tw/get-a-quote` | Existing screen inquiry form | URLs, Texas city selection and product options retained |
-| `/login`, `/tw/login` | Existing login UI skeleton | URLs retained; functional auth remains unimplemented/unverified |
-| `/console`, `/tw/console` | Existing placeholder | URLs retained; placeholder now translated |
-| New `/services`, `/tw/services` | Facility services and GMP | New route; experience at `#experience`, GMP at `#gmp` |
-| New `/about`, `/tw/about` | Company introduction | New route |
-| New `/contact`, `/tw/contact` | Facility inquiry and verified contact channels | New route using the existing mail integration |
-| New `/window-screen-solutions`, `/tw/window-screen-solutions` | Complete former screen homepage | Permanent header button immediately before the language controls |
+| `/factory/home` | Factory homepage and default landing page | `/`, `/factory`, `/home` |
+| `/factory/services` | Facility services, experience and GMP | `/services` |
+| `/factory/about` | Company introduction | `/about` |
+| `/factory/contact` | Facility inquiry | `/contact` |
+| `/windows/home` | Full window/screen homepage | `/windows`, `/window-screen-solutions` |
+| `/windows/products?tab=...` | Existing full catalog and product IDs | `/products?tab=...` |
+| `/windows/quote` | Existing Texas city/product quote form | `/get-a-quote` |
+| `/login`, `/console` | Shared existing UI skeleton/placeholder | Kept as shared routes |
 
-No existing URL was deleted, so no relocation HTTP redirect is necessary. Netlify's existing `/* -> /index.html` **200 rewrite**, not a redirect, remains the server fallback for direct navigation/refresh. `/api/*` function rewrite and direct `/.netlify/functions/quote` calls are retained. Unknown paths render a localized not-found view; Netlify SPA rewriting can still return HTTP 200 for these paths.
+Traditional Chinese prepends `/tw`; `/tw` defaults to `/tw/factory/home`. Client aliases preserve search/hash and replace the old history entry. Netlify has explicit 301 rules for root/business roots and legacy EN/TW routes before the SPA fallback. Those deployed HTTP responses have not been verified here. API rewrites and `/.netlify/functions/quote` are unchanged. Canonical routes still use the existing `/* -> /index.html` **200 rewrite** for direct navigation/refresh. Unknown business paths have a localized return link to that business's homepage; SPA fallback may return HTTP 200 for unknown paths.
 
 ## Source access and photography
 
@@ -64,7 +62,7 @@ Final checks:
 - `pnpm build`: passed, includes TypeScript and production bundle; lazy-loaded secondary pages keep the main bundle below the Vite warning threshold.
 - `pnpm lint`: passed. `pnpm check-locales`: passed. New strings, metadata, form feedback and gallery labels exist in both dictionaries.
 - `pnpm test:inquiry`: **8 tests passed**, zero skipped. Exercises actual bundled server schema/handler, HTML escaping, input/type/size/origin/method validation, provider-returned and thrown failures, receipt versus optional confirmation, and declared edge limits. Mail provider is mocked; no actual delivery occurred.
-- `pnpm test:browser`: **233 checks passed**, at 1440px, 390px, 320px, in both languages. Direct routes and refreshes, exact localized metadata/lang, all four product categories and counts of original media, scroll/query/hash-preserving language switching and refresh, six-photo gallery keyboard navigation/focus return, thumbnail failure fallback, equal footer row spacing, product-card click scroll retention, removed conversation shortcuts/featured-details links, mobile menu navigation, lightbox Escape behavior, click-to-load video target, truthful failure/partial-success form states, skip link, reduced motion, missing local images, console/page errors and horizontal overflow checked. External players, thumbnail responses, and email responses are stubbed; local images remain real.
+- `pnpm test:browser`: **269 checks passed**, at 1440px, 390px, 320px, in both languages. Direct routes and refreshes, exact localized metadata/lang, all four product categories and counts of original media, scroll/query/hash-preserving language switching and refresh, six-photo horizontal carousel arrows/keyboard and viewer focus return, legacy aliases with preserved query/hash, default factory routing, exact factory/window hero height parity, thumbnail failure fallback, equal footer row spacing, product-card click scroll retention, removed conversation shortcuts/featured-details links, mobile menu navigation, lightbox Escape behavior, click-to-load video target, truthful failure/partial-success form states, skip link, reduced motion, missing local images, console/page errors and horizontal overflow checked. External players, thumbnail responses, and email responses are stubbed; local images remain real.
 - `pnpm test:csp`: six bilingual production pages, local images, and configured embed target exercised with the prepared Netlify CSP injected into HTTP responses; **zero CSP violations**. Real YouTube content is stubbed. Does not establish deployed headers.
 - Screenshots captured for home/services/contact/screen homepage in both languages at desktop/mobile widths, reviewed visually. Current photo/portrait-viewer artifacts are in `/tmp/hissus-photos-review`; scripts can regenerate them.
 - Full dependency advisories and remaining risk: [security-review.md](security-review.md). Final frontend audit has one remaining tooling finding; root audit has none. No vulnerability-free claim.
@@ -105,7 +103,7 @@ No live DNS, dashboards, paid service purchases, deployments, intrusive scans, o
 
 ## Latest refinements
 
-The factory hero now uses a full-width generated architectural concept with a legible dark overlay and an explicit illustration caption. Its three 640/1200/1672px WebP sizes total 304,356 bytes; the original generated PNG is preserved outside the checkout. This image is separate from the real uploaded-photo gallery and is not labeled as a completed project. Services' original entrance photo fades into the page background. The Chinese headline is 「從規劃到建置，打造您的理想廠房。」.
+The factory hero now uses a full-width generated architectural concept with a legible dark overlay and the visible caption removed at the user’s request. Generated provenance remains in this document. Its three 640/1200/1672px WebP sizes total 304,356 bytes; the original generated PNG is preserved outside the checkout. This image is separate from the real uploaded-photo gallery and is not labeled as a completed project. Services' original entrance photo fades into the page background. The Chinese headline is 「從規劃到建置，打造您的理想廠房。」.
 
 Footer rows are evenly spaced, and the conversation section retains only its project-discussion CTA. Window product-card clicks preserve scroll, including on mobile; the featured-products details link is removed. Ordinary links to a different page, explicit anchors, and the back-to-top control retain their intended behavior.
 

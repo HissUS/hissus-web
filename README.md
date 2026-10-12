@@ -60,7 +60,7 @@ pnpm install
 pnpm dev
 ```
 
-Frontend available at: `http://localhost:5173` (auto-redirects to `/home`)
+Frontend available at: `http://localhost:5173` (auto-redirects to `/factory/home`)
 
 ## Building
 
@@ -105,20 +105,22 @@ Disabled automatically in `prod` profile.
 
 | Route | Description |
 |---|---|
-| `/` | Redirects to `/home` |
-| `/home` | Company homepage — English (US, default) |
-| `/$country/home` | Company homepage — localized (e.g. `/tw/home`) |
-| `/services`, `/tw/services` | Factory/facility services, experience section and GMP |
-| `/about`, `/tw/about` | Company introduction |
-| `/contact`, `/tw/contact` | Facility inquiry form |
-| `/window-screen-solutions`, `/tw/window-screen-solutions` | Complete former screen homepage |
-| `/get-a-quote`, `/tw/get-a-quote` | Preserved screen quote form |
-| `/login` | Login page — English |
-| `/$country/login` | Login page — localized (e.g. `/tw/login`) |
-| `/products` | Product catalog — English |
-| `/$country/products` | Product catalog — localized (e.g. `/tw/products`) |
+| `/` | Redirects to `/factory/home` |
+| `/factory/home`, `/tw/factory/home` | Factory homepage, English / Traditional Chinese |
+| `/factory/services`, `/tw/factory/services` | Factory/facility services, experience and GMP |
+| `/factory/about`, `/tw/factory/about` | Company introduction |
+| `/factory/contact`, `/tw/factory/contact` | Facility inquiry form |
+| `/windows/home`, `/tw/windows/home` | Window and screen homepage |
+| `/windows/products`, `/tw/windows/products` | Full product catalog; `?tab=...` retains category selection |
+| `/windows/quote`, `/tw/windows/quote` | Window/screen quote form |
+| `/login`, `/tw/login` | Shared login page |
+| `/console`, `/tw/console` | Shared console placeholder |
 
-**i18n URL convention**: English (US) has no country code. All other locales prepend a 2-letter country code as the first path segment (`/$country/[page]`).
+Business roots (`/factory`, `/windows`) lead to their homepages. Old public paths (`/home`, `/services`, `/about`, `/contact`, `/window-screen-solutions`, `/products`, `/get-a-quote`) redirect to the corresponding business routes. Their `/tw` variants redirect as well. Client redirects retain query selections and hashes; Netlify is configured with HTTP 301 aliases before the SPA fallback. Production redirect behavior must be verified after deployment.
+
+Both forms use the existing Netlify quote function. See [email previews and Resend setup](docs/inquiry-email-review.md) before testing delivery. A plain Vite development server does not run Netlify Functions.
+
+**i18n URL convention**: English (US) has no country code. All other locales prepend a 2-letter country code as the first path segment (`/$country/[business]/[page]` for public business pages).
 
 | Country code | Locale |
 |---|---|
@@ -202,6 +204,6 @@ open http://localhost:8080/api/swagger-ui.html
 docker exec hissus_backend env | grep -iE "password|secret"  # should return nothing
 
 # i18n routing
-# English default:    http://localhost:5173/home
-# Taiwan (zh-TW):     http://localhost:5173/tw/home
+# English default:    http://localhost:5173/factory/home
+# Taiwan (zh-TW):     http://localhost:5173/tw/factory/home
 ```

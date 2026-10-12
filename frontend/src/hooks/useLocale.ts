@@ -29,8 +29,8 @@ export function useLocale() {
  * Handles adding/removing the /$country prefix automatically.
  *
  * Usage: const switchLocale = useLocaleSwitcher()
- *        switchLocale('tw')        // → /tw/home
- *        switchLocale(undefined)   // → /home  (English)
+ *        switchLocale('tw')        // → /tw/factory/home
+ *        switchLocale(undefined)   // → /factory/home  (English)
  */
 export function useLocaleSwitcher() {
   const navigate = useNavigate()

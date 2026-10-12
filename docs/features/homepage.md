@@ -4,7 +4,7 @@
 
 The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with an illustrative factory background hero and a six-photo gallery and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
 
-The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/window-screen-solutions` and `/tw/window-screen-solutions`, using the original HeroSection, CatalogExplorer, and TrustSection. The product catalog and quote URLs remain unchanged. The section below documents those preserved components.
+The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/windows/home` and `/tw/windows/home`, using the original HeroSection, CatalogExplorer, and TrustSection. The catalog and quote pages use `/windows/products` and `/windows/quote`; old URLs redirect to them. The section below documents those preserved components.
 
 Showcase Hissus retractable screen products and drive quote conversions. The homepage is self-contained within the `homepage` feature — it does not import from `products` or `inquiry` features.
 
@@ -28,8 +28,8 @@ src/pages/WindowScreenPage.tsx
 * **Visual**: Full-bleed `belc.jpg` background; gradient overlay `bg-linear-to-b from-transparent to-black/40`; image fades in with `animate-in fade-in duration-700`.
 * **Typography**: `text-5xl font-bold tracking-tight text-white` headline; `text-xl text-white/90` subtitle.
 * **Dual CTAs** (locale-prefix-aware via `useLocale()`):
-  * "Get A Quote" → `${prefix}/get-a-quote` (`variant="default" size="lg"`)
-  * "Explore Products" → `${prefix}/products` (`variant="outline" size="lg"`, `border-white bg-transparent text-white`)
+  * "Get A Quote" → `${prefix}/windows/quote` (`variant="default" size="lg"`)
+  * "Explore Products" → `${prefix}/windows/products` (`variant="outline" size="lg"`, `border-white bg-transparent text-white`)
 * **i18n keys**: `homepage.hero.title`, `homepage.hero.subtitle`, `nav.getQuote`, `homepage.hero.explore`
 
 ### 2. Catalog Explorer (Owner: `homepage`)
@@ -89,7 +89,7 @@ Self-contained interactive product showcase. **No dependency on `products` featu
 
 ## Factory photography and motion
 
-`FactoryImage.tsx` renders same-origin responsive WebP assets with explicit dimensions, alt text, srcset, and lazy loading. The home hero uses a generated architectural concept through `FactoryHero.tsx`, clearly labeled as illustrative. Real IMG_1555 remains in the gallery. Services uses IMG_1801 with an edge gradient that blends into the page; About uses IMG_1811. `FactoryGallery.tsx` presents six curated photos with bilingual captions and a native modal viewer. `hooks/useFactoryGallery.ts` manages the viewer, body-scroll lock, and focus return without scrolling. Escape closes it; arrows and buttons move between images.
+`FactoryImage.tsx` renders same-origin responsive WebP assets with explicit dimensions, alt text, srcset, and lazy loading. The home hero uses a generated architectural concept through `FactoryHero.tsx`, with the visible illustration caption removed at the user’s request. Its generated-image provenance remains documented. Real IMG_1555 remains in the gallery. Services uses IMG_1801 with an edge gradient that blends into the page; About uses IMG_1811. `FactoryGallery.tsx` presents six curated photos in a horizontal Embla carousel with bilingual captions and a native modal viewer. One photo is visible on mobile, two on tablet and three on desktop. Dragging, arrow buttons and left/right keys scroll horizontally; reduced motion makes button scrolling immediate. `hooks/useFactoryCarousel.ts` manages the carousel, while `hooks/useFactoryGallery.ts` manages the viewer, body-scroll lock, and focus return without scrolling. Escape closes it; arrows and buttons move between images.
 
 `Reveal.tsx` uses IntersectionObserver to fade content once as it enters view. Only opacity/transform change, preserving layout. Reduced-motion users see content immediately; unsupported observers leave content visible. No animation dependency was added.
 
@@ -102,3 +102,7 @@ Video cards request the actual YouTube thumbnail from `i.ytimg.com`, fall back t
 Footer contact rows have a shared 44px minimum height, aligned icons/text, and an 8px gap so plain-text address rows match linked rows. CompanyContact retains the project-discussion CTA and removes the email/phone shortcuts. The Traditional Chinese hero headline now reads 「從規劃到建置，打造您的理想廠房。」.
 
 Email wiring, separate business templates, sender-domain prerequisites, and generated client/team previews are documented in [inquiry-email-review.md](../inquiry-email-review.md).
+
+## Canonical routes and matched heroes
+
+Public routes are grouped under `/factory` and `/windows`, with `/factory/home` as the default. Shared `lib/siteRoutes.ts` defines destinations; header navigation, business switches, footer links, CTAs, product selection, language switching and metadata use the new namespace. Traditional Chinese still prepends `/tw`. Client and prepared Netlify HTTP redirects keep legacy bookmarks usable; client redirects retain search/hash. Both hero sections are 520px below 640px viewport width and 600px above it, verified in both languages at the supported test widths. The factory heading/copy spacing is kept compact so the section does not grow beyond those heights.

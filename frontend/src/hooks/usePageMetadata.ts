@@ -7,9 +7,8 @@ const PAGE_KEYS: Record<string, string> = {
   services: 'services',
   about: 'about',
   contact: 'contact',
-  'window-screen-solutions': 'screens',
   products: 'products',
-  'get-a-quote': 'quote',
+  quote: 'quote',
   login: 'login',
   console: 'console',
 }
@@ -19,7 +18,9 @@ export function usePageMetadata() {
   const { t, i18n } = useTranslation()
   useEffect(() => {
     const basePath = pathname.replace(/^\/tw(?=\/|$)/, '')
-    const page = PAGE_KEYS[basePath.split('/')[1]]
+    const parts = basePath.split('/').filter(Boolean)
+    const slug = ['factory', 'windows'].includes(parts[0]) ? parts[1] : parts[0]
+    const page = parts[0] === 'windows' && slug === 'home' ? 'screens' : PAGE_KEYS[slug]
     document.title = page ? t(`company.metadata.${page}.title`) : t('company.notFoundTitle')
     const description =
       document.querySelector<HTMLMetaElement>('meta[name="description"]') ??

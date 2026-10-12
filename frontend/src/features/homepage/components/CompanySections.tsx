@@ -101,7 +101,10 @@ export function CompanyContact() {
           </h2>
           <p className="mt-8 max-w-2xl leading-relaxed text-white/90">{t('company.contactDesc')}</p>
         </div>
-        <Link to={`${prefix}/contact` as never} className="company-button company-button-light">
+        <Link
+          to={`${prefix}/factory/contact` as never}
+          className="company-button company-button-light"
+        >
           {t('nav.discuss')}
           <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
         </Link>

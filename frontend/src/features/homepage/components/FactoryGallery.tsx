@@ -1,13 +1,14 @@
 import { ChevronLeft, ChevronRight, X, Expand } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { FACTORY_PHOTOS } from '../constants'
-import { useFactoryGallery } from '../hooks'
+import { useFactoryGallery, useFactoryCarousel } from '../hooks'
 import { FactoryImage } from './FactoryImage'
 import { Reveal } from './Reveal'
 
 export function FactoryGallery() {
   const { t } = useTranslation()
   const { selected, dialog, open, move, close } = useFactoryGallery()
+  const { viewport, position, scroll } = useFactoryCarousel()
   const photo = selected === null ? null : FACTORY_PHOTOS[selected]
   return (
     <section
@@ -23,33 +24,69 @@ export function FactoryGallery() {
           </h2>
           <p className="company-copy mt-8">{t('company.photosDesc')}</p>
         </Reveal>
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {FACTORY_PHOTOS.map((item, index) => (
-            <Reveal key={item.id}>
-              <figure>
+        <Reveal className="mt-16">
+          <div
+            data-factory-carousel
+            role="region"
+            aria-label={t('company.photosLabel')}
+            aria-roledescription={t('gallery.carousel')}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault()
+                scroll(event.key === 'ArrowLeft' ? 'previous' : 'next')
+              }
+            }}
+          >
+            <div ref={viewport} className="overflow-hidden">
+              <div className="-ml-8 flex touch-pan-y">
+                {FACTORY_PHOTOS.map((item, index) => (
+                  <figure
+                    key={item.id}
+                    className="min-w-0 shrink-0 basis-full pl-8 sm:basis-1/2 lg:basis-1/3"
+                  >
+                    <button
+                      type="button"
+                      onClick={(event) => open(index, event.currentTarget)}
+                      aria-label={t('company.viewPhoto', { caption: t(item.captionKey) })}
+                      className="group relative block w-full overflow-hidden rounded-2xl bg-gray-200"
+                    >
+                      <FactoryImage
+                        photo={item}
+                        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                      <Expand
+                        className="absolute bottom-4 right-4 h-8 w-8 rounded bg-black/60 p-1 text-white"
+                        aria-hidden="true"
+                      />
+                    </button>
+                    <figcaption className="mt-4 text-sm leading-relaxed text-gray-600">
+                      {t(item.captionKey)}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+            <div className="mt-8 flex justify-end gap-4">
+              {(['previous', 'next'] as const).map((direction) => (
                 <button
+                  key={direction}
                   type="button"
-                  onClick={(event) => open(index, event.currentTarget)}
-                  aria-label={t('company.viewPhoto', { caption: t(item.captionKey) })}
-                  className="group relative block w-full overflow-hidden bg-gray-200"
+                  onClick={() => scroll(direction)}
+                  disabled={!position[direction]}
+                  aria-label={t(`gallery.${direction}`)}
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-default disabled:opacity-35"
                 >
-                  <FactoryImage
-                    photo={item}
-                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                  <Expand
-                    className="absolute bottom-4 right-4 h-8 w-8 bg-black/60 p-1 text-white"
-                    aria-hidden="true"
-                  />
+                  {direction === 'previous' ? (
+                    <ChevronLeft aria-hidden="true" />
+                  ) : (
+                    <ChevronRight aria-hidden="true" />
+                  )}
                 </button>
-                <figcaption className="mt-4 text-sm leading-relaxed text-gray-600">
-                  {t(item.captionKey)}
-                </figcaption>
-              </figure>
-            </Reveal>
-          ))}
-        </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </div>
       <dialog
         ref={dialog}

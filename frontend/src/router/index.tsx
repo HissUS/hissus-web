@@ -13,7 +13,8 @@ import { AuthLayout } from '../layouts/AuthLayout'
 import { MainLayout } from '../layouts/MainLayout'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
-import { HomePage } from '../pages/HomePage'
+import { SITE_PATHS, LEGACY_PATHS, getSiteSection } from '@/lib'
+const HomePage = lazyRouteComponent(() => import('../pages/HomePage'), 'HomePage')
 const ServicesPage = lazyRouteComponent(() => import('../pages/ServicesPage'), 'ServicesPage')
 const WindowScreenPage = lazyRouteComponent(
   () => import('../pages/WindowScreenPage'),
@@ -69,8 +70,13 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  beforeLoad: () => {
-    throw redirect({ to: '/home' })
+  beforeLoad: ({ location }) => {
+    throw redirect({
+      to: '/factory/home',
+      search: location.search as never,
+      hash: location.hash,
+      replace: true,
+    })
   },
 })
 
@@ -82,57 +88,70 @@ const mainLayoutRoute = createRoute({
   component: MainLayout,
 })
 
-// /home         → English (US)
-// /$country/home → localized  (e.g. /tw/home)
-const homeRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/home',
-  component: HomePage,
-})
-const homeCountryRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/$country/home',
-  component: HomePage,
-})
-
-// /products | /$country/products
-const productsRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/products',
-  component: ProductsPage,
-})
-const productsCountryRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/$country/products',
-  component: ProductsPage,
-})
-
-// /console | /$country/console
 function ConsolePage() {
   const { t } = useTranslation()
   return <h1 className="company-container py-16 text-2xl">{t('company.console')}</h1>
 }
-const consoleRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/console',
-  component: ConsolePage,
-})
-const consoleCountryRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/$country/console',
-  component: ConsolePage,
-})
 
-// /get-a-quote | /$country/get-a-quote
-const quoteRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/get-a-quote',
-  component: QuotePage,
-})
-const quoteCountryRoute = createRoute({
-  getParentRoute: () => mainLayoutRoute,
-  path: '/$country/get-a-quote',
-  component: QuotePage,
+const publicPages = (
+  [
+    { path: SITE_PATHS.factory.home, component: HomePage },
+    { path: SITE_PATHS.factory.services, component: ServicesPage },
+    { path: SITE_PATHS.factory.about, component: AboutPage },
+    { path: SITE_PATHS.factory.contact, component: ContactPage },
+    { path: SITE_PATHS.windows.home, component: WindowScreenPage },
+    { path: SITE_PATHS.windows.products, component: ProductsPage },
+    { path: SITE_PATHS.windows.quote, component: QuotePage },
+    { path: '/console', component: ConsolePage },
+  ] as const
+).flatMap(({ path, component }) => [
+  createRoute({ getParentRoute: () => mainLayoutRoute, path, component }),
+  createRoute({ getParentRoute: () => mainLayoutRoute, path: `/$country${path}`, component }),
+])
+
+// Preserve locale, query selection and hash for bookmarked links.
+const aliases = {
+  ...LEGACY_PATHS,
+  '/factory': SITE_PATHS.factory.home,
+  '/windows': SITE_PATHS.windows.home,
+}
+const legacyRoutes = Object.entries(aliases).flatMap(([path, destination]) => [
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    beforeLoad: ({ location }) => {
+      throw redirect({
+        to: destination as never,
+        search: location.search as never,
+        hash: location.hash,
+        replace: true,
+      })
+    },
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: `/$country${path}`,
+    beforeLoad: ({ params, location }) => {
+      throw redirect({
+        to: `/${params.country}${destination}` as never,
+        search: location.search as never,
+        hash: location.hash,
+        replace: true,
+      })
+    },
+  }),
+])
+const countryIndex = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/$country',
+  beforeLoad: ({ params, location }) => {
+    throw redirect({
+      to: `/${params.country}/factory/home` as never,
+      search: location.search as never,
+      hash: location.hash,
+      replace: true,
+    })
+  },
 })
 
 // ─── Layout: Auth ─────────────────────────────────────────────────────────────
@@ -158,42 +177,25 @@ const loginCountryRoute = createRoute({
 function NotFoundPage() {
   const { t } = useTranslation()
   const prefix = window.location.pathname.startsWith('/tw/') ? '/tw' : ''
+  const homePath = SITE_PATHS[getSiteSection(window.location.pathname)].home
   return (
     <div className="company-container py-16">
       <h1 className="company-heading">{t('company.notFoundTitle')}</h1>
       <p className="company-copy mt-8">{t('company.notFoundDesc')}</p>
-      <Link to={`${prefix}/home` as never} className="company-text-link">
+      <Link to={`${prefix}${homePath}` as never} className="company-text-link">
         {t('nav.home')}
       </Link>
     </div>
   )
 }
 
-const companyRoutes = [
-  { path: '/services', component: ServicesPage },
-  { path: '/window-screen-solutions', component: WindowScreenPage },
-  { path: '/about', component: AboutPage },
-  { path: '/contact', component: ContactPage },
-].flatMap(({ path, component }) => [
-  createRoute({ getParentRoute: () => mainLayoutRoute, path, component }),
-  createRoute({ getParentRoute: () => mainLayoutRoute, path: `/$country${path}`, component }),
-])
-
 // ─── Route tree ───────────────────────────────────────────────────────────────
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  mainLayoutRoute.addChildren([
-    ...companyRoutes,
-    homeRoute,
-    homeCountryRoute,
-    productsRoute,
-    productsCountryRoute,
-    consoleRoute,
-    consoleCountryRoute,
-    quoteRoute,
-    quoteCountryRoute,
-  ]),
+  countryIndex,
+  ...legacyRoutes,
+  mainLayoutRoute.addChildren(publicPages),
   authLayoutRoute.addChildren([loginRoute, loginCountryRoute]),
 ])
 

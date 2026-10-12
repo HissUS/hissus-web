@@ -244,7 +244,7 @@
   "company": {
     "eyebrow": "HISSUS · 工廠與設施建置",
     "heroTitle": "從規劃到建置，打造您的理想廠房。",
-    "heroDesc": "協助企業建置工廠與設施，結合團隊的醫院與無塵室工程經驗，以務實的合作方式掌握品質、成本與風險。",
+    "heroDesc": "以團隊的醫院與無塵室施工經驗，協助企業規劃與建置廠房。",
     "heroLink": "了解我們的合作方式",
     "introLabel": "我們的服務",
     "introTitle": "為企業的下一步，打造合適空間。",
@@ -365,11 +365,10 @@
       "1366": "樓梯與動線空間"
     },
     "viewPhoto": "查看照片：{{caption}}",
-    "heroImageNote": "建築情境示意圖",
     "facilityEmail": {
       "adminSubject": "HISSUS 工廠與設施詢問 - {{name}}",
       "adminBadge": "工廠與設施建置",
-      "adminHeading": "新的工廠與設施詢問",
+      "adminHeading": "HISSUS - 新的工廠與設施詢問",
       "adminFooter": "此信件由 HISSUS 工廠與設施詢問表單提交。",
       "userSubject": "您的工廠與設施詢問確認 - HISSUS",
       "userHeading": "我們已收到您的詢問",
@@ -383,7 +382,8 @@
     "previousVideo": "上一組影片",
     "nextVideo": "下一組影片",
     "close": "關閉照片",
-    "top": "回到頁首"
+    "top": "回到頁首",
+    "carousel": "照片輪播"
   },
   "contactLabels": {
     "phone": "電話",

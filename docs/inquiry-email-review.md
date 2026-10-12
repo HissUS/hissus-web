@@ -47,3 +47,9 @@ For sending on the existing Netlify site:
 If site settings and sender-domain verification are already complete, the key and redeploy are the remaining steps. The key alone cannot prove delivery without checking those prerequisites. No dashboard, DNS, key, deployment or inbox was changed here.
 
 A plain `pnpm dev` runs Vite and does not run Netlify Functions. Use Netlify's development workflow with a server-only local `.env.local` for local mail testing, or the deployed site. Do not commit real credentials or paste them in chat.
+
+## Manual testing after the route update
+
+Open `/factory/contact` for a facility inquiry and `/windows/quote` for a screen quote (prepend `/tw` for Traditional Chinese). Factory and window emails use the same HTML shell; factory admin headings now include HISSUS branding and customer badges use their own confirmation subject, matching the window structure. The fields remain specific to each business. Preview files were regenerated from the actual handler without sending messages.
+
+The supplied Resend credential was not copied into tracked files, documentation, previews, logs, or frontend code. No Netlify account binding is available in this workspace, so it was not installed in the live site. Add it securely as `RESEND_API_KEY` in the site's Functions environment for the deployment you will test, and redeploy. Sender-domain verification is still required. Plain Vite development remains insufficient for a real mail submission; use the Netlify development workflow or the deployed site.

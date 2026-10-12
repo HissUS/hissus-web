@@ -42,12 +42,12 @@ const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
     }),
   )
   for (const path of [
-    '/home',
-    '/tw/home',
-    '/products?tab=multi-handle',
-    '/tw/products?tab=windows',
-    '/get-a-quote',
-    '/tw/contact',
+    '/factory/home',
+    '/tw/factory/home',
+    '/windows/products?tab=multi-handle',
+    '/tw/windows/products?tab=windows',
+    '/windows/quote',
+    '/tw/factory/contact',
   ]) {
     await page.goto(base + path, { waitUntil: 'domcontentloaded' })
     await page.locator('h1').waitFor()

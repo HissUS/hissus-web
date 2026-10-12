@@ -34,12 +34,12 @@ export function HeroSection() {
         <h1 className={styles.title}>{t('homepage.hero.title')}</h1>
         <p className={styles.subtitle}>{t('homepage.hero.subtitle')}</p>
         <div className={styles.cta}>
-          <Link to={`${prefix}/get-a-quote` as never}>
+          <Link to={`${prefix}/windows/quote` as never}>
             <Button variant="default" size="lg" className="w-full sm:w-auto">
               {t('nav.getQuote')}
             </Button>
           </Link>
-          <Link to={`${prefix}/products` as never}>
+          <Link to={`${prefix}/windows/products` as never}>
             <Button
               variant="outline"
               size="lg"
