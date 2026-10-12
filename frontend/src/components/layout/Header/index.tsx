@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Menu, X } from 'lucide-react'
+import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
@@ -17,7 +17,6 @@ export function Header() {
     { path: '/home', key: 'home' },
     { path: '/services', key: 'services' },
     { path: '/services', hash: 'experience', key: 'experience' },
-    { path: '/window-screen-solutions', key: 'screens' },
     { path: '/about', key: 'about' },
     { path: '/contact', key: 'contact' },
   ]
@@ -29,7 +28,7 @@ export function Header() {
       >
         {t('nav.skip')}
       </a>
-      <div className="company-container flex min-h-24 items-center justify-between gap-4">
+      <div className="company-container grid min-h-24 grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2 py-4 sm:flex sm:justify-between xl:py-0">
         <Link
           to={`${prefix}/home` as never}
           aria-label="HISSUS"
@@ -61,7 +60,15 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="col-span-2 row-start-2 flex w-full items-center gap-2 sm:w-auto sm:shrink-0">
+          <Link
+            to={`${prefix}/window-screen-solutions` as never}
+            onClick={() => setOpen(false)}
+            className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-center text-sm font-medium text-primary-foreground hover:bg-primary/90 sm:flex-none"
+          >
+            <span>{t('nav.screens')}</span>
+            <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+          </Link>
           <button
             type="button"
             aria-pressed={locale === 'en'}
@@ -69,7 +76,7 @@ export function Header() {
               switchLocale('en')
               setOpen(false)
             }}
-            className="px-2 text-sm text-gray-700 aria-pressed:font-semibold aria-pressed:text-primary"
+            className="shrink-0 px-2 text-sm text-gray-700 aria-pressed:font-semibold aria-pressed:text-primary"
           >
             {t('nav.english')}
           </button>
@@ -83,33 +90,33 @@ export function Header() {
               switchLocale('zh-TW')
               setOpen(false)
             }}
-            className="px-2 text-sm text-gray-700 aria-pressed:font-semibold aria-pressed:text-primary"
+            className="shrink-0 px-2 text-sm text-gray-700 aria-pressed:font-semibold aria-pressed:text-primary"
           >
             {t('nav.chinese')}
           </button>
-          <button
-            ref={menuButton}
-            type="button"
-            aria-controls="mobile-navigation"
-            aria-expanded={open}
-            onClick={() => setOpen(!open)}
-            className="inline-flex items-center gap-2 px-2 text-sm text-gray-700 xl:hidden"
-          >
-            {open ? (
-              <X className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <Menu className="h-4 w-4" aria-hidden="true" />
-            )}
-            <span className="hidden sm:inline">{t(open ? 'nav.closeMenu' : 'nav.menu')}</span>
-            <span className="sr-only sm:hidden">{t(open ? 'nav.closeMenu' : 'nav.menu')}</span>
-          </button>
         </div>
+        <button
+          ref={menuButton}
+          type="button"
+          aria-controls="mobile-navigation"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+          className="col-start-2 row-start-1 inline-flex shrink-0 justify-self-end items-center gap-2 px-2 text-sm text-gray-700 xl:hidden"
+        >
+          {open ? (
+            <X className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <Menu className="h-4 w-4" aria-hidden="true" />
+          )}
+          <span className="hidden sm:inline">{t(open ? 'nav.closeMenu' : 'nav.menu')}</span>
+          <span className="sr-only sm:hidden">{t(open ? 'nav.closeMenu' : 'nav.menu')}</span>
+        </button>
       </div>
       {open && (
         <nav
           id="mobile-navigation"
           aria-label={t('nav.primary')}
-          className="company-container max-h-[calc(100dvh-6rem)] overflow-y-auto border-t border-gray-200 py-4 xl:hidden"
+          className="company-container max-h-[calc(100dvh-10rem)] sm:max-h-[calc(100dvh-6rem)] overflow-y-auto border-t border-gray-200 py-4 xl:hidden"
           onKeyDown={(event) => {
             if (event.key === 'Escape') {
               setOpen(false)

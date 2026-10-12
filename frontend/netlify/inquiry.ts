@@ -39,7 +39,6 @@ const TEXAS_CITIES = new Set([
   'Corpus Christi',
   'Galveston',
 ])
-const SCREEN_PRODUCTS = new Set(['single-handle', 'double-handle', 'multi-handle', 'windows'])
 const text = (max: number) =>
   z
     .string()
@@ -51,29 +50,38 @@ const text = (max: number) =>
         !Array.from(value).some((char) => char.charCodeAt(0) < 32 || char.charCodeAt(0) === 127),
     )
 
-export const inquirySchema = z
-  .object({
-    kind: z.enum(['screen', 'facility']).default('screen'),
-    firstName: text(80),
-    lastName: text(80),
-    email: z.string().trim().email().max(254),
-    phone: text(25),
-    city: text(120),
-    product: text(80),
-    message: z.string().trim().max(4000).default(''),
-    locale: z.enum(['en', 'zh-TW']).default('en'),
-    website: z.string().max(0).default(''),
-  })
-  .superRefine((data, ctx) => {
-    if (data.kind === 'screen') {
-      if (
-        !/^\d{10}$/.test(data.phone) ||
-        !TEXAS_CITIES.has(data.city) ||
-        !SCREEN_PRODUCTS.has(data.product)
-      ) {
-        ctx.addIssue({ code: 'custom', message: 'Invalid screen inquiry' })
-      }
-    } else if (!/^[+\d][\d ()-]{6,24}$/.test(data.phone) || data.product !== 'factory-facility') {
-      ctx.addIssue({ code: 'custom', message: 'Invalid facility inquiry' })
+const sharedFields = {
+  email: z.string().trim().email().max(254),
+  message: z.string().trim().max(4000).default(''),
+  locale: z.enum(['en', 'zh-TW']).default('en'),
+  website: z.string().max(0).default(''),
+}
+
+const screenInquirySchema = z.object({
+  ...sharedFields,
+  kind: z.literal('screen'),
+  firstName: text(80),
+  lastName: text(80),
+  phone: text(25).regex(/^\d{10}$/),
+  city: text(120).refine((value) => TEXAS_CITIES.has(value)),
+  product: z.enum(['single-handle', 'double-handle', 'multi-handle', 'windows']),
+})
+
+const facilityInquirySchema = z.object({
+  ...sharedFields,
+  kind: z.literal('facility'),
+  name: text(160),
+  phone: text(25).regex(/^[+\d][\d ()-]{6,24}$/),
+  subject: text(200),
+})
+
+// Existing screen clients may omit kind; preserve that API behavior.
+export const inquirySchema = z.preprocess(
+  (input) => {
+    if (input && typeof input === 'object' && !Array.isArray(input) && !('kind' in input)) {
+      return { ...input, kind: 'screen' }
     }
-  })
+    return input
+  },
+  z.discriminatedUnion('kind', [screenInquirySchema, facilityInquirySchema]),
+)

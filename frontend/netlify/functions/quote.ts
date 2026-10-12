@@ -177,30 +177,25 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
     if (headers.origin && !settings.origins.includes(headers.origin))
       return response(403, { code: 'ORIGIN_DENIED' })
     if (!settings.apiKey) return response(503, { code: 'UNAVAILABLE' })
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      city,
-      product,
-      message,
-      locale: lang,
-      kind,
-    } = parsed.data
+    const inquiry = parsed.data
+    const { email, phone, message, locale: lang, kind } = inquiry
     const dictionary = lang === 'zh-TW' ? zhTW : en
     const s = dictionary.quote.email
-    const fullName = `${firstName} ${lastName}`
+    const fullName =
+      inquiry.kind === 'facility' ? inquiry.name : `${inquiry.firstName} ${inquiry.lastName}`
     const rows: [string, string][] = [
-      [s.labelName, escapeHtml(fullName)],
+      [kind === 'facility' ? dictionary.company.form.name : s.labelName, escapeHtml(fullName)],
       [s.labelEmail, escapeHtml(email)],
       [s.labelPhone, escapeHtml(phone)],
-      [kind === 'facility' ? dictionary.company.facilityCity : s.labelCity, escapeHtml(city)],
-      [
-        kind === 'facility' ? dictionary.company.service : s.labelProduct,
-        kind === 'facility' ? dictionary.company.facilityProduct : escapeHtml(product),
-      ],
     ]
+    if (inquiry.kind === 'facility') {
+      rows.push([dictionary.company.form.subject, escapeHtml(inquiry.subject)])
+    } else {
+      rows.push(
+        [s.labelCity, escapeHtml(inquiry.city)],
+        [s.labelProduct, escapeHtml(inquiry.product)],
+      )
+    }
     const common = {
       lang,
       rows,
@@ -244,7 +239,9 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
           ...common,
           badge: kind === 'facility' ? dictionary.company.facilityProduct : s.userSubject,
           heading: s.userHeading,
-          intro: fill(s.userIntro, { name: escapeHtml(firstName) }),
+          intro: fill(s.userIntro, {
+            name: escapeHtml(inquiry.kind === 'facility' ? inquiry.name : inquiry.firstName),
+          }),
           footer: s.userFooter,
         }),
       })

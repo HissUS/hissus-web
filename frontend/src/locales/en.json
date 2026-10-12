@@ -348,7 +348,13 @@
     },
     "console": "Console — coming soon",
     "notFoundTitle": "Page not found",
-    "notFoundDesc": "Use the navigation to find our services or screen solutions."
+    "notFoundDesc": "Use the navigation to find our services or screen solutions.",
+    "form": {
+      "name": "Name / company name",
+      "subject": "What would you like to ask about?",
+      "nameRequired": "Please enter your name or company name.",
+      "subjectRequired": "Please tell us what you would like to ask about."
+    }
   },
   "gallery": {
     "previous": "Previous images",

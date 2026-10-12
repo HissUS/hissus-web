@@ -72,7 +72,7 @@ function RequiredMark({ children }: { children: string }) {
   )
 }
 
-export function QuotePage({ facility = false }: { facility?: boolean }) {
+export function QuotePage() {
   const { t } = useTranslation()
   const {
     firstName,
@@ -97,12 +97,12 @@ export function QuotePage({ facility = false }: { facility?: boolean }) {
     error,
     handleSubmit,
     reset,
-  } = useInquiry(facility)
+  } = useInquiry(false)
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      {!facility && <h1 className="mb-4 text-3xl font-bold">{t('quote.title')}</h1>}
-      {!facility && <p className="mb-8 text-lg text-gray-600">{t('quote.subtitle')}</p>}
+      <h1 className="mb-4 text-3xl font-bold">{t('quote.title')}</h1>
+      <p className="mb-8 text-lg text-gray-600">{t('quote.subtitle')}</p>
 
       <form onSubmit={handleSubmit} className="space-y-6" aria-busy={pending}>
         <div hidden aria-hidden="true">
@@ -118,9 +118,7 @@ export function QuotePage({ facility = false }: { facility?: boolean }) {
           </label>
         </div>
         <fieldset disabled={pending} className="space-y-6">
-          <legend className="sr-only">
-            {t(facility ? 'company.contactPageTitle' : 'quote.title')}
-          </legend>
+          <legend className="sr-only">{t('quote.title')}</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="flex w-full flex-col">
               <span className="mb-2 text-base font-medium">
@@ -177,12 +175,10 @@ export function QuotePage({ facility = false }: { facility?: boolean }) {
               <input
                 type="tel"
                 autoComplete="tel"
-                maxLength={facility ? 25 : 10}
+                maxLength={10}
                 className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
                 value={phone}
-                onChange={(e) =>
-                  setPhone(facility ? e.target.value : e.target.value.replace(/\D/g, ''))
-                }
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                 required
                 aria-required
               />
@@ -192,68 +188,50 @@ export function QuotePage({ facility = false }: { facility?: boolean }) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="flex w-full flex-col">
               <span className="mb-2 text-base font-medium">
-                <RequiredMark>{t(facility ? 'company.facilityCity' : 'quote.city')}</RequiredMark>
+                <RequiredMark>{t('quote.city')}</RequiredMark>
               </span>
-              {facility ? (
-                <input
-                  required
-                  maxLength={120}
-                  className="h-11 rounded-md border px-3 py-2 text-base"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-              ) : (
-                <select
-                  className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                  aria-required
-                >
-                  <option value="" disabled>
-                    {t('quote.cityPlaceholder')}
-                  </option>
-                  {TEXAS_CITY_GROUPS.map((group) => (
-                    <optgroup key={group.labelKey} label={t(group.labelKey)}>
-                      {group.options.map((c) => (
-                        <option key={c.value} value={c.value}>
-                          {t(c.labelKey)}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-              )}
+              <select
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+                aria-required
+              >
+                <option value="" disabled>
+                  {t('quote.cityPlaceholder')}
+                </option>
+                {TEXAS_CITY_GROUPS.map((group) => (
+                  <optgroup key={group.labelKey} label={t(group.labelKey)}>
+                    {group.options.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {t(c.labelKey)}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
             </label>
 
             <label className="flex w-full flex-col">
               <span className="mb-2 text-base font-medium">
-                <RequiredMark>
-                  {t(facility ? 'company.service' : 'quote.productWanted')}
-                </RequiredMark>
+                <RequiredMark>{t('quote.productWanted')}</RequiredMark>
               </span>
-              {facility ? (
-                <p className="flex min-h-11 items-center border-b border-gray-200">
-                  {t('company.facilityProduct')}
-                </p>
-              ) : (
-                <select
-                  className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
-                  value={product}
-                  onChange={(e) => setProduct(e.target.value)}
-                  required
-                  aria-required
-                >
-                  <option value="" disabled>
-                    {t('quote.productPlaceholder')}
+              <select
+                className="h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40"
+                value={product}
+                onChange={(e) => setProduct(e.target.value)}
+                required
+                aria-required
+              >
+                <option value="" disabled>
+                  {t('quote.productPlaceholder')}
+                </option>
+                {PRODUCT_OPTIONS.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {t(item.label)}
                   </option>
-                  {PRODUCT_OPTIONS.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {t(item.label)}
-                    </option>
-                  ))}
-                </select>
-              )}
+                ))}
+              </select>
             </label>
           </div>
 
@@ -274,19 +252,13 @@ export function QuotePage({ facility = false }: { facility?: boolean }) {
         )}
         {submitted && (
           <div role="status" className="text-base text-green-800">
-            {t(
-              copyFailed
-                ? 'company.copyFailed'
-                : facility
-                  ? 'company.sentNotice'
-                  : 'quote.sentNotice',
-            )}
+            {t(copyFailed ? 'company.copyFailed' : 'quote.sentNotice')}
           </div>
         )}
 
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={pending}>
-            {t(pending ? 'company.sending' : facility ? 'company.sendInquiry' : 'quote.send')}
+            {t(pending ? 'company.sending' : 'quote.send')}
           </Button>
           <Button disabled={pending} variant="outline" type="button" onClick={reset}>
             {t('quote.reset')}

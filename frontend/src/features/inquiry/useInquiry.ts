@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 export function useInquiry(facility: boolean) {
   const { i18n } = useTranslation()
+  const [name, setName] = useState('')
+  const [subject, setSubject] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [city, setCity] = useState('')
-  const [product, setProduct] = useState(facility ? 'factory-facility' : '')
+  const [product, setProduct] = useState('')
   const [pending, setPending] = useState(false)
   const [copyFailed, setCopyFailed] = useState(false)
   const [website, setWebsite] = useState('')
@@ -17,13 +19,16 @@ export function useInquiry(facility: boolean) {
   const [error, setError] = useState<string | null>(null)
 
   function validate() {
-    if (!firstName.trim() || !lastName.trim()) return 'quote.errors.nameRequired'
+    if (facility) {
+      if (!name.trim()) return 'company.form.nameRequired'
+      if (!subject.trim()) return 'company.form.subjectRequired'
+    } else if (!firstName.trim() || !lastName.trim()) return 'quote.errors.nameRequired'
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return 'quote.errors.emailInvalid'
     if (!phone.trim()) return 'quote.errors.phoneRequired'
     if (!(facility ? /^[+\d][\d ()-]{6,24}$/ : /^\d{10}$/).test(phone))
       return 'quote.errors.phoneInvalid'
-    if (!city.trim()) return facility ? 'quoteErrors.invalid' : 'quote.errors.cityRequired'
-    if (!product) return 'quote.errors.productRequired'
+    if (!facility && !city.trim()) return 'quote.errors.cityRequired'
+    if (!facility && !product) return 'quote.errors.productRequired'
     return null
   }
 
@@ -68,12 +73,9 @@ export function useInquiry(facility: boolean) {
         body: JSON.stringify({
           kind: facility ? 'facility' : 'screen',
           website,
-          firstName,
-          lastName,
+          ...(facility ? { name, subject } : { firstName, lastName, city, product }),
           email,
           phone,
-          city,
-          product,
           message,
           locale: i18n.language,
         }),
@@ -105,12 +107,14 @@ export function useInquiry(facility: boolean) {
       setSubmitted(true)
       setError(null)
       // Reset form after successful submission
+      setName('')
+      setSubject('')
       setFirstName('')
       setLastName('')
       setEmail('')
       setPhone('')
       setCity('')
-      setProduct(facility ? 'factory-facility' : '')
+      setProduct('')
       setMessage('')
     } catch (err) {
       setError('quote.errors.submitFailed')
@@ -121,12 +125,14 @@ export function useInquiry(facility: boolean) {
   }
 
   function reset() {
+    setName('')
+    setSubject('')
     setFirstName('')
     setLastName('')
     setEmail('')
     setPhone('')
     setCity('')
-    setProduct(facility ? 'factory-facility' : '')
+    setProduct('')
     setMessage('')
     setWebsite('')
     setError(null)
@@ -135,6 +141,10 @@ export function useInquiry(facility: boolean) {
   }
 
   return {
+    name,
+    setName,
+    subject,
+    setSubject,
     firstName,
     setFirstName,
     lastName,

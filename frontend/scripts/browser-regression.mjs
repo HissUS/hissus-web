@@ -89,6 +89,38 @@ try {
         await page.waitForFunction((title) => document.title === title, expected.title)
         checks++
       }
+      await page.goto(`${base}${prefix}/home`, { waitUntil: 'domcontentloaded' })
+      const screenButton = page
+        .locator('header')
+        .getByRole('link', {
+          name: prefix ? '門窗與紗窗解決方案' : 'Window & Screen Solutions',
+          exact: true,
+        })
+      await screenButton.waitFor()
+      assert.equal(
+        await page
+          .locator('header nav')
+          .getByRole('link', {
+            name: prefix ? '門窗與紗窗解決方案' : 'Window & Screen Solutions',
+            exact: true,
+          })
+          .count(),
+        0,
+      )
+      assert.equal(
+        await screenButton.evaluate((element) => element.classList.contains('bg-primary')),
+        true,
+      )
+      const buttonBox = await screenButton.boundingBox()
+      const englishBox = await page
+        .locator('header')
+        .getByRole('button', { name: 'English', exact: true })
+        .boundingBox()
+      assert.ok(buttonBox.x + buttonBox.width <= englishBox.x)
+      await screenButton.click()
+      await page.waitForURL('**/window-screen-solutions')
+      await page.locator('h1').waitFor()
+      checks++
       for (const [tab, translationKey, imageCount, videoCount] of [
         ['multi-handle', 'multiHandle', 5, 4],
         ['double-handle', 'doubleHandle', 1, 3],
@@ -169,18 +201,27 @@ try {
       await page.goto(`${base}${prefix}/${facility ? 'contact' : 'get-a-quote'}`, {
         waitUntil: 'domcontentloaded',
       })
-      await page.getByLabel(prefix ? '名字' : 'First name', { exact: false }).fill('Test')
-      await page.getByLabel(prefix ? '姓氏' : 'Last name', { exact: false }).fill('Visitor')
-      await page.locator('input[type="email"]').fill('test@example.com')
-      await page.locator('input[type="tel"]').fill(facility ? '+886 912 345 678' : '4692883098')
-      if (facility)
+      if (facility) {
         await page
-          .getByLabel(prefix ? '專案地點' : 'Project location', { exact: false })
-          .fill('Taiwan')
-      else {
+          .getByLabel(prefix ? '姓名／公司名稱' : 'Name / company name', { exact: false })
+          .fill('Sample Company')
+        await page
+          .getByLabel(prefix ? '您想詢問什麼？' : 'What would you like to ask about?', {
+            exact: false,
+          })
+          .fill('Factory setup and GMP')
+        assert.equal(await page.locator('form input:visible').count(), 4)
+        assert.equal(await page.locator('form textarea:visible').count(), 1)
+        assert.equal(await page.locator('select').count(), 0)
+        checks++
+      } else {
+        await page.getByLabel(prefix ? '名字' : 'First name', { exact: false }).fill('Test')
+        await page.getByLabel(prefix ? '姓氏' : 'Last name', { exact: false }).fill('Visitor')
         await page.locator('select').nth(0).selectOption('Plano')
         await page.locator('select').nth(1).selectOption('windows')
       }
+      await page.locator('input[type="email"]').fill('test@example.com')
+      await page.locator('input[type="tel"]').fill(facility ? '+886 912 345 678' : '4692883098')
       let calls = 0
       await page.route('**/.netlify/functions/quote', async (route) => {
         calls++
@@ -199,6 +240,14 @@ try {
       await page.route('**/.netlify/functions/quote', async (route) => {
         const data = route.request().postDataJSON()
         assert.equal(data.kind, facility ? 'facility' : 'screen')
+        if (facility) {
+          assert.equal(data.name, 'Sample Company')
+          assert.equal(data.subject, 'Factory setup and GMP')
+          assert.equal(
+            'city' in data || 'product' in data || 'firstName' in data || 'lastName' in data,
+            false,
+          )
+        }
         await route.fulfill({
           status: 200,
           contentType: 'application/json',

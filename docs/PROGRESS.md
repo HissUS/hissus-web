@@ -538,3 +538,35 @@
   - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
   - **Fail Case**: Resolve a package published inside the configured 1440-minute window in an isolated reproduction.
   - **Expected**: pnpm rejects it. Original user log documented rejection; no production dependency downgrade of protections or age-policy exception was added.
+
+### [FEAT-011] Dedicated Screen Button and Compact Facility Contact (2026-10-11)
+
+- **Summary**: Moved Window & Screen Solutions out of the main navigation list into a button immediately before English/Chinese controls, with a responsive mobile arrangement. Replaced the facility contact page with the screen-quote-style layout and five fields: name/company name, phone, email, inquiry subject, and optional message; preserved screen quote fields and shared mail/error handling.
+- **Affected Files**:
+  - `frontend/src/components/layout/Header/index.tsx`
+  - `frontend/src/pages/ContactPage.tsx`
+  - `frontend/src/pages/QuotePage.tsx`
+  - `frontend/src/features/inquiry/components/FacilityInquiryForm.tsx`
+  - `frontend/src/features/inquiry/components/index.ts`
+  - `frontend/src/features/inquiry/index.ts`
+  - `frontend/src/features/inquiry/useInquiry.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/netlify/inquiry.ts`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/factory-website-review.md`
+  - `docs/security-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build, lint, check locale parity and run bundled function regressions.
+  - **Expected**: TypeScript/build, lint, locales and all 8 function tests pass. Facility inquiries accept name/subject without city/product; old screen requests still work. Missing/oversized/injected facility inputs produce 400 before any mail call.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run production browser and CSP checks.
+  - **Expected**: 118 browser checks pass in EN/zh-TW at 1440/390/320px. Screen button precedes language controls and opens the complete section; compact contact form has five visible fields and sends only relevant fields. Screen form and media remain functional. Six CSP pages have no violations; mail/player are stubbed.
+  - **Command/URL**: Run `cd frontend && pnpm preview --host 0.0.0.0 --port 4173`; in another terminal: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Submit a facility payload with an empty subject, array name, control-character subject, or invalid phone/email.
+  - **Expected**: Server rejects with 400 and sends no email; provider failures still produce truthful localized errors.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **Photo access**: Google Photos retry returned a proxy 403. Google Photos/redirect/image domains were saved in the environment network draft; review/save/publication is still needed before runtime access can be rechecked. No album images were viewed or substituted.

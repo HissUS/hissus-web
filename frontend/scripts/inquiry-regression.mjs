@@ -68,22 +68,27 @@ test('screen inquiry notifies team and customer; HTML is escaped', async () => {
   assert.ok(sent[1].html.includes('&lt;b&gt;Test&lt;/b&gt;'))
   assert.ok(!sent[1].html.includes('<script>'))
 })
-test('Chinese facility inquiry accepts international phone and free-text location', async () => {
+test('Chinese facility inquiry accepts a company name, international phone and inquiry subject', async () => {
   const { handler, sent } = fixture()
   const result = await run(
     handler,
     event({
-      ...valid,
       kind: 'facility',
-      product: 'factory-facility',
+      name: '測試公司 <b>Test</b>',
+      subject: '詢問最高限價 <script>test</script>',
+      email: valid.email,
       phone: '+886 912 345 678',
-      city: '台灣',
+      message: '想了解合作方式',
       locale: 'zh-TW',
     }),
   )
   assert.equal(result.statusCode, 200)
   assert.ok(sent[0].html.includes('工廠與設施建置'))
   assert.ok(sent[0].html.includes('lang="zh-TW"'))
+  assert.ok(sent[0].html.includes('姓名／公司名稱'))
+  assert.ok(sent[0].html.includes('詢問最高限價 &lt;script&gt;test&lt;/script&gt;'))
+  assert.ok(sent[1].html.includes('測試公司 &lt;b&gt;Test&lt;/b&gt;'))
+  assert.ok(!sent[0].html.includes('專案地點'))
 })
 test('invalid fields, types, product, city, JSON and honeypot are rejected before email', async () => {
   const { handler, sent } = fixture()
@@ -101,6 +106,34 @@ test('invalid fields, types, product, city, JSON and honeypot are rejected befor
     assert.equal((await run(handler, event(body))).statusCode, 400)
   assert.equal((await run(handler, event(valid, { body: '{broken' }))).statusCode, 400)
   assert.equal(sent.length, 0)
+})
+test('facility input requires only its own bounded name/contact/subject fields', async () => {
+  const { handler, sent } = fixture()
+  const facility = {
+    kind: 'facility',
+    name: 'Sample Company',
+    email: valid.email,
+    phone: '+1 469 288 3098',
+    subject: 'Facility setup',
+    locale: 'en',
+  }
+  for (const body of [
+    { ...facility, name: '' },
+    { ...facility, subject: '' },
+    { ...facility, name: [] },
+    { ...facility, subject: {} },
+    { ...facility, name: 'x'.repeat(161) },
+    { ...facility, subject: 'x'.repeat(201) },
+    { ...facility, subject: 'line\nbreak' },
+    { ...facility, phone: 'bad' },
+    { ...facility, email: 'bad' },
+    { ...facility, website: 'bot' },
+  ])
+    assert.equal((await run(handler, event(body))).statusCode, 400)
+  assert.equal(sent.length, 0)
+  const result = await run(handler, event(facility))
+  assert.equal(result.statusCode, 200)
+  assert.equal(sent.length, 2)
 })
 test('method, media type, body size, origin and missing configuration have explicit errors', async () => {
   const { handler, sent } = fixture()

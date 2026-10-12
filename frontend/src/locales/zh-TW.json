@@ -348,7 +348,13 @@
     },
     "console": "管理介面 — 即將推出",
     "notFoundTitle": "找不到此頁面",
-    "notFoundDesc": "請使用導覽選單瀏覽工程服務或門窗與紗窗解決方案。"
+    "notFoundDesc": "請使用導覽選單瀏覽工程服務或門窗與紗窗解決方案。",
+    "form": {
+      "name": "姓名／公司名稱",
+      "subject": "您想詢問什麼？",
+      "nameRequired": "請填寫姓名或公司名稱。",
+      "subjectRequired": "請填寫您想詢問的主題。"
+    }
   },
   "gallery": {
     "previous": "上一組照片",
