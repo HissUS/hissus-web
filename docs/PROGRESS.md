@@ -665,3 +665,60 @@
   - **Expected**: A same-origin category photo loads in place of the remote thumbnail, preserving the card. External thumbnail/player/mail responses are stubbed elsewhere in the suite; genuine playback and delivery remain unverified.
   - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
 - **Photo review**: The smaller uploaded archive was successfully downloaded and all 12 images reviewed. Six selected originals are documented in `docs/factory-website-review.md`; originals stay intact outside the checkout, and only 18 optimized derivatives totaling 1,571,818 bytes are committed. No client/location/certification attribution was inferred. Desktop/mobile gallery and portrait-viewer screenshots were inspected in `/tmp/hissus-photos-review`.
+
+### [FEAT-014] Factory Hero, Layout Polish, Product Scroll, and Email Review (2026-10-12)
+
+- **Summary**: Added a labeled generated factory background hero, blended the Services photo, aligned footer contact rows, removed conversation shortcuts and featured-product details links, and made product selection retain scroll on desktop/mobile. Refined the Chinese headline and business-specific emails, with reply addresses and eight no-send previews from the actual handler.
+- **Affected Files**:
+  - `docs/PROGRESS.md`
+  - `docs/email-previews/facility-client-en.html`
+  - `docs/email-previews/facility-client-zh-TW.html`
+  - `docs/email-previews/facility-team-en.html`
+  - `docs/email-previews/facility-team-zh-TW.html`
+  - `docs/email-previews/index.html`
+  - `docs/email-previews/manifest.json`
+  - `docs/email-previews/screen-client-en.html`
+  - `docs/email-previews/screen-client-zh-TW.html`
+  - `docs/email-previews/screen-team-en.html`
+  - `docs/email-previews/screen-team-zh-TW.html`
+  - `docs/factory-website-review.md`
+  - `docs/features/homepage.md`
+  - `docs/inquiry-email-review.md`
+  - `docs/security-review.md`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/preview-inquiry-emails.mjs`
+  - `frontend/src/assets/images/factory/factory-hero-1200.webp`
+  - `frontend/src/assets/images/factory/factory-hero-640.webp`
+  - `frontend/src/assets/images/factory/factory-hero-full.webp`
+  - `frontend/src/assets/index.css`
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/CatalogExplorer.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/GalleryCarousel.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/SpecSection.tsx`
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/FactoryHero.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/ProductsPage.tsx`
+  - `frontend/src/pages/ServicesPage.tsx`
+
+- **Verification**:
+  - **Action**: Build, lint, check locale parity, and exercise bundled inquiry handler regressions.
+  - **Expected**: Build/TypeScript, lint/locales, and all 8 inquiry tests pass. Messages stay escaped; team and client Reply-To addresses are correct; factory mail uses facility wording; window products use readable names. Invalid input, missing keys and provider failures retain explicit responses.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run production browser and CSP regressions.
+  - **Expected**: 233 browser checks pass in both languages at 1440/390/320px, including product-card changes without scroll reset, uniform footer row heights/gaps, removed conversation/details links, language scroll retention, media and form feedback. Six CSP pages have zero violations. External thumbnail/player/mail responses remain stubbed.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Action**: Generate email previews and open the selector in a browser.
+  - **Expected**: Eight real-handler HTML previews cover both businesses, both recipients and both languages without sending a message. All eight were inspected at 900/390px with no horizontal overflow; screenshots were reviewed. This does not establish every email client's rendering.
+  - **Command/URL**: `cd frontend && node scripts/preview-inquiry-emails.mjs`; then open `docs/email-previews/index.html` from the repository root in your browser.
+  - **Fail Case**: Run the regression fixture without an API key or with a returned/thrown provider failure.
+  - **Expected**: Missing key returns 503 with no mail calls; notification failure returns 502 without claiming success. Optional customer-copy failure still reports team receipt without encouraging duplicate inquiries.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **External readiness**: No API key or Netlify credential exists in this workspace. Live site settings, Resend sender-domain verification and delivery remain unverified. `docs/inquiry-email-review.md` explains how to confirm whether the key/redeploy are the final prerequisites. No real mail, secret, deployment, dashboard or DNS change was made.
+- **Visual review**: Factory hero, Services blend, footer, Chinese copy and gallery were inspected in desktop/mobile screenshots under `/tmp/hissus-photos-review`. Hero WebPs are 640/1200/1672px wide and total 304,356 bytes. The original generated PNG and uploaded photos remain intact outside the checkout; the real gallery is separate from the illustrative hero.

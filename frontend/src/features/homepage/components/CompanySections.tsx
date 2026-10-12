@@ -1,16 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import {
-  ArrowUpRight,
-  Building2,
-  FileText,
-  Handshake,
-  Hospital,
-  Mail,
-  Phone,
-  ShieldCheck,
-} from 'lucide-react'
+import { ArrowUpRight, Building2, FileText, Handshake, Hospital, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { SITE_CONFIG } from '@/config/site'
 import { useLocale } from '@/hooks'
 import { Reveal } from './Reveal'
 
@@ -110,22 +100,6 @@ export function CompanyContact() {
             {t('company.contactTitle')}
           </h2>
           <p className="mt-8 max-w-2xl leading-relaxed text-white/90">{t('company.contactDesc')}</p>
-          <div className="mt-8 flex flex-wrap gap-8">
-            <a
-              className="inline-flex items-center gap-2 underline underline-offset-4"
-              href={`mailto:${SITE_CONFIG.contact.email}`}
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              {t('company.email')}
-            </a>
-            <a
-              className="inline-flex items-center gap-2 underline underline-offset-4"
-              href={`tel:${SITE_CONFIG.contact.phone}`}
-            >
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {t('company.phone')}
-            </a>
-          </div>
         </div>
         <Link to={`${prefix}/contact` as never} className="company-button company-button-light">
           {t('nav.discuss')}

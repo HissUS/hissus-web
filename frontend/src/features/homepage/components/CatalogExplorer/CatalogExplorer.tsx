@@ -1,20 +1,15 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
-import { useLocale } from '@/hooks'
 import { useCatalogData } from './useCatalogData'
 import { GalleryCarousel } from './GalleryCarousel'
 import { SpecSection } from './SpecSection'
 
 export function CatalogExplorer() {
   const { t } = useTranslation()
-  const { country } = useLocale()
-  const prefix = country ? `/${country}` : ''
   const categories = useCatalogData()
   const [activeId, setActiveId] = useState(categories[0].id)
   const active = categories.find((c) => c.id === activeId) ?? categories[0]
-
-  const detailsHref = `${prefix}/products?tab=${active.id}`
 
   return (
     <section
@@ -57,7 +52,7 @@ export function CatalogExplorer() {
 
         <div className="mt-8 sm:mt-10 animate-in fade-in duration-700 delay-300 fill-mode-both">
           <GalleryCarousel key={active.id} images={active.images} videos={active.videos} />
-          <SpecSection specs={active.specs} detailsHref={detailsHref} />
+          <SpecSection specs={active.specs} />
         </div>
       </div>
     </section>

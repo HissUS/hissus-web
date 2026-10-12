@@ -13,17 +13,23 @@ export function ServicesPage() {
   return (
     <>
       <section className="company-section company-hero">
-        <Reveal className="company-container grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <Reveal className="company-container grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-8">
           <div>
             <p className="company-eyebrow">{t('company.eyebrow')}</p>
             <h1 className="company-title mt-8 max-w-4xl">{t('company.servicesTitle')}</h1>
             <p className="company-copy mt-8 max-w-3xl">{t('company.servicesDesc')}</p>
           </div>
-          <FactoryImage
-            photo={FACTORY_PHOTOS[2]}
-            priority
-            className="aspect-[4/3] w-full object-cover"
-          />
+          <div className="company-service-image relative overflow-hidden">
+            <FactoryImage
+              photo={FACTORY_PHOTOS[2]}
+              priority
+              className="aspect-[4/3] w-full object-cover"
+            />
+            <div
+              aria-hidden="true"
+              className="company-service-blend pointer-events-none absolute inset-0"
+            />
+          </div>
         </Reveal>
       </section>
       <section className="company-section">

@@ -67,6 +67,9 @@ test('screen inquiry notifies team and customer; HTML is escaped', async () => {
   assert.deepEqual(JSON.parse(result.body), { success: true, confirmationSent: true })
   assert.ok(sent[1].html.includes('&lt;b&gt;Test&lt;/b&gt;'))
   assert.ok(!sent[1].html.includes('<script>'))
+  assert.equal(sent[0].replyTo, valid.email)
+  assert.equal(sent[1].replyTo, 'team@example.com')
+  assert.ok(sent[0].html.includes('Pleated Window Screen'))
 })
 test('Chinese facility inquiry accepts a company name, international phone and inquiry subject', async () => {
   const { handler, sent } = fixture()
@@ -90,6 +93,10 @@ test('Chinese facility inquiry accepts a company name, international phone and i
   assert.ok(sent[1].html.includes('測試公司 &lt;b&gt;Test&lt;/b&gt;'))
   assert.ok(!sent[0].html.includes('專案地點'))
   assert.ok(sent.every((mail) => !mail.subject.includes('\u2014')))
+  assert.ok(sent[0].html.includes('工廠與設施詢問表單'))
+  assert.ok(sent[1].html.includes('工廠與設施詢問的摘要'))
+  assert.ok(!sent[1].html.includes('報價需求的摘要'))
+  assert.equal(sent[0].replyTo, valid.email)
 })
 test('invalid fields, types, product, city, JSON and honeypot are rejected before email', async () => {
   const { handler, sent } = fixture()

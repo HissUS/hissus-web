@@ -6,6 +6,7 @@ export {
   ExperienceSection,
   GmpSection,
   FactoryImage,
+  FactoryHero,
   FactoryGallery,
   Reveal,
 } from './components'

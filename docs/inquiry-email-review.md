@@ -1,0 +1,49 @@
+# Inquiry email review
+
+The factory and window forms share the Netlify `quote` function and Resend integration. No live email was sent during this review.
+
+The implementation is configured to send from **HISSUS <quotes@hissus.com>**. Team notifications go to **hiss.usatx@gmail.com**, unless the server variable `QUOTE_RECIPIENT_EMAIL` overrides it. The customer copy goes to the email entered in the form. Team messages set Reply-To to the visitor; customer messages set Reply-To to the team inbox.
+
+| Business | Team receives | Client receives |
+| --- | --- | --- |
+| Factory | “New Facility Inquiry”, with name/company name, email, phone, inquiry subject and message | “We've Received Your Inquiry”, a short acknowledgement and the same submitted details |
+| Windows | “HISS US - New Quote Request”, with name, email, phone, city, readable product name and message | “We've Received Your Request”, a short acknowledgement and the same quote details |
+
+Both use a navy header, white body, striped details table, separate message block, and a muted footer. English and Traditional Chinese follow the submitted form's language. Line breaks in messages are preserved after HTML escaping. Factory emails now use facility-specific wording throughout. There are no em dashes.
+
+## See the actual templates
+
+Open [the preview selector](email-previews/index.html) in a browser after cloning the repository. These files are rendered from the actual handler with sample data and a stubbed sender. They are documentation, outside the published application.
+
+| Preview | English | Traditional Chinese |
+| --- | --- | --- |
+| Factory, team | [View](email-previews/facility-team-en.html) | [View](email-previews/facility-team-zh-TW.html) |
+| Factory, client | [View](email-previews/facility-client-en.html) | [View](email-previews/facility-client-zh-TW.html) |
+| Windows, team | [View](email-previews/screen-team-en.html) | [View](email-previews/screen-team-zh-TW.html) |
+| Windows, client | [View](email-previews/screen-client-en.html) | [View](email-previews/screen-client-zh-TW.html) |
+
+Subjects, sender, recipients and reply addresses are in [manifest.json](email-previews/manifest.json). Regenerate after template changes:
+
+```sh
+cd frontend
+node scripts/preview-inquiry-emails.mjs
+```
+
+Eight previews were rendered and checked at 900px and 390px for overflow, language and copy. Screenshots were visually reviewed. Browser rendering does not establish compatibility with every email client.
+
+## Netlify and Resend readiness
+
+Code inspection and the bundled handler tests verify the server-side Resend call, input validation, separate form payloads, both destinations, and truthful failure/partial-success responses. The Netlify config publishes `dist` and bundles `netlify/functions`. Forms post to `/.netlify/functions/quote`. The key stays server-side and is not exposed through `VITE_*`.
+
+`RESEND_API_KEY` is absent from this workspace. No local environment file or injected Netlify credential is present. The live Netlify and Resend account settings were not accessible, so this review cannot establish that the API key is the only missing deployment step.
+
+For sending on the existing Netlify site:
+
+1. Confirm its base directory is `frontend`, with the checked-in Netlify configuration active, build command `pnpm build`, publish directory `dist`, and functions directory `netlify/functions`.
+2. In Resend, verify the `hissus.com` domain and its required DNS records so `quotes@hissus.com` can send to real visitors.
+3. Add an authorized sending key as **RESEND_API_KEY** to the site's server-side Functions environment for the relevant deploy context, then redeploy. `QUOTE_RECIPIENT_EMAIL` is optional because the inbox already has a default.
+4. Once authorized to send real messages, submit one controlled factory inquiry and one window quote. Confirm team receipt, customer confirmation, and replies reaching the right inbox. Verify these on the deployed site, not plain Vite development.
+
+If site settings and sender-domain verification are already complete, the key and redeploy are the remaining steps. The key alone cannot prove delivery without checking those prerequisites. No dashboard, DNS, key, deployment or inbox was changed here.
+
+A plain `pnpm dev` runs Vite and does not run Netlify Functions. Use Netlify's development workflow with a server-only local `.env.local` for local mail testing, or the deployed site. Do not commit real credentials or paste them in chat.

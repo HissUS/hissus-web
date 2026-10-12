@@ -83,27 +83,30 @@ export function Footer() {
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-100">
                 {t('footer.contactUs')}
               </h3>
-              <ul className="space-y-2 text-sm">
+              <ul className="grid gap-2 text-sm">
                 {Object.entries(SITE_CONFIG.contact).map(([key, value]) => (
-                  <li key={key} className="flex min-w-0 items-center gap-2">
+                  <li
+                    key={key}
+                    className="grid min-h-11 min-w-0 grid-cols-[1rem_minmax(0,1fr)] items-center gap-2 text-left"
+                  >
                     <span className="flex h-4 w-4 shrink-0 items-center justify-center">
                       <span className="sr-only">{t(`contactLabels.${key}`)}</span>
                       {CONTACT_ICONS[key]}
                     </span>
-                    <span className="min-w-0 break-words">
+                    <span className="flex min-w-0 items-center break-words">
                       {isContactLink(value) ? (
                         <a
                           href={value.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center underline-offset-2 hover:text-zinc-100 hover:underline"
+                          className="inline-flex w-full items-center underline-offset-2 hover:text-zinc-100 hover:underline"
                         >
                           {value.label}
                         </a>
                       ) : key === 'email' || key === 'phone' ? (
                         <a
                           href={`${key === 'email' ? 'mailto' : 'tel'}:${value}`}
-                          className="inline-flex items-center hover:text-white hover:underline"
+                          className="inline-flex w-full items-center hover:text-white hover:underline"
                         >
                           {value}
                         </a>

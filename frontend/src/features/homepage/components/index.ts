@@ -5,3 +5,4 @@ export { CompanyContact, ExperienceSection, GmpSection } from './CompanySections
 export { FactoryImage } from './FactoryImage'
 export { FactoryGallery } from './FactoryGallery'
 export { Reveal } from './Reveal'
+export { FactoryHero } from './FactoryHero'

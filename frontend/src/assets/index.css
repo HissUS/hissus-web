@@ -271,3 +271,25 @@ footer :focus-visible {
 .factory-dialog::backdrop {
   background: rgb(0 0 0 / 80%);
 }
+
+/* Image edges fade into the Services page rather than forming a separate card. */
+.company-service-image {
+  border-radius: 1.5rem;
+}
+.company-service-blend {
+  background:
+    linear-gradient(to right, var(--color-gray-50), transparent 28%),
+    linear-gradient(to top, var(--color-gray-50), transparent 22%),
+    linear-gradient(to bottom, var(--color-gray-50), transparent 14%);
+}
+@media (max-width: 1023px) {
+  .company-service-blend {
+    background:
+      linear-gradient(to top, var(--color-gray-50), transparent 28%),
+      linear-gradient(to bottom, var(--color-gray-50), transparent 18%);
+  }
+}
+
+.factory-hero :focus-visible {
+  outline-color: white;
+}

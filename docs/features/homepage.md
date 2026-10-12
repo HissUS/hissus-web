@@ -2,7 +2,7 @@
 
 ## 🎯 Business Intent
 
-The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with a real factory photograph and a six-photo gallery and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
+The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with an illustrative factory background hero and a six-photo gallery and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
 
 The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/window-screen-solutions` and `/tw/window-screen-solutions`, using the original HeroSection, CatalogExplorer, and TrustSection. The product catalog and quote URLs remain unchanged. The section below documents those preserved components.
 
@@ -51,7 +51,7 @@ Self-contained interactive product showcase. **No dependency on `products` featu
   * Bottom gradient on each image: `bg-linear-to-t from-black/20 to-transparent`.
 * **Spec Section** (`SpecSection.tsx`):
   * Frameless 3-column spec grid (`grid grid-cols-3 gap-x-8 gap-y-3`), icon + label, no borders or backgrounds.
-  * "Explore Details" button (right-aligned) → `${prefix}/products?tab=${category.id}`.
+  * Specifications remain; the featured-products "Explore Details" link was removed at the user’s request.
 * **i18n keys**: `products.singleHandle`, `products.multiHandle`, `products.doubleHandle`, `products.windows`, `products.spec.midgeProof`, `products.spec.uvResistance`, `products.spec.trackless`, `common.explore_details`
 
 ### 3. Trust & Brand Story (Owner: `homepage`)
@@ -73,7 +73,7 @@ Self-contained interactive product showcase. **No dependency on `products` featu
 * **Import Rule**: Only shared UI from `src/components/ui-wrapper`. No cross-feature imports on the homepage.
 * **Self-Contained Data**: `useCatalogData()` returns static in-memory data — no API calls, no `products` feature dependency.
 * **i18n Namespace**: `homepage.*` for layout text, `products.*` for product names/specs, `common.*` for generic labels.
-* **Locale Links**: All CTAs and "Explore Details" links must be computed with `useLocale()` prefix pattern: `const prefix = country ? \`/\${country}\` : ''`.
+* **Locale Links**: All navigation CTAs must be computed with `useLocale()` prefix pattern: `const prefix = country ? \`/\${country}\` : ''`.
 
 ## 🌐 Content Mapping (en.json)
 
@@ -89,12 +89,16 @@ Self-contained interactive product showcase. **No dependency on `products` featu
 
 ## Factory photography and motion
 
-`FactoryImage.tsx` renders same-origin responsive WebP assets with explicit dimensions, alt text, srcset, and lazy loading. The home hero uses IMG_1555, Services uses IMG_1801, and About uses IMG_1811. `FactoryGallery.tsx` presents six curated photos with bilingual captions and a native modal viewer. `hooks/useFactoryGallery.ts` manages the viewer, body-scroll lock, and focus return without scrolling. Escape closes it; arrows and buttons move between images.
+`FactoryImage.tsx` renders same-origin responsive WebP assets with explicit dimensions, alt text, srcset, and lazy loading. The home hero uses a generated architectural concept through `FactoryHero.tsx`, clearly labeled as illustrative. Real IMG_1555 remains in the gallery. Services uses IMG_1801 with an edge gradient that blends into the page; About uses IMG_1811. `FactoryGallery.tsx` presents six curated photos with bilingual captions and a native modal viewer. `hooks/useFactoryGallery.ts` manages the viewer, body-scroll lock, and focus return without scrolling. Escape closes it; arrows and buttons move between images.
 
 `Reveal.tsx` uses IntersectionObserver to fade content once as it enters view. Only opacity/transform change, preserving layout. Reduced-motion users see content immediately; unsupported observers leave content visible. No animation dependency was added.
 
-Language navigation sets `resetScroll: false` and disables hash scrolling for that transition, while retaining query/hash. Normal page navigation and the original back-to-top control retain their existing behavior.
+Language navigation sets `resetScroll: false` and disables hash scrolling for that transition, while retaining query/hash. Product-card links also disable scroll reset and hash scrolling; the old mobile scroll-to-details callback was removed. Existing page navigation, explicit anchor links, and the back-to-top control retain their intended destinations. Gallery close restores focus without scrolling.
 
 Window menus now expose Home, Products, and Quote in both desktop and mobile layouts. Both inquiry forms omit the standalone email link beneath the privacy note; verified contact details remain in the footer.
 
 Video cards request the actual YouTube thumbnail from `i.ytimg.com`, fall back to an existing category photo on image failure, and retain the poster while the player loads. A single user click mounts the privacy-enhanced iframe with `autoplay=1` and the autoplay permission. No player or playback is started before that click. The narrow image host is included in Netlify CSP; YouTube playback is still subject to provider availability and browser policies.
+
+Footer contact rows have a shared 44px minimum height, aligned icons/text, and an 8px gap so plain-text address rows match linked rows. CompanyContact retains the project-discussion CTA and removes the email/phone shortcuts. The Traditional Chinese hero headline now reads 「從規劃到建置，打造您的理想廠房。」.
+
+Email wiring, separate business templates, sender-domain prerequisites, and generated client/team previews are documented in [inquiry-email-review.md](../inquiry-email-review.md).

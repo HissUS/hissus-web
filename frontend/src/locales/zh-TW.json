@@ -243,7 +243,7 @@
   },
   "company": {
     "eyebrow": "HISSUS · 工廠與設施建置",
-    "heroTitle": "為下一座設施，打好基礎。",
+    "heroTitle": "從規劃到建置，打造您的理想廠房。",
     "heroDesc": "協助企業建置工廠與設施，結合團隊的醫院與無塵室工程經驗，以務實的合作方式掌握品質、成本與風險。",
     "heroLink": "了解我們的合作方式",
     "introLabel": "我們的服務",
@@ -364,7 +364,18 @@
       "1821": "明亮的開放室內空間",
       "1366": "樓梯與動線空間"
     },
-    "viewPhoto": "查看照片：{{caption}}"
+    "viewPhoto": "查看照片：{{caption}}",
+    "heroImageNote": "建築情境示意圖",
+    "facilityEmail": {
+      "adminSubject": "HISSUS 工廠與設施詢問 - {{name}}",
+      "adminBadge": "工廠與設施建置",
+      "adminHeading": "新的工廠與設施詢問",
+      "adminFooter": "此信件由 HISSUS 工廠與設施詢問表單提交。",
+      "userSubject": "您的工廠與設施詢問確認 - HISSUS",
+      "userHeading": "我們已收到您的詢問",
+      "userIntro": "您好 {{name}}，感謝您與 HISSUS 聯繫。以下是您工廠與設施詢問的摘要，我們會了解您的需求，並盡快與您聯繫。",
+      "userFooter": "© HISSUS。您收到此郵件是因為您提交了工廠與設施詢問。"
+    }
   },
   "gallery": {
     "previous": "上一組照片",

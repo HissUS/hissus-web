@@ -96,17 +96,8 @@ export function ProductsPage() {
                       key={category.id}
                       to={`${prefix}/products` as never}
                       search={{ tab: category.id } as never}
-                      onClick={() => {
-                        if (typeof window === 'undefined') return
-                        if (!window.matchMedia('(max-width: 639px)').matches) return
-                        requestAnimationFrame(() => {
-                          const details = document.getElementById('product-details')
-                          if (!details) return
-                          const offset = 218
-                          const top = details.getBoundingClientRect().top + window.scrollY - offset
-                          window.scrollTo({ top, behavior: 'smooth' })
-                        })
-                      }}
+                      resetScroll={false}
+                      hashScrollIntoView={false}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
                         'group rounded-3xl border p-3 text-left shadow-sm transition-all duration-200 ring-2 ring-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2',

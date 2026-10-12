@@ -87,7 +87,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
 
     return () => {
       document.body.style.overflow = previousOverflow
-      previouslyFocused?.focus()
+      previouslyFocused?.focus({ preventScroll: true })
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [selectedImage])

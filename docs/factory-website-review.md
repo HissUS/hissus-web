@@ -37,14 +37,14 @@ Google Photos and the external reference sites returned proxy 403 responses; the
 
 | Uploaded source | Placement | Selection reason |
 | --- | --- | --- |
-| `IMG_1555.JPG` | Home hero and gallery | Clear open factory floor, steel columns and skylights |
+| `IMG_1555.JPG` | Gallery | Clear open factory floor, steel columns and skylights |
 | `IMG_1771.JPG` | Gallery | Equipment aisle adds manufacturing context |
 | `IMG_1801.JPG` | Services hero and gallery | Clear entrance, glass frontage, simple composition |
 | `IMG_1811.JPG` | About and gallery | Loading bays illustrate building access |
 | `IMG_1821.JPG` | Gallery | Bright supporting room broadens the selection |
 | `IMG_1366.JPG` | Gallery, uncropped portrait in viewer | Stairwell shows circulation and interior detail |
 
-Skipped IMG_1559/1782/1804 as similar compositions, IMG_1809 as a less focused exterior, IMG_1355 for distracting equipment detail and labels, and IMG_1817 for people and branded dining-area context. Each selected photo has 640/1200/1800px-wide WebP derivatives at quality 82, generated with EXIF orientation applied and metadata omitted. All 18 files total 1,571,818 bytes. They live in `frontend/src/assets/images/factory/`; below-fold photos load lazily, while hero images have high fetch priority. Viewer navigation supports buttons, arrow keys, Escape, native focus trapping, and focus return without scrolling. Motion uses opacity/transform only and respects reduced motion.
+Skipped IMG_1559/1782/1804 as similar compositions, IMG_1809 as a less focused exterior, IMG_1355 for distracting equipment detail and labels, and IMG_1817 for people and branded dining-area context. Each selected photo has 640/1200/1800px-wide WebP derivatives at quality 82, generated with EXIF orientation applied and metadata omitted. All 18 uploaded-photo derivatives total 1,571,818 bytes. They live in `frontend/src/assets/images/factory/`; below-fold photos load lazily, while hero images have high fetch priority. Viewer navigation supports buttons, arrow keys, Escape, native focus trapping, and focus return without scrolling. Motion uses opacity/transform only and respects reduced motion.
 
 Selected repository assets:
 
@@ -64,7 +64,7 @@ Final checks:
 - `pnpm build`: passed, includes TypeScript and production bundle; lazy-loaded secondary pages keep the main bundle below the Vite warning threshold.
 - `pnpm lint`: passed. `pnpm check-locales`: passed. New strings, metadata, form feedback and gallery labels exist in both dictionaries.
 - `pnpm test:inquiry`: **8 tests passed**, zero skipped. Exercises actual bundled server schema/handler, HTML escaping, input/type/size/origin/method validation, provider-returned and thrown failures, receipt versus optional confirmation, and declared edge limits. Mail provider is mocked; no actual delivery occurred.
-- `pnpm test:browser`: **209 checks passed**, at 1440px, 390px, 320px, in both languages. Direct routes and refreshes, exact localized metadata/lang, all four product categories and counts of original media, scroll/query/hash-preserving language switching and refresh, six-photo gallery keyboard navigation/focus return, thumbnail failure fallback, mobile menu navigation, lightbox Escape behavior, click-to-load video target, truthful failure/partial-success form states, skip link, reduced motion, missing local images, console/page errors and horizontal overflow checked. External players, thumbnail responses, and email responses are stubbed; local images remain real.
+- `pnpm test:browser`: **233 checks passed**, at 1440px, 390px, 320px, in both languages. Direct routes and refreshes, exact localized metadata/lang, all four product categories and counts of original media, scroll/query/hash-preserving language switching and refresh, six-photo gallery keyboard navigation/focus return, thumbnail failure fallback, equal footer row spacing, product-card click scroll retention, removed conversation shortcuts/featured-details links, mobile menu navigation, lightbox Escape behavior, click-to-load video target, truthful failure/partial-success form states, skip link, reduced motion, missing local images, console/page errors and horizontal overflow checked. External players, thumbnail responses, and email responses are stubbed; local images remain real.
 - `pnpm test:csp`: six bilingual production pages, local images, and configured embed target exercised with the prepared Netlify CSP injected into HTTP responses; **zero CSP violations**. Real YouTube content is stubbed. Does not establish deployed headers.
 - Screenshots captured for home/services/contact/screen homepage in both languages at desktop/mobile widths, reviewed visually. Current photo/portrait-viewer artifacts are in `/tmp/hissus-photos-review`; scripts can regenerate them.
 - Full dependency advisories and remaining risk: [security-review.md](security-review.md). Final frontend audit has one remaining tooling finding; root audit has none. No vulnerability-free claim.
@@ -102,3 +102,11 @@ After user-authorized staging deployment, in the existing Netlify site:
 7. Determine live DNS/CDN ownership before any Cloudflare-specific action. The compose Cloudflare Tunnel scaffold is not proof the website uses Cloudflare. If the separate Oracle backend is deployed later, switch to prod, keep tunnel credentials as mounted secrets, remove host-published API/database ports, close direct origin ingress, and enforce authenticated endpoint/CSRF/actuator policy in a separate backend deployment review. Do not expose an origin around the CDN or mistake the localhost Nginx development proxy for production protection.
 
 No live DNS, dashboards, paid service purchases, deployments, intrusive scans, or load tests were performed.
+
+## Latest refinements
+
+The factory hero now uses a full-width generated architectural concept with a legible dark overlay and an explicit illustration caption. Its three 640/1200/1672px WebP sizes total 304,356 bytes; the original generated PNG is preserved outside the checkout. This image is separate from the real uploaded-photo gallery and is not labeled as a completed project. Services' original entrance photo fades into the page background. The Chinese headline is 「從規劃到建置，打造您的理想廠房。」.
+
+Footer rows are evenly spaced, and the conversation section retains only its project-discussion CTA. Window product-card clicks preserve scroll, including on mobile; the featured-products details link is removed. Ordinary links to a different page, explicit anchors, and the back-to-top control retain their intended behavior.
+
+Factory email copy now describes facility inquiries throughout; window emails display human-readable product names, and all message line breaks remain visible after escaping. Reply-To points to the client on team notifications and to the team on client confirmations. Eight actual-handler email previews and deployment prerequisites are in [inquiry-email-review.md](inquiry-email-review.md). The API key is absent here; live sender-domain and Netlify settings could not be checked, so no claim is made that the key is the only missing deployment prerequisite. No actual message or deployment was made.

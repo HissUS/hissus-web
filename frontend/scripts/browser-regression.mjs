@@ -140,10 +140,46 @@ try {
               .getByRole('button', { name: translations.nav.closeMenu, exact: true })
               .click()
           assert.equal(await page.locator('footer li svg').count(), 6)
+          const contactRows = await page.locator('footer li').evaluateAll((rows) =>
+            rows.map((row) => {
+              const rect = row.getBoundingClientRect()
+              return { top: rect.top, height: rect.height }
+            }),
+          )
+          assert.ok(
+            contactRows.every((row) => Math.abs(row.height - 44) < 1),
+            'footer contact rows have equal height',
+          )
+          assert.ok(
+            contactRows
+              .slice(1)
+              .every((row, index) => Math.abs(row.top - contactRows[index].top - 52) < 1),
+            'footer contact rows have equal spacing',
+          )
+
           assert.equal(await page.locator('footer nav').getByRole('link').count(), 2)
           if (path === 'contact')
             assert.equal(await page.locator('main a[href$="/get-a-quote"]').count(), 0)
           if (path === 'home') assert.equal(await page.locator('#screens-heading').count(), 0)
+          if (['home', 'services', 'about'].includes(path))
+            assert.equal(
+              await page
+                .locator(
+                  'section[aria-labelledby="company-contact-heading"] a[href^="mailto:"],section[aria-labelledby="company-contact-heading"] a[href^="tel:"]',
+                )
+                .count(),
+              0,
+            )
+          if (path === 'home')
+            assert.equal(await page.locator('h1').innerText(), translations.company.heroTitle)
+          if (path === 'window-screen-solutions')
+            assert.equal(
+              await page
+                .getByRole('link', { name: translations.common.explore_details, exact: true })
+                .count(),
+              0,
+            )
+
           checks++
         }
 
@@ -164,6 +200,10 @@ try {
               ),
             )
           })
+          for (const reveal of await page.locator('.factory-reveal').all())
+            await reveal.scrollIntoViewIfNeeded()
+          await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+          await page.waitForTimeout(700)
           await page.screenshot({
             path: `${screenshotDirectory}/${width}-${prefix ? 'tw' : 'en'}-${path}.png`,
             fullPage: true,
@@ -211,13 +251,26 @@ try {
       await page.waitForURL(`**${prefix}/home`)
       await page.locator('h1').waitFor()
       checks++
+      await page.goto(`${base}${prefix}/products?tab=windows`, { waitUntil: 'domcontentloaded' })
       for (const [tab, translationKey, imageCount, videoCount] of [
         ['multi-handle', 'multiHandle', 5, 4],
         ['double-handle', 'doubleHandle', 1, 3],
         ['single-handle', 'singleHandle', 4, 1],
         ['windows', 'windows', 1, 1],
       ]) {
-        await page.goto(`${base}${prefix}/products?tab=${tab}`, { waitUntil: 'domcontentloaded' })
+        const productLink = page.locator(`#select-product a[href$="tab=${tab}"]`)
+        await productLink.scrollIntoViewIfNeeded()
+        await page.waitForTimeout(150)
+        const selectionY = await page.evaluate(() => window.scrollY)
+        await productLink.click()
+        await page.waitForURL(`**/products?tab=${tab}`)
+        await page.waitForTimeout(400)
+        assert.ok(
+          Math.abs((await page.evaluate(() => window.scrollY)) - selectionY) < 2,
+          `product selection retains scroll ${width} ${prefix} ${tab}`,
+        )
+        checks++
+
         await page.locator('#product-details').waitFor()
         await page.waitForFunction(
           (locale) => document.documentElement.lang === locale,

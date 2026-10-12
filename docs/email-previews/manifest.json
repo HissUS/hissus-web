@@ -1,0 +1,82 @@
+[
+  {
+    "kind": "facility",
+    "audience": "team",
+    "locale": "en",
+    "file": "facility-team-en.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "hiss.usatx@gmail.com",
+    "replyTo": "client@example.com",
+    "subject": "HISSUS Facility Inquiry - Sample Manufacturing Co."
+  },
+  {
+    "kind": "facility",
+    "audience": "client",
+    "locale": "en",
+    "file": "facility-client-en.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "client@example.com",
+    "replyTo": "hiss.usatx@gmail.com",
+    "subject": "Your Facility Inquiry - HISSUS"
+  },
+  {
+    "kind": "screen",
+    "audience": "team",
+    "locale": "en",
+    "file": "screen-team-en.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "hiss.usatx@gmail.com",
+    "replyTo": "client@example.com",
+    "subject": "HISS US Quote Request - Taylor Lee"
+  },
+  {
+    "kind": "screen",
+    "audience": "client",
+    "locale": "en",
+    "file": "screen-client-en.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "client@example.com",
+    "replyTo": "hiss.usatx@gmail.com",
+    "subject": "Your Quote Request - HISS US"
+  },
+  {
+    "kind": "facility",
+    "audience": "team",
+    "locale": "zh-TW",
+    "file": "facility-team-zh-TW.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "hiss.usatx@gmail.com",
+    "replyTo": "client@example.com",
+    "subject": "HISSUS 工廠與設施詢問 - 範例製造公司"
+  },
+  {
+    "kind": "facility",
+    "audience": "client",
+    "locale": "zh-TW",
+    "file": "facility-client-zh-TW.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "client@example.com",
+    "replyTo": "hiss.usatx@gmail.com",
+    "subject": "您的工廠與設施詢問確認 - HISSUS"
+  },
+  {
+    "kind": "screen",
+    "audience": "team",
+    "locale": "zh-TW",
+    "file": "screen-team-zh-TW.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "hiss.usatx@gmail.com",
+    "replyTo": "client@example.com",
+    "subject": "HISS US 報價需求 - 小明 陳"
+  },
+  {
+    "kind": "screen",
+    "audience": "client",
+    "locale": "zh-TW",
+    "file": "screen-client-zh-TW.html",
+    "from": "HISSUS <quotes@hissus.com>",
+    "to": "client@example.com",
+    "replyTo": "hiss.usatx@gmail.com",
+    "subject": "您的報價需求確認 - HISS US"
+  }
+]

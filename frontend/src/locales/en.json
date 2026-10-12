@@ -364,7 +364,18 @@
       "1821": "Bright open interior room",
       "1366": "Stairwell and circulation space"
     },
-    "viewPhoto": "View photo: {{caption}}"
+    "viewPhoto": "View photo: {{caption}}",
+    "heroImageNote": "Illustrative architectural concept",
+    "facilityEmail": {
+      "adminSubject": "HISSUS Facility Inquiry - {{name}}",
+      "adminBadge": "Factory & Facility Services",
+      "adminHeading": "New Facility Inquiry",
+      "adminFooter": "Submitted via the HISSUS factory and facility inquiry form.",
+      "userSubject": "Your Facility Inquiry - HISSUS",
+      "userHeading": "We've Received Your Inquiry",
+      "userIntro": "Hi {{name}}, thank you for contacting HISSUS about your facility. Here is a summary of your inquiry. Our team will review your needs and get back to you.",
+      "userFooter": "© HISSUS. You received this email because you submitted a factory and facility inquiry."
+    }
   },
   "gallery": {
     "previous": "Previous images",

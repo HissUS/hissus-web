@@ -116,7 +116,7 @@ function buildEmailHtml(opts: {
 // ---------------------------------------------------------------------------
 // Handler
 // ---------------------------------------------------------------------------
-type Mail = { from: string; to: string; subject: string; html: string }
+type Mail = { from: string; to: string; replyTo: string; subject: string; html: string }
 type MailResult = { error: unknown; data?: unknown }
 type Dependencies = {
   getConfig: () => { apiKey?: string; recipientEmail: string; origins: string[] }
@@ -181,6 +181,7 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
     const { email, phone, message, locale: lang, kind } = inquiry
     const dictionary = lang === 'zh-TW' ? zhTW : en
     const s = dictionary.quote.email
+    const copy = kind === 'facility' ? dictionary.company.facilityEmail : s
     const fullName =
       inquiry.kind === 'facility' ? inquiry.name : `${inquiry.firstName} ${inquiry.lastName}`
     const rows: [string, string][] = [
@@ -193,13 +194,27 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
     } else {
       rows.push(
         [s.labelCity, escapeHtml(inquiry.city)],
-        [s.labelProduct, escapeHtml(inquiry.product)],
+        [
+          s.labelProduct,
+          escapeHtml(
+            dictionary.products[
+              (
+                {
+                  'single-handle': 'singleHandle',
+                  'double-handle': 'doubleHandle',
+                  'multi-handle': 'multiHandle',
+                  windows: 'windows',
+                } as const
+              )[inquiry.product]
+            ],
+          ),
+        ],
       )
     }
     const common = {
       lang,
       rows,
-      message: escapeHtml(message),
+      message: escapeHtml(message).replace(/\r?\n/g, '<br />'),
       noneLabel: s.none,
       detailsHeading: s.detailsHeading,
       messageHeading: s.messageHeading,
@@ -209,16 +224,13 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
       const admin = await deps.sendMail(settings.apiKey, {
         from,
         to: settings.recipientEmail,
-        subject: normalizeSubjectValue(
-          kind === 'facility'
-            ? `HISSUS - ${dictionary.company.facilityProduct} - ${fullName}`
-            : fill(s.adminSubject, { name: fullName }),
-        ),
+        replyTo: email,
+        subject: normalizeSubjectValue(fill(copy.adminSubject, { name: fullName })),
         html: buildEmailHtml({
           ...common,
-          badge: kind === 'facility' ? dictionary.company.facilityProduct : s.adminBadge,
-          heading: kind === 'facility' ? dictionary.company.contactPageTitle : s.adminHeading,
-          footer: s.adminFooter,
+          badge: copy.adminBadge,
+          heading: copy.adminHeading,
+          footer: copy.adminFooter,
         }),
       })
       if (admin.error) return response(502, { code: 'SEND_FAILED' })
@@ -233,16 +245,16 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
       const confirmation = await deps.sendMail(settings.apiKey, {
         from,
         to: email,
-        subject:
-          kind === 'facility' ? `HISSUS - ${dictionary.company.contactPageTitle}` : s.userSubject,
+        replyTo: settings.recipientEmail,
+        subject: copy.userSubject,
         html: buildEmailHtml({
           ...common,
-          badge: kind === 'facility' ? dictionary.company.facilityProduct : s.userSubject,
-          heading: s.userHeading,
-          intro: fill(s.userIntro, {
+          badge: kind === 'facility' ? copy.adminBadge : copy.userSubject,
+          heading: copy.userHeading,
+          intro: fill(copy.userIntro, {
             name: escapeHtml(inquiry.kind === 'facility' ? inquiry.name : inquiry.firstName),
           }),
-          footer: s.userFooter,
+          footer: copy.userFooter,
         }),
       })
       confirmationSent = !confirmation.error
