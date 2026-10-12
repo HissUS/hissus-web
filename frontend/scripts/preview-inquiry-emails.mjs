@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
+import './prepare-inquiry-origins.mjs'
 
 // Use the real handler with an injected sender. No API call or email is sent.
 const require = createRequire(import.meta.url)

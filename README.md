@@ -122,6 +122,8 @@ For Netlify deployment, the repository-root `netlify.toml` selects base director
 
 Both forms use the existing Netlify quote function. See [email previews and Resend setup](docs/inquiry-email-review.md) before testing delivery. A plain Vite development server does not run Netlify Functions.
 
+`pnpm build` prepares the function's allowed origins from Netlify's public build URL variables before compiling. The generated `.netlify/inquiry-origins.json` stays ignored and is bundled only into the server function; API keys remain runtime-only. Deploy the latest commit and test its newest deployment address because older deploy permalinks retain their old code.
+
 **i18n URL convention**: English (US) has no country code. All other locales prepend a 2-letter country code as the first path segment (`/$country/[business]/[page]` for public business pages).
 
 | Country code | Locale |

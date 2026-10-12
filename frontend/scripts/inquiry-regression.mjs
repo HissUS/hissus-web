@@ -1,9 +1,10 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createRequire } from 'node:module'
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { prepareInquiryOrigins } from './prepare-inquiry-origins.mjs'
 
 // Bundle the actual function, including the real Zod schema and locale dictionaries.
 const require = createRequire(import.meta.url)
@@ -256,6 +257,74 @@ test('origin configuration normalizes trusted URLs and excludes malformed settin
     }),
     ['https://hissus.com', 'https://www.hissus.com'],
   )
+})
+
+test('default handler accepts bundled deploy origins without runtime URL variables', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const permalink = 'https://6acd57786add24678df4fcf9--hissus.netlify.app'
+  const bundledOutput = join(temporary, 'build-origins-quote.cjs')
+  try {
+    prepareInquiryOrigins({
+      URL: 'https://hissus.netlify.app/',
+      DEPLOY_PRIME_URL: 'https://hissus.com/',
+      DEPLOY_URL: `${permalink}/`,
+      RESEND_API_KEY: 'not-to-be-bundled',
+    })
+    assert.deepEqual(
+      JSON.parse(
+        readFileSync(new URL('../.netlify/inquiry-origins.json', import.meta.url), 'utf8'),
+      ),
+      ['https://hissus.netlify.app', 'https://hissus.com', permalink],
+    )
+    buildSync({
+      entryPoints: ['netlify/functions/quote.ts'],
+      bundle: true,
+      platform: 'node',
+      format: 'cjs',
+      outfile: bundledOutput,
+    })
+    assert.equal(readFileSync(bundledOutput, 'utf8').includes('not-to-be-bundled'), false)
+  } finally {
+    prepareInquiryOrigins()
+  }
+  const names = ['URL', 'DEPLOY_PRIME_URL', 'DEPLOY_URL', 'RESEND_API_KEY']
+  const previous = names.map((name) => [name, process.env[name]])
+  context.after(() => {
+    for (const [name, value] of previous) {
+      if (value === undefined) delete process.env[name]
+      else process.env[name] = value
+    }
+  })
+  for (const name of names) delete process.env[name]
+  const { createInquiryHandler: createBundledHandler } = require(bundledOutput)
+  const handler = createBundledHandler()
+  for (const body of [
+    valid,
+    {
+      kind: 'facility',
+      name: 'Sample Co.',
+      subject: 'Setup',
+      email: valid.email,
+      phone: valid.phone,
+    },
+  ]) {
+    for (const origin of [permalink, 'https://hissus.netlify.app', 'https://hissus.com']) {
+      const response = await run(
+        handler,
+        event(body, { headers: { 'content-type': 'application/json', origin } }),
+      )
+      // Reaching missing-key validation proves the origin was accepted without sending mail.
+      assert.equal(response.statusCode, 503)
+      assert.equal(JSON.parse(response.body).code, 'UNAVAILABLE')
+    }
+    const denied = await run(
+      handler,
+      event(body, {
+        headers: { 'content-type': 'application/json', origin: 'https://other.netlify.app' },
+      }),
+    )
+    assert.equal(denied.statusCode, 403)
+  }
 })
 
 test('provider rejection logs only safe categories and a correlatable request ID', async (context) => {

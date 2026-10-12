@@ -14,14 +14,18 @@ const PROVIDER_CODES = new Set([
   'internal_server_error',
 ])
 
-/** Only trusted server configuration defines origins, including immutable Netlify deploys. */
-export function getAllowedOrigins(environment: {
-  URL?: string
-  DEPLOY_PRIME_URL?: string
-  DEPLOY_URL?: string
-}) {
+/** Only trusted build/runtime configuration defines origins, including immutable deploys. */
+export function getAllowedOrigins(
+  environment: { URL?: string; DEPLOY_PRIME_URL?: string; DEPLOY_URL?: string },
+  buildOrigins: readonly string[] = [],
+) {
   const origins = new Set(['https://hissus.com', 'https://www.hissus.com'])
-  for (const value of [environment.URL, environment.DEPLOY_PRIME_URL, environment.DEPLOY_URL]) {
+  for (const value of [
+    environment.URL,
+    environment.DEPLOY_PRIME_URL,
+    environment.DEPLOY_URL,
+    ...buildOrigins,
+  ]) {
     if (!value) continue
     try {
       const url = new URL(value.trim())

@@ -68,7 +68,7 @@ Inspect the **POST** to `/.netlify/functions/quote` in the browser's Network tab
 
 | HTTP status and response code | Meaning and next check |
 | --- | --- |
-| 403 `ORIGIN_DENIED` | The website origin is outside the function's allowlist. It includes hissus.com/www and the exact server-configured `URL`, `DEPLOY_PRIME_URL`, and `DEPLOY_URL`. Deploy permalinks are now included, with no wildcard for other Netlify sites. |
+| 403 `ORIGIN_DENIED` | The website origin is outside the function's allowlist. It includes hissus.com/www and the exact build/runtime-configured `URL`, `DEPLOY_PRIME_URL`, and `DEPLOY_URL`. Deploy permalinks are included, with no wildcard for other Netlify sites. |
 | 405 `METHOD_NOT_ALLOWED` | The endpoint accepts POST. Inspect the actual form request rather than a direct browser GET. |
 | 503 `UNAVAILABLE` | The function cannot read a nonempty `RESEND_API_KEY`. Check the Functions scope and deploy context, then redeploy. |
 | 502 `SEND_FAILED` | The team notification failed. In Netlify's `quote` function logs, match the response's `requestId` to the failure entry. |
@@ -77,4 +77,6 @@ Failures include a request ID in the JSON response and `X-Request-ID` header. Lo
 
 The supplied Resend key screenshot shows sending access restricted to hissus.com, matching `quotes@hissus.com`. It does not establish that the domain is verified. A rejected origin occurs before Resend is called, so adding a key does not resolve that rejection.
 
-After deploying this fix, test the **newest deployment** or the main site address. An older deploy permalink remains tied to its old code. Twelve bundled-handler checks cover the supplied permalink, unrelated-origin rejection, method errors, safe diagnostics, and existing sending behavior with a stubbed sender. Real delivery remains unverified here; the environment proxy blocked a read-only request to the public deploy URL, so that attempt did not measure the site's response.
+After deploying this fix, test the **newest deployment** or the main site address. An older deploy permalink remains tied to its old code. Thirteen bundled-handler checks cover the supplied permalink, unrelated-origin rejection, method errors, safe diagnostics, and existing sending behavior with a stubbed sender. Real delivery remains unverified here; the environment proxy blocked a read-only request to the public deploy URL, so that attempt did not measure the site's response.
+
+The subsequent response confirmed `ORIGIN_DENIED` on the updated deployment. Runtime variables alone were insufficient. `pnpm build` now runs `scripts/prepare-inquiry-origins.mjs` before TypeScript/Vite, storing only the three normalized public origins in ignored `.netlify/inquiry-origins.json`. The function statically imports that JSON, so Netlify's function bundler retains the build addresses even when its runtime omits the URL variables. No API key or other environment data is copied. Tests bundle the actual default handler with the supplied deployment address, remove runtime URL/key variables, and verify both businesses pass origin validation while unrelated sites remain rejected. Local mail previews and inquiry tests also prepare the file automatically.

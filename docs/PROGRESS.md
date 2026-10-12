@@ -824,3 +824,32 @@
   - **Expected**: Unrelated origins return 403 `ORIGIN_DENIED` before mail; malformed/non-HTTP settings add no origins; GET returns 405 `METHOD_NOT_ALLOWED` with `Allow: POST`. Existing missing-key, invalid-input, notification-failure and partial-success behavior remains covered.
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **Live status**: The user's deploy URL fits the missing-origin case, but its exact response JSON was not supplied. The environment proxy blocked a read-only request, so live HTTP behavior and real sending remain unverified. Test the newest deployment or main site address after redeploying; older immutable permalinks retain their old code. No actual email, live secret, dashboard or DNS change was made.
+
+### [FIX-006] Bundle Inquiry Origins from the Netlify Build (2026-10-12)
+
+- **Summary**: The user's updated deployment returned `ORIGIN_DENIED`, confirming rejection before Resend. Capture the exact public Netlify origins during the build and statically bundle them into the function so runtime URL variable availability cannot prevent same-deploy submissions.
+- **Affected Files**:
+  - `README.md`
+  - `frontend/package.json`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/netlify/inquiryDiagnostics.ts`
+  - `frontend/scripts/prepare-inquiry-origins.mjs`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/preview-inquiry-emails.mjs`
+  - `docs/inquiry-email-review.md`
+  - `docs/security-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build and lint; run bundled inquiry tests.
+  - **Expected**: Build/TypeScript and lint pass; all 13 tests pass. The build prepares ignored `.netlify/inquiry-origins.json` with only normalized public origins. No other environment data is bundled, no wildcard is added, and no real mail is sent.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm test:inquiry`
+  - **Action**: Bundle the actual default handler with the supplied deploy address, then remove runtime URL variables and the sending key.
+  - **Expected**: Both forms accept the deploy/main/custom origin and reach missing-key validation (503 `UNAVAILABLE`) instead of origin denial. A synthetic secret in the generator's environment is absent from the generated file and function bundle.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+  - **Action**: Render email previews from the handler on a local checkout.
+  - **Expected**: The preview script prepares its ignored origins file and renders all eight previews to a temporary output folder without sending messages.
+  - **Command/URL**: `cd frontend && node scripts/preview-inquiry-emails.mjs /tmp/hissus-origin-fix-previews`
+  - **Fail Case**: Submit the test fixture with an unrelated Netlify origin while runtime URL variables are absent.
+  - **Expected**: HTTP 403 before any mail call; existing input/method/provider errors and diagnostic privacy tests still pass.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **Live status**: The prior rejection is confirmed by the user's response JSON. Real delivery after this change requires deploying the latest commit and testing its new address; no live key, DNS, dashboard or email was changed here.

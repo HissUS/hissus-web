@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { inquirySchema, getAllowedOrigins, getMailFailureDetails } from '..'
 import type { Config, Handler } from '@netlify/functions'
 import { Resend } from 'resend'
+import buildOrigins from '../../.netlify/inquiry-origins.json'
 import en from '../../src/locales/en.json'
 import zhTW from '../../src/locales/zh-TW.json'
 
@@ -128,7 +129,7 @@ const dependencies: Dependencies = {
   getConfig: () => ({
     apiKey: process.env.RESEND_API_KEY?.trim(),
     recipientEmail: process.env.QUOTE_RECIPIENT_EMAIL?.trim() || 'hiss.usatx@gmail.com',
-    origins: getAllowedOrigins(process.env),
+    origins: getAllowedOrigins(process.env, buildOrigins),
   }),
   sendMail: (apiKey, mail) =>
     new Resend(apiKey).emails.send(mail, { signal: AbortSignal.timeout(8000) }),
