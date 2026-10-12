@@ -150,7 +150,12 @@ const dependencies: Dependencies = {
 
 // Netlify enforces this at the edge after deployment; local code is not DDoS protection.
 export const config: Config = {
-  rateLimit: { windowLimit: 5, windowSize: 60, aggregateBy: ['ip', 'domain'] },
+  path: '/.netlify/functions/quote',
+  rateLimit: {
+    windowLimit: 5,
+    windowSize: 60,
+    aggregateBy: ['ip', 'domain'],
+  },
 }
 
 export function createInquiryHandler(deps: Dependencies = dependencies): Handler {
