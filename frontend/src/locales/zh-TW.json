@@ -114,14 +114,14 @@
       "submitFailed": "目前無法寄送您的詢問，請稍後再試或以電子郵件聯絡我們。"
     },
     "email": {
-      "adminSubject": "HISS US 報價需求 - {{name}}",
-      "adminBadge": "新進需求",
-      "adminHeading": "HISS US - 新報價需求",
-      "adminFooter": "此信件由 HISS US 報價表單提交。",
-      "userSubject": "您的報價需求確認 - HISS US",
-      "userHeading": "我們已收到您的需求",
-      "userIntro": "您好 {{name}}，感謝您的聯繫！以下是您報價需求的摘要，我們將盡快與您聯繫。",
-      "userFooter": "© HISS US。您收到此郵件是因為您提交了報價需求。",
+      "adminSubject": "[HISS US WINDOWS QUOTE] 新需求 - {{topic}} - {{name}}",
+      "adminBadge": "新需求",
+      "adminHeading": "新的門窗與紗窗報價需求",
+      "adminFooter": "此信件由 HISS US 門窗與紗窗報價表單提交。",
+      "userSubject": "[HISS US WINDOWS QUOTE] 已收到您的需求 - {{topic}}",
+      "userHeading": "您的門窗與紗窗報價需求",
+      "userIntro": "您好 {{name}}，我們已收到您的門窗與紗窗報價需求。以下是您需求的摘要，我們會了解您的需求，並盡快與您聯繫。",
+      "userFooter": "© HISS US。您收到此郵件是因為您提交了門窗與紗窗報價需求。",
       "detailsHeading": "詳細資訊",
       "messageHeading": "訊息",
       "labelName": "姓名",
@@ -129,7 +129,10 @@
       "labelPhone": "電話",
       "labelCity": "城市",
       "labelProduct": "產品",
-      "none": "（無）"
+      "none": "（無）",
+      "userBadge": "已收到需求",
+      "businessLabel": "門窗與紗窗報價",
+      "topicLabel": "詢問產品"
     },
     "cityGroups": {
       "northTexas": "北德州",
@@ -366,14 +369,17 @@
     },
     "viewPhoto": "查看照片：{{caption}}",
     "facilityEmail": {
-      "adminSubject": "HISSUS 工廠與設施詢問 - {{name}}",
-      "adminBadge": "工廠與設施建置",
-      "adminHeading": "HISSUS - 新的工廠與設施詢問",
-      "adminFooter": "此信件由 HISSUS 工廠與設施詢問表單提交。",
-      "userSubject": "您的工廠與設施詢問確認 - HISSUS",
-      "userHeading": "我們已收到您的詢問",
-      "userIntro": "您好 {{name}}，感謝您與 HISSUS 聯繫。以下是您工廠與設施詢問的摘要，我們會了解您的需求，並盡快與您聯繫。",
-      "userFooter": "© HISSUS。您收到此郵件是因為您提交了工廠與設施詢問。"
+      "adminSubject": "[HISS US FACILITY INQUIRY] 新需求 - {{topic}} - {{name}}",
+      "adminBadge": "新需求",
+      "adminHeading": "新的工廠與設施詢問",
+      "adminFooter": "此信件由 HISS US 工廠與設施詢問表單提交。",
+      "userSubject": "[HISS US FACILITY INQUIRY] 已收到您的需求 - {{topic}}",
+      "userHeading": "您的工廠與設施詢問",
+      "userIntro": "您好 {{name}}，我們已收到您的工廠與設施詢問。以下是您工廠與設施詢問的摘要，我們會了解您的需求，並盡快與您聯繫。",
+      "userFooter": "© HISS US。您收到此郵件是因為您提交了工廠與設施詢問。",
+      "userBadge": "已收到需求",
+      "businessLabel": "工廠與設施建置",
+      "topicLabel": "詢問主題"
     }
   },
   "gallery": {

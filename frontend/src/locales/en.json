@@ -114,14 +114,14 @@
       "submitFailed": "We could not send your request. Please try again or contact us by email."
     },
     "email": {
-      "adminSubject": "HISS US Quote Request - {{name}}",
-      "adminBadge": "Incoming Request",
-      "adminHeading": "HISS US - New Quote Request",
-      "adminFooter": "Submitted via the HISS US quote request form.",
-      "userSubject": "Your Quote Request - HISS US",
-      "userHeading": "We've Received Your Request",
-      "userIntro": "Hi {{name}}, thank you for reaching out! Here is a summary of your quote request. We will get back to you as soon as possible.",
-      "userFooter": "© HISS US. You received this email because you submitted a quote request.",
+      "adminSubject": "[HISS US WINDOWS QUOTE] New request - {{topic}} - {{name}}",
+      "adminBadge": "New request",
+      "adminHeading": "New Window & Screen Quote Request",
+      "adminFooter": "Submitted via the HISS US window and screen quote form.",
+      "userSubject": "[HISS US WINDOWS QUOTE] Request received - {{topic}}",
+      "userHeading": "Your Window & Screen Quote Request",
+      "userIntro": "Hi {{name}}, we have received your window and screen quote request. Here is a summary of your request. Our team will review your needs and get back to you.",
+      "userFooter": "© HISS US. You received this email because you submitted a window and screen quote request.",
       "detailsHeading": "Details",
       "messageHeading": "Message",
       "labelName": "Name",
@@ -129,7 +129,10 @@
       "labelPhone": "Phone",
       "labelCity": "City",
       "labelProduct": "Product",
-      "none": "(none)"
+      "none": "(none)",
+      "userBadge": "Request received",
+      "businessLabel": "Window & Screen Quote",
+      "topicLabel": "Requested product"
     },
     "cityGroups": {
       "northTexas": "North Texas",
@@ -366,14 +369,17 @@
     },
     "viewPhoto": "View photo: {{caption}}",
     "facilityEmail": {
-      "adminSubject": "HISSUS Facility Inquiry - {{name}}",
-      "adminBadge": "Factory & Facility Services",
-      "adminHeading": "HISSUS - New Facility Inquiry",
-      "adminFooter": "Submitted via the HISSUS factory and facility inquiry form.",
-      "userSubject": "Your Facility Inquiry - HISSUS",
-      "userHeading": "We've Received Your Inquiry",
-      "userIntro": "Hi {{name}}, thank you for contacting HISSUS about your facility. Here is a summary of your inquiry. Our team will review your needs and get back to you.",
-      "userFooter": "© HISSUS. You received this email because you submitted a factory and facility inquiry."
+      "adminSubject": "[HISS US FACILITY INQUIRY] New request - {{topic}} - {{name}}",
+      "adminBadge": "New request",
+      "adminHeading": "New Factory & Facility Inquiry",
+      "adminFooter": "Submitted via the HISS US factory and facility inquiry form.",
+      "userSubject": "[HISS US FACILITY INQUIRY] Request received - {{topic}}",
+      "userHeading": "Your Factory & Facility Inquiry",
+      "userIntro": "Hi {{name}}, we have received your factory and facility inquiry. Here is a summary of your inquiry. Our team will review your needs and get back to you.",
+      "userFooter": "© HISS US. You received this email because you submitted a factory and facility inquiry.",
+      "userBadge": "Request received",
+      "businessLabel": "Factory & Facility Inquiry",
+      "topicLabel": "Inquiry topic"
     }
   },
   "gallery": {

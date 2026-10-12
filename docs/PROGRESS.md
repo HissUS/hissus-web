@@ -853,3 +853,34 @@
   - **Expected**: HTTP 403 before any mail call; existing input/method/provider errors and diagnostic privacy tests still pass.
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **Live status**: The prior rejection is confirmed by the user's response JSON. Real delivery after this change requires deploying the latest commit and testing its new address; no live key, DNS, dashboard or email was changed here.
+
+### [FIX-007] Consistent Business-Specific Inquiry Emails (2026-10-12)
+
+- **Summary**: Standardized team and customer subject prefixes for factory inquiries and window quotes, including the submitted topic or readable product name. Both email types share one layout with prominent business labels and highlighted request details; factory uses teal accents and windows uses blue, with matching English/Traditional Chinese copy.
+- **Affected Files**:
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/inquiry-email-review.md`
+  - `docs/email-previews/facility-team-en.html`
+  - `docs/email-previews/facility-team-zh-TW.html`
+  - `docs/email-previews/facility-client-en.html`
+  - `docs/email-previews/facility-client-zh-TW.html`
+  - `docs/email-previews/screen-team-en.html`
+  - `docs/email-previews/screen-team-zh-TW.html`
+  - `docs/email-previews/screen-client-en.html`
+  - `docs/email-previews/screen-client-zh-TW.html`
+  - `docs/email-previews/manifest.json`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build, lint, check locale parity and exercise the bundled handler.
+  - **Expected**: Build/TypeScript, lint/locales and all 13 inquiry tests pass. Both recipients use `[HISS US FACILITY INQUIRY]` or `[HISS US WINDOWS QUOTE]`, the appropriate topic/product and localized request/receipt wording. Team subjects include the sender name. Dynamic subjects remain one line, and email HTML escapes submitted text.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Regenerate and inspect the eight actual-handler previews and their subject manifest.
+  - **Expected**: Both businesses/recipients/languages use matching layouts, clear text labels and distinct accents. Sixteen browser renderings at 900/390px have no horizontal overflow; screenshots under `/tmp/hissus-email-label-review` were visually inspected. Browser preview rendering does not establish compatibility with every mail client.
+  - **Command/URL**: `cd frontend && node scripts/preview-inquiry-emails.mjs`; open `docs/email-previews/index.html` and inspect `docs/email-previews/manifest.json`.
+  - **Fail Case**: Submit the existing fixture with HTML markup in the name/topic/message or a returned/thrown notification error.
+  - **Expected**: Markup is displayed as text in email bodies; subject text remains a single line with the correct business prefix. Notification failure still returns 502 without claiming success; optional customer-confirmation failure retains team-receipt success.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **Sending status**: Previews and handler checks use stub senders. No real email, secret, dashboard or deployment was changed. Deploy the latest branch commit for the revised email templates.

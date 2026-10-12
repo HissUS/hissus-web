@@ -7,7 +7,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "hiss.usatx@gmail.com",
     "replyTo": "client@example.com",
-    "subject": "HISSUS Facility Inquiry - Sample Manufacturing Co."
+    "subject": "[HISS US FACILITY INQUIRY] New request - Factory setup and GMP cooperation - Sample Manufacturing Co."
   },
   {
     "kind": "facility",
@@ -17,7 +17,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "client@example.com",
     "replyTo": "hiss.usatx@gmail.com",
-    "subject": "Your Facility Inquiry - HISSUS"
+    "subject": "[HISS US FACILITY INQUIRY] Request received - Factory setup and GMP cooperation"
   },
   {
     "kind": "screen",
@@ -27,7 +27,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "hiss.usatx@gmail.com",
     "replyTo": "client@example.com",
-    "subject": "HISS US Quote Request - Taylor Lee"
+    "subject": "[HISS US WINDOWS QUOTE] New request - Single-Handle Retractable Pleated Screen Door - Taylor Lee"
   },
   {
     "kind": "screen",
@@ -37,7 +37,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "client@example.com",
     "replyTo": "hiss.usatx@gmail.com",
-    "subject": "Your Quote Request - HISS US"
+    "subject": "[HISS US WINDOWS QUOTE] Request received - Single-Handle Retractable Pleated Screen Door"
   },
   {
     "kind": "facility",
@@ -47,7 +47,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "hiss.usatx@gmail.com",
     "replyTo": "client@example.com",
-    "subject": "HISSUS 工廠與設施詢問 - 範例製造公司"
+    "subject": "[HISS US FACILITY INQUIRY] 新需求 - 廠房建置與最高限價合作方式 - 範例製造公司"
   },
   {
     "kind": "facility",
@@ -57,7 +57,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "client@example.com",
     "replyTo": "hiss.usatx@gmail.com",
-    "subject": "您的工廠與設施詢問確認 - HISSUS"
+    "subject": "[HISS US FACILITY INQUIRY] 已收到您的需求 - 廠房建置與最高限價合作方式"
   },
   {
     "kind": "screen",
@@ -67,7 +67,7 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "hiss.usatx@gmail.com",
     "replyTo": "client@example.com",
-    "subject": "HISS US 報價需求 - 小明 陳"
+    "subject": "[HISS US WINDOWS QUOTE] 新需求 - 單把手捲簾紗門 - 小明 陳"
   },
   {
     "kind": "screen",
@@ -77,6 +77,6 @@
     "from": "HISSUS <quotes@hissus.com>",
     "to": "client@example.com",
     "replyTo": "hiss.usatx@gmail.com",
-    "subject": "您的報價需求確認 - HISS US"
+    "subject": "[HISS US WINDOWS QUOTE] 已收到您的需求 - 單把手捲簾紗門"
   }
 ]

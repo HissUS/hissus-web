@@ -6,10 +6,10 @@ The implementation is configured to send from **HISSUS <quotes@hissus.com>**. Te
 
 | Business | Team receives | Client receives |
 | --- | --- | --- |
-| Factory | “New Facility Inquiry”, with name/company name, email, phone, inquiry subject and message | “We've Received Your Inquiry”, a short acknowledgement and the same submitted details |
-| Windows | “HISS US - New Quote Request”, with name, email, phone, city, readable product name and message | “We've Received Your Request”, a short acknowledgement and the same quote details |
+| Factory | `[HISS US FACILITY INQUIRY] New request - {topic} - {name}`, with name/company name, email, phone, inquiry subject and message | `[HISS US FACILITY INQUIRY] Request received - {topic}`, an acknowledgement and the same submitted details |
+| Windows | `[HISS US WINDOWS QUOTE] New request - {product} - {name}`, with name, email, phone, city, readable product name and message | `[HISS US WINDOWS QUOTE] Request received - {product}`, an acknowledgement and the same quote details |
 
-Both use a navy header, white body, striped details table, separate message block, and a muted footer. English and Traditional Chinese follow the submitted form's language. Line breaks in messages are preserved after HTML escaping. Factory emails now use facility-specific wording throughout. There are no em dashes.
+Both use the same layout: a prominent business label, request/receipt badge, heading, highlighted topic or product, white body, striped details table, separate message block, and muted footer. Factory inquiries use teal; window and screen quotes use navy/blue. Text identifies the business independently of color. Both recipients see the same inquiry topic or readable product name in the subject and body. English and Traditional Chinese follow the submitted form's language; the bracketed English subject prefixes stay consistent across languages for inbox filtering. Line breaks in messages are preserved after HTML escaping. Dynamic subjects are normalized to one line. There are no em dashes.
 
 ## See the actual templates
 

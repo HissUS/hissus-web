@@ -81,6 +81,12 @@ test('screen inquiry notifies team and customer; HTML is escaped', async () => {
   assert.equal(sent[0].replyTo, valid.email)
   assert.equal(sent[1].replyTo, 'team@example.com')
   assert.ok(sent[0].html.includes('Pleated Window Screen'))
+  assert.equal(
+    sent[0].subject,
+    '[HISS US WINDOWS QUOTE] New request - Pleated Window Screen - <b>Test</b> Visitor',
+  )
+  assert.equal(sent[1].subject, '[HISS US WINDOWS QUOTE] Request received - Pleated Window Screen')
+  assert.ok(sent.every((mail) => mail.html.includes('Window & Screen Quote')))
 })
 test('Chinese facility inquiry accepts a company name, international phone and inquiry subject', async () => {
   const { handler, sent } = fixture()
@@ -108,6 +114,15 @@ test('Chinese facility inquiry accepts a company name, international phone and i
   assert.ok(sent[1].html.includes('工廠與設施詢問的摘要'))
   assert.ok(!sent[1].html.includes('報價需求的摘要'))
   assert.equal(sent[0].replyTo, valid.email)
+  assert.equal(
+    sent[0].subject,
+    '[HISS US FACILITY INQUIRY] 新需求 - 詢問最高限價 <script>test</script> - 測試公司 <b>Test</b>',
+  )
+  assert.equal(
+    sent[1].subject,
+    '[HISS US FACILITY INQUIRY] 已收到您的需求 - 詢問最高限價 <script>test</script>',
+  )
+  assert.ok(sent.every((mail) => mail.html.includes('工廠與設施建置')))
 })
 test('invalid fields, types, product, city, JSON and honeypot are rejected before email', async () => {
   const { handler, sent } = fixture()
