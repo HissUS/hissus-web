@@ -18,6 +18,7 @@ export function Header() {
     ? [
         { path: homePath, key: 'home' },
         { path: '/products', key: 'products' },
+        { path: '/get-a-quote', key: 'quote' },
       ]
     : [
         { path: homePath, key: 'home' },

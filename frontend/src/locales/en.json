@@ -86,7 +86,8 @@
     "skip": "Skip to content",
     "english": "English",
     "chinese": "繁體中文",
-    "servicesShort": "Services"
+    "servicesShort": "Services",
+    "quote": "Quote"
   },
   "quote": {
     "title": "Get a Quote",
@@ -245,8 +246,6 @@
     "heroTitle": "A clear foundation for your next facility.",
     "heroDesc": "Factory setup and construction services, informed by our team’s hospital and cleanroom experience. A considered approach to quality, cost, and risk.",
     "heroLink": "Explore our approach",
-    "photoPending": "Project photography pending",
-    "photoNote": "Factory and facility images will be added after project details and publication permissions are confirmed.",
     "introLabel": "WHAT WE DO",
     "introTitle": "Spaces for the work ahead.",
     "introDesc": "We help companies establish factories and facilities. We start with a conversation about your needs and define the construction scope and cooperation terms together.",
@@ -276,9 +275,9 @@
         "desc": "Savings below the agreed budget are shared between you and our team according to the agreed terms."
       }
     },
-    "photosLabel": "PROJECT PHOTOGRAPHY",
-    "photosTitle": "A closer look, with context.",
-    "photosDesc": "We are preparing a selection of relevant project images. Each will be accompanied by verified context, without assumptions about ownership or certification.",
+    "photosLabel": "FACTORY & FACILITY GALLERY",
+    "photosTitle": "Spaces, equipment, and the details between.",
+    "photosDesc": "Explore factory interiors, equipment areas, building access, and supporting spaces.",
     "screensLabel": "ALSO AT HISSUS",
     "screensTitle": "Open to light. Closed to insects.",
     "screensDesc": "Our window and screen solutions remain a dedicated part of HISSUS. Explore the full product range, installation galleries, demonstrations, and quote service.",
@@ -356,7 +355,16 @@
       "subject": "What would you like to ask about?",
       "nameRequired": "Please enter your name or company name.",
       "subjectRequired": "Please tell us what you would like to ask about."
-    }
+    },
+    "photos": {
+      "1555": "Open factory floor with steel columns and skylights",
+      "1771": "Equipment aisle and machinery",
+      "1801": "Building entrance with glass frontage",
+      "1811": "Loading bays and exterior access",
+      "1821": "Bright open interior room",
+      "1366": "Stairwell and circulation space"
+    },
+    "viewPhoto": "View photo: {{caption}}"
   },
   "gallery": {
     "previous": "Previous images",

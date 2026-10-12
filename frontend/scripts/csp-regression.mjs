@@ -35,6 +35,12 @@ const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
       body: '<html><body>Stubbed external player</body></html>',
     }),
   )
+  await page.route('https://i.ytimg.com/**', (route) =>
+    route.fulfill({
+      contentType: 'image/webp',
+      body: readFileSync(new URL('../src/assets/images/factory/1555-640.webp', import.meta.url)),
+    }),
+  )
   for (const path of [
     '/home',
     '/tw/home',

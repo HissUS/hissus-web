@@ -29,13 +29,24 @@ const paths = [
   'login',
   'console',
 ]
+const thumbnail = readFileSync(
+  new URL('../src/assets/images/factory/1555-640.webp', import.meta.url),
+)
+// External thumbnails and players are stubbed; local assets and CSP remain real.
+async function newPage(options) {
+  const page = await browser.newPage(options)
+  await page.route('https://i.ytimg.com/**', (route) =>
+    route.fulfill({ contentType: 'image/webp', body: thumbnail }),
+  )
+  return page
+}
 let checks = 0
 const screenshotDirectory = process.env.SCREENSHOT_DIR
 if (screenshotDirectory) mkdirSync(screenshotDirectory, { recursive: true })
 try {
   for (const width of [1440, 390, 320])
     for (const prefix of ['', '/tw']) {
-      const page = await browser.newPage({ viewport: { width, height: 900 } })
+      const page = await newPage({ viewport: { width, height: 900 } })
       const errors = []
       page.on('pageerror', (error) => errors.push(error.message))
       page.on('console', (message) => {
@@ -81,7 +92,7 @@ try {
             path.split('?')[0],
           )
           const expectedLinks = windowSite
-            ? [translations.nav.home, translations.nav.products]
+            ? [translations.nav.home, translations.nav.products, translations.nav.quote]
             : [translations.nav.home, translations.nav.servicesShort, translations.nav.contact]
           const expectedSwitch = windowSite ? translations.nav.services : translations.nav.screens
           const switchButton = page
@@ -116,6 +127,13 @@ try {
               .evaluate((element) => getComputedStyle(element).fontSize),
             '18px',
           )
+          if (windowSite)
+            assert.equal(
+              await navigation
+                .getByRole('link', { name: translations.nav.quote, exact: true })
+                .getAttribute('href'),
+              `${prefix}/get-a-quote`,
+            )
           if (width < 1024)
             await page
               .locator('header')
@@ -223,12 +241,24 @@ try {
         waitUntil: 'domcontentloaded',
       })
       await page.locator('#product-details').waitFor()
+      await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }))
+      const previousY = await page.evaluate(() => window.scrollY)
       await page
         .getByRole('button', { name: prefix ? 'English' : '繁體中文', exact: true })
         .first()
         .click()
       await page.waitForURL(`**/${prefix ? '' : 'tw/'}products?tab=single-handle`)
+      await page.waitForTimeout(750)
+      assert.ok(
+        Math.abs((await page.evaluate(() => window.scrollY)) - previousY) < 2,
+        'product language switch retains scroll',
+      )
+      checks++
       await page.reload({ waitUntil: 'domcontentloaded' })
+      await page.waitForFunction(
+        (locale) => document.documentElement.lang === locale,
+        prefix ? 'en' : 'zh-TW',
+      )
       assert.equal(await page.locator('html').getAttribute('lang'), prefix ? 'en' : 'zh-TW')
       assert.ok(page.url().includes('tab=single-handle'))
       checks++
@@ -244,7 +274,11 @@ try {
         .getByRole('button', { name: prefix ? 'Click to play' : '點擊播放', exact: false })
         .first()
         .click()
-      assert.ok((await page.locator('iframe').first().getAttribute('src')).includes('autoplay=0'))
+      assert.ok((await page.locator('iframe').first().getAttribute('src')).includes('autoplay=1'))
+      assert.ok((await page.locator('iframe').first().getAttribute('allow')).includes('autoplay'))
+      await page.waitForFunction(
+        () => getComputedStyle(document.querySelector('iframe')).opacity === '1',
+      )
       checks++
       await page
         .locator('#product-details button')
@@ -298,12 +332,83 @@ try {
       }
       await page.close()
     }
-  const page = await browser.newPage()
+  for (const width of [1440, 390, 320]) {
+    const media = await newPage({ viewport: { width, height: 900 } })
+    for (const prefix of ['', '/tw']) {
+      for (const hash of ['', '#factory-gallery']) {
+        await media.goto(`${base}${prefix}/home${hash}`, { waitUntil: 'domcontentloaded' })
+        await media.locator('#factory-gallery').waitFor()
+        await media.evaluate(() => window.scrollTo({ top: 1200, behavior: 'instant' }))
+        await media.waitForTimeout(200)
+        const before = await media.evaluate(() => window.scrollY)
+        await media
+          .locator('header')
+          .getByRole('button', { name: prefix ? 'English' : '繁體中文', exact: true })
+          .click()
+        await media.waitForURL(`**/${prefix ? '' : 'tw/'}home${hash}`)
+        await media.waitForTimeout(750)
+        assert.ok(
+          Math.abs((await media.evaluate(() => window.scrollY)) - before) < 2,
+          `factory locale scroll ${width} ${prefix} ${hash}`,
+        )
+        checks++
+      }
+      const gallery = media.locator('#factory-gallery')
+      assert.equal(await gallery.locator('figure').count(), 6)
+      const trigger = gallery.locator('figure button').first()
+      await trigger.click()
+      const dialog = media.getByRole('dialog')
+      await dialog.waitFor()
+      assert.equal(
+        await media.evaluate(() => document.activeElement.closest('dialog') !== null),
+        true,
+      )
+      await media.keyboard.press('ArrowRight')
+      assert.ok((await dialog.textContent()).includes('2 / 6'))
+      await media.keyboard.press('ArrowLeft')
+      assert.ok((await dialog.textContent()).includes('1 / 6'))
+      await dialog
+        .getByRole('button', {
+          name: dictionaries[prefix ? 'en' : 'zh-TW'].gallery.next,
+          exact: true,
+        })
+        .click()
+      assert.ok((await dialog.textContent()).includes('2 / 6'))
+      await dialog.locator('img').evaluate((img) => img.decode())
+      assert.equal(
+        await media.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
+        false,
+      )
+      await media.keyboard.press('Escape')
+      await dialog.waitFor({ state: 'hidden' })
+      assert.equal(await trigger.evaluate((element) => element === document.activeElement), true)
+      checks++
+      await media
+        .locator('footer')
+        .getByRole('button', { name: prefix ? '繁體中文' : 'English', exact: true })
+        .click()
+      const footerY = await media.evaluate(() => window.scrollY)
+      await media.waitForTimeout(750)
+      assert.ok(
+        await media.evaluate(() => window.scrollY > 1000),
+        'footer locale switch does not return to top',
+      )
+      assert.ok(footerY > 1000)
+      checks++
+    }
+    await media.close()
+  }
+  const page = await newPage()
   for (const prefix of ['', '/tw'])
     for (const facility of [false, true]) {
       await page.goto(`${base}${prefix}/${facility ? 'contact' : 'get-a-quote'}`, {
         waitUntil: 'domcontentloaded',
       })
+      assert.equal(
+        await page.locator('main a[href^="mailto:"]').count(),
+        0,
+        'no email link beneath inquiry form',
+      )
       if (facility) {
         await page
           .getByLabel(prefix ? '姓名／公司名稱' : 'Name / company name', { exact: false })
@@ -374,6 +479,18 @@ try {
     await page.evaluate(() => getComputedStyle(document.querySelector('a')).transitionDuration),
     '0s',
   )
+  assert.equal(
+    await page
+      .locator('.factory-reveal')
+      .evaluateAll((elements) =>
+        elements.every(
+          (element) =>
+            getComputedStyle(element).opacity === '1' &&
+            getComputedStyle(element).transitionDuration === '0s',
+        ),
+      ),
+    true,
+  )
   checks++
   await page.keyboard.press('Tab')
   assert.equal(
@@ -381,8 +498,22 @@ try {
     '#main-content',
   )
   checks++
+  await page.unroute('https://i.ytimg.com/**')
+  await page.route('https://i.ytimg.com/**', (route) => route.abort('failed'))
+  await page.goto(`${base}/products?tab=single-handle`, { waitUntil: 'domcontentloaded' })
+  const poster = page.locator('img[src*="i.ytimg.com"]').first()
+  await poster.scrollIntoViewIfNeeded()
+  await page.waitForFunction(
+    () => !!document.querySelector('img[data-fallback="true"]')?.naturalWidth,
+  )
+  assert.ok(
+    (await page.locator('img[data-fallback="true"]').first().getAttribute('src')).startsWith(
+      '/assets/',
+    ),
+  )
+  checks++
   console.log(
-    `${checks} browser checks passed (desktop/mobile, EN/zh-TW, routes, media, forms, keyboard, reduced motion). External video and mail delivery are stubbed.`,
+    `${checks} browser checks passed (desktop/mobile, EN/zh-TW, routes, media, forms, keyboard, reduced motion). External thumbnails, video, and mail delivery are stubbed.`,
   )
 } finally {
   await browser.close()

@@ -2,7 +2,7 @@
 
 ## 🎯 Business Intent
 
-The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with a clearly labeled photography placeholder and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
+The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with a real factory photograph and a six-photo gallery and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
 
 The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/window-screen-solutions` and `/tw/window-screen-solutions`, using the original HeroSection, CatalogExplorer, and TrustSection. The product catalog and quote URLs remain unchanged. The section below documents those preserved components.
 
@@ -86,3 +86,15 @@ Self-contained interactive product showcase. **No dependency on `products` featu
 | `products.spec.uvResistance` | "UPF 50+ UV Resistance" |
 | `products.spec.trackless` | "Trackless Design" |
 | `common.explore_details` | "Explore Details" |
+
+## Factory photography and motion
+
+`FactoryImage.tsx` renders same-origin responsive WebP assets with explicit dimensions, alt text, srcset, and lazy loading. The home hero uses IMG_1555, Services uses IMG_1801, and About uses IMG_1811. `FactoryGallery.tsx` presents six curated photos with bilingual captions and a native modal viewer. `hooks/useFactoryGallery.ts` manages the viewer, body-scroll lock, and focus return without scrolling. Escape closes it; arrows and buttons move between images.
+
+`Reveal.tsx` uses IntersectionObserver to fade content once as it enters view. Only opacity/transform change, preserving layout. Reduced-motion users see content immediately; unsupported observers leave content visible. No animation dependency was added.
+
+Language navigation sets `resetScroll: false` and disables hash scrolling for that transition, while retaining query/hash. Normal page navigation and the original back-to-top control retain their existing behavior.
+
+Window menus now expose Home, Products, and Quote in both desktop and mobile layouts. Both inquiry forms omit the standalone email link beneath the privacy note; verified contact details remain in the footer.
+
+Video cards request the actual YouTube thumbnail from `i.ytimg.com`, fall back to an existing category photo on image failure, and retain the poster while the player loads. A single user click mounts the privacy-enhanced iframe with `autoplay=1` and the autoplay permission. No player or playback is started before that click. The narrow image host is included in Netlify CSP; YouTube playback is still subject to provider availability and browser policies.

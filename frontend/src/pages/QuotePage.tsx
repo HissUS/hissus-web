@@ -1,7 +1,6 @@
 import { useInquiry } from '@/features/inquiry'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui-wrapper'
-import { SITE_CONFIG } from '@/config/site'
 import { CATALOG_DATA } from '../features/homepage/constants/catalog'
 
 const TEXAS_CITY_GROUPS = [
@@ -265,9 +264,6 @@ export function QuotePage() {
           </Button>
         </div>
         <p className="text-sm leading-relaxed text-gray-600">{t('company.privacy')}</p>
-        <a className="company-text-link" href={`mailto:${SITE_CONFIG.contact.email}`}>
-          {SITE_CONFIG.contact.email}
-        </a>
       </form>
     </div>
   )

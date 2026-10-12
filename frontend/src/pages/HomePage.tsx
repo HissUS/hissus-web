@@ -5,7 +5,10 @@ import {
   CompanyContact,
   ExperienceSection,
   GmpSection,
-  PhotoPlaceholder,
+  FactoryImage,
+  FactoryGallery,
+  FACTORY_PHOTOS,
+  Reveal,
 } from '@/features/homepage'
 import { useLocale } from '@/hooks'
 
@@ -17,7 +20,7 @@ export function HomePage() {
     <>
       <section className="company-hero" aria-labelledby="company-hero-heading">
         <div className="company-container grid gap-8 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16">
-          <div className="py-8 lg:py-16">
+          <Reveal className="py-8 lg:py-16">
             <p className="company-eyebrow">{t('company.eyebrow')}</p>
             <h1 id="company-hero-heading" className="company-title mt-8">
               {t('company.heroTitle')}
@@ -33,12 +36,18 @@ export function HomePage() {
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
-          </div>
-          <PhotoPlaceholder />
+          </Reveal>
+          <Reveal>
+            <FactoryImage
+              photo={FACTORY_PHOTOS[0]}
+              priority
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </Reveal>
         </div>
       </section>
       <section className="company-section" aria-labelledby="intro-heading">
-        <div className="company-container grid gap-8 lg:grid-cols-2 lg:gap-16">
+        <Reveal className="company-container grid gap-8 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="company-eyebrow">{t('company.introLabel')}</p>
             <h2 id="intro-heading" className="company-heading mt-8">
@@ -52,22 +61,11 @@ export function HomePage() {
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
       <ExperienceSection />
       <GmpSection />
-      <section className="company-section bg-gray-50" aria-labelledby="photo-heading">
-        <div className="company-container grid gap-8 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="company-eyebrow">{t('company.photosLabel')}</p>
-            <h2 id="photo-heading" className="company-heading mt-8">
-              {t('company.photosTitle')}
-            </h2>
-            <p className="company-copy mt-8">{t('company.photosDesc')}</p>
-          </div>
-          <PhotoPlaceholder compact />
-        </div>
-      </section>
+      <FactoryGallery />
       <CompanyContact />
     </>
   )

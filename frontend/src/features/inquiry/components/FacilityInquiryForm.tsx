@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui-wrapper'
-import { SITE_CONFIG } from '@/config/site'
 import { useInquiry } from '../useInquiry'
 
 const inputClass =
@@ -114,9 +113,6 @@ export function FacilityInquiryForm() {
         </Button>
       </div>
       <p className="text-sm leading-relaxed text-gray-600">{t('company.privacy')}</p>
-      <a className="company-text-link" href={`mailto:${SITE_CONFIG.contact.email}`}>
-        {SITE_CONFIG.contact.email}
-      </a>
     </form>
   )
 }

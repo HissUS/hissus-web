@@ -49,6 +49,6 @@ export function useLocaleSwitcher() {
       : pathname
 
     const targetPath = targetCountry ? `/${targetCountry}${basePath}` : basePath
-    navigate({ to: targetPath, search: true, hash })
+    navigate({ to: targetPath, search: true, hash, resetScroll: false, hashScrollIntoView: false })
   }
 }

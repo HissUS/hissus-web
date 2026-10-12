@@ -1,4 +1,7 @@
 export { HeroSection } from './HeroSection'
 export { TrustSection } from './TrustSection'
 export { CatalogExplorer } from './CatalogExplorer'
-export { CompanyContact, ExperienceSection, GmpSection, PhotoPlaceholder } from './CompanySections'
+export { CompanyContact, ExperienceSection, GmpSection } from './CompanySections'
+export { FactoryImage } from './FactoryImage'
+export { FactoryGallery } from './FactoryGallery'
+export { Reveal } from './Reveal'

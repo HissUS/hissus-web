@@ -12,19 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { SITE_CONFIG } from '@/config/site'
 import { useLocale } from '@/hooks'
-
-export function PhotoPlaceholder({ compact = false }: { compact?: boolean }) {
-  const { t } = useTranslation()
-  return (
-    <div className={`photo-placeholder ${compact ? 'photo-placeholder-compact' : ''}`}>
-      <Building2 className="h-12 w-12" strokeWidth={1} aria-hidden="true" />
-      <p className="mt-8 text-lg font-medium">{t('company.photoPending')}</p>
-      <p className="mt-4 max-w-sm text-sm leading-relaxed text-gray-600">
-        {t('company.photoNote')}
-      </p>
-    </div>
-  )
-}
+import { Reveal } from './Reveal'
 
 export function ExperienceSection() {
   const { t } = useTranslation()
@@ -34,7 +22,7 @@ export function ExperienceSection() {
       className="company-section bg-gray-50"
       aria-labelledby="experience-heading"
     >
-      <div className="company-container grid gap-16 lg:grid-cols-2">
+      <Reveal className="company-container grid gap-16 lg:grid-cols-2">
         <div>
           <p className="company-eyebrow">{t('company.experienceLabel')}</p>
           <h2 id="experience-heading" className="company-heading mt-8">
@@ -60,7 +48,7 @@ export function ExperienceSection() {
             {t('company.experienceNote')}
           </p>
         </div>
-      </div>
+      </Reveal>
     </section>
   )
 }
@@ -74,7 +62,7 @@ export function GmpSection() {
   ]
   return (
     <section id="gmp" className="company-section" aria-labelledby="gmp-heading">
-      <div className="company-container">
+      <Reveal className="company-container">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="company-eyebrow">{t('company.gmpLabel')}</p>
@@ -104,7 +92,7 @@ export function GmpSection() {
         <p className="mt-16 max-w-4xl border-l-2 border-primary pl-8 text-sm leading-relaxed text-gray-600">
           {t('company.gmpNote')}
         </p>
-      </div>
+      </Reveal>
     </section>
   )
 }
@@ -115,7 +103,7 @@ export function CompanyContact() {
   const prefix = country ? `/${country}` : ''
   return (
     <section className="company-section company-contact" aria-labelledby="company-contact-heading">
-      <div className="company-container grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+      <Reveal className="company-container grid items-end gap-8 lg:grid-cols-[1fr_auto]">
         <div>
           <p className="text-sm font-medium tracking-widest">{t('company.contactLabel')}</p>
           <h2 id="company-contact-heading" className="company-heading mt-8 max-w-3xl">
@@ -143,7 +131,7 @@ export function CompanyContact() {
           {t('nav.discuss')}
           <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
         </Link>
-      </div>
+      </Reveal>
     </section>
   )
 }

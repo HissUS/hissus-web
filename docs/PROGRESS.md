@@ -602,3 +602,66 @@
   - **Fail Case**: Navigate directly to `/products` or `/tw/get-a-quote` and use Home, language switching, and the business switch.
   - **Expected**: Window navigation stays within the screen section; factory button returns to the corresponding localized company homepage. Product query selection survives language switching.
 - **External blocker**: The uploaded ZIP exceeds the tool's 32 MiB transfer limit. No photos or document instructions from it were inspected. Photo selection remains pending smaller archives or individual images.
+
+### [FEAT-013] Factory Photos, Motion, and Scroll-Preserving Language Changes (2026-10-12)
+
+- **Summary**: Replaced factory photo placeholders with six curated user-supplied photos, responsive WebP assets, bilingual captions, and an accessible gallery viewer. Added reduced-motion-aware reveals, retained scroll/query/hash when switching languages, removed standalone email links beneath both forms, added window Quote navigation, and replaced blank video cards with thumbnails and click-initiated playback.
+- **Affected Files**:
+  - `docs/PROGRESS.md`
+  - `docs/factory-website-review.md`
+  - `docs/features/homepage.md`
+  - `docs/security-review.md`
+  - `frontend/netlify.toml`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/csp-regression.mjs`
+  - `frontend/src/assets/images/factory/1366-1200.webp`
+  - `frontend/src/assets/images/factory/1366-1800.webp`
+  - `frontend/src/assets/images/factory/1366-640.webp`
+  - `frontend/src/assets/images/factory/1555-1200.webp`
+  - `frontend/src/assets/images/factory/1555-1800.webp`
+  - `frontend/src/assets/images/factory/1555-640.webp`
+  - `frontend/src/assets/images/factory/1771-1200.webp`
+  - `frontend/src/assets/images/factory/1771-1800.webp`
+  - `frontend/src/assets/images/factory/1771-640.webp`
+  - `frontend/src/assets/images/factory/1801-1200.webp`
+  - `frontend/src/assets/images/factory/1801-1800.webp`
+  - `frontend/src/assets/images/factory/1801-640.webp`
+  - `frontend/src/assets/images/factory/1811-1200.webp`
+  - `frontend/src/assets/images/factory/1811-1800.webp`
+  - `frontend/src/assets/images/factory/1811-640.webp`
+  - `frontend/src/assets/images/factory/1821-1200.webp`
+  - `frontend/src/assets/images/factory/1821-1800.webp`
+  - `frontend/src/assets/images/factory/1821-640.webp`
+  - `frontend/src/assets/index.css`
+  - `frontend/src/components/layout/Header/index.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/GalleryCarousel.tsx`
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/FactoryGallery.tsx`
+  - `frontend/src/features/homepage/components/FactoryImage.tsx`
+  - `frontend/src/features/homepage/components/Reveal.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/constants/factoryPhotos.ts`
+  - `frontend/src/features/homepage/constants/index.ts`
+  - `frontend/src/features/homepage/hooks/index.ts`
+  - `frontend/src/features/homepage/hooks/useFactoryGallery.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/features/inquiry/components/FacilityInquiryForm.tsx`
+  - `frontend/src/hooks/useLocale.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/pages/AboutPage.tsx`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/QuotePage.tsx`
+  - `frontend/src/pages/ServicesPage.tsx`
+
+- **Verification**:
+  - **Action**: Run frontend build, lint, locale parity, and inquiry handler tests.
+  - **Expected**: TypeScript/build, lint/locales, and all 8 inquiry tests pass. No actual email is sent by the tests.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Start production preview, then run browser and CSP regressions.
+  - **Expected**: 209 browser checks pass at 1440/390/320px in both languages. Header language changes preserve current scroll even with a hash and product query; footer changes stay near the bottom. Six gallery photos load, arrow controls work, Escape closes, and focus returns. Quote links target the screen quote page; both forms omit their standalone mailto link. Reduced motion displays all reveal content immediately. Video clicks request immediate playback with autoplay permission and retain a poster until the iframe loads. Six production CSP routes have zero violations.
+  - **Command/URL**: `cd frontend && pnpm preview --host 0.0.0.0 --port 4173`; in another terminal: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Block YouTube thumbnail requests in browser regression.
+  - **Expected**: A same-origin category photo loads in place of the remote thumbnail, preserving the card. External thumbnail/player/mail responses are stubbed elsewhere in the suite; genuine playback and delivery remain unverified.
+  - **Command/URL**: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+- **Photo review**: The smaller uploaded archive was successfully downloaded and all 12 images reviewed. Six selected originals are documented in `docs/factory-website-review.md`; originals stay intact outside the checkout, and only 18 optimized derivatives totaling 1,571,818 bytes are committed. No client/location/certification attribution was inferred. Desktop/mobile gallery and portrait-viewer screenshots were inspected in `/tmp/hissus-photos-review`.

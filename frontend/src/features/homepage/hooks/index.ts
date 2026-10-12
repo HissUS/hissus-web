@@ -1,0 +1,1 @@
+export { useFactoryGallery } from './useFactoryGallery'

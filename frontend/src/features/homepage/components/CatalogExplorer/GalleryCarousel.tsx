@@ -45,6 +45,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   const [videoEmblaRef, videoEmblaApi] = useEmblaCarousel({ loop: true, align: 'start' })
   const [selectedImage, setSelectedImage] = useState<CatalogImage | null>(null)
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
+  const [loadedVideo, setLoadedVideo] = useState<string | null>(null)
   const showArrows = images.length > 3
   const displayImages = showArrows ? ensureLoopBuffer(images) : images
 
@@ -189,25 +190,41 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                   const id = video.id as string
                   const isActive = activeVideo === id
 
-                  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=0&controls=1&rel=0&playsinline=1`
+                  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&controls=1&rel=0&playsinline=1`
 
                   return (
                     <div
                       key={`${id}-${index}`}
                       className="shrink-0 basis-full px-2 sm:basis-2/3 lg:basis-1/2"
                     >
-                      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black/5 shadow-sm">
-                        <div className="relative aspect-video w-full">
+                      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+                        <div className="relative aspect-video w-full bg-black">
+                          <img
+                            src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+                            alt=""
+                            width="480"
+                            height="360"
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full object-cover"
+                            onError={(event) => {
+                              const fallback = images[0]?.src
+                              if (fallback && !event.currentTarget.dataset.fallback) {
+                                event.currentTarget.dataset.fallback = 'true'
+                                event.currentTarget.src = getAssetUrl(fallback)
+                              }
+                            }}
+                          />
                           {isActive && (
                             <iframe
-                              className={`h-full w-full ${isActive ? '' : 'pointer-events-none'}`}
+                              className={`absolute inset-0 h-full w-full bg-black transition-opacity duration-300 ${loadedVideo === id ? 'opacity-100' : 'opacity-0'}`}
+                              onLoad={() => setLoadedVideo(id)}
                               src={src}
                               title={
                                 video.titleKey
                                   ? t(video.titleKey)
                                   : t('products.gallery.videoTitle')
                               }
-                              allow="encrypted-media; picture-in-picture"
+                              allow="autoplay; encrypted-media; picture-in-picture"
                               referrerPolicy="strict-origin-when-cross-origin"
                               allowFullScreen
                             />
@@ -216,10 +233,13 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                           {!isActive && (
                             <button
                               type="button"
-                              onClick={() => setActiveVideo(id)}
-                              className="absolute inset-0 flex flex-col gap-4 items-center justify-center bg-gray-100 text-gray-900 hover:bg-gray-200"
+                              onClick={() => {
+                                setLoadedVideo(null)
+                                setActiveVideo(id)
+                              }}
+                              className="absolute inset-0 flex flex-col gap-4 items-center justify-center bg-black/30 text-white hover:bg-black/40"
                             >
-                              <span className="text-sm font-medium">
+                              <span className="rounded bg-black/60 px-3 py-2 text-sm font-medium">
                                 {t(video.titleKey ?? 'products.gallery.videoTitle')}
                               </span>
                               <span className="flex items-center gap-2 rounded-full bg-primary text-white px-3 py-1.5 text-xs font-semibold shadow-sm">
