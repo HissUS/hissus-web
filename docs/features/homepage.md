@@ -122,3 +122,7 @@ The gallery order is entrance IMG_1801, open factory floor IMG_1555, bright room
 ## Distinct GMP cooperation layout
 
 `GmpSection` uses a white section with a softly bordered light-gray summary panel for the model name, headline and introduction. Budget ceiling, transparent costs and shared savings appear as three vertical icon-led rows beside it on desktop and beneath it on mobile. Removing the numbered three-column cards distinguishes the pricing model from the one-stop service stages. The original bilingual GMP definition, contract/approved-change terms and certification clarification remain unchanged.
+
+## Mobile window product selection
+
+`ProductsPage` uses `useProductOverviewScroll` from the existing homepage/catalog feature. An ordinary product-card selection below 768px requests a scroll only after the selected category renders; selecting the current category also works. The overview section now owns `#product-details`, including its heading. The scroll accounts for the sticky header and a small gap, uses smooth motion by default and instant motion for reduced-motion users. Desktop selections, initial/direct visits, language switches and modified clicks do not request this scroll. The router still uses `resetScroll={false}` and `hashScrollIntoView={false}` for product links.

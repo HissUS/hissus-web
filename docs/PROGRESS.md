@@ -1132,3 +1132,27 @@
   - **Expected**: Text stays legible on the light backgrounds and the summary/benefits stay within the viewport.
   - **Command/URL**: `/factory/services#gmp`, `/tw/factory/services#gmp`
 - **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.
+
+### [FEAT-019] Scroll Mobile Product Selection to the Overview (2026-10-12)
+
+- **Summary**: Ordinary window product-card selections below 768px now scroll to the rendered overview, accounting for the sticky header and respecting reduced motion. The overview section owns the existing anchor; desktop selection, direct visits, modified clicks and language switching do not request this scroll.
+- **Affected Files**:
+  - `frontend/src/features/homepage/hooks/useProductOverviewScroll.ts`
+  - `frontend/src/features/homepage/hooks/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/pages/ProductsPage.tsx`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint and run production browser regressions.
+  - **Expected**: Build and lint pass; 279 browser checks pass in both languages at 1440/390/320px. Selecting each of the four categories on mobile brings the overview heading into view below the header; desktop retains scroll, and the selected product’s media and details still match its query.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && pnpm build && pnpm lint && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Action**: Check the breakpoint and reduced-motion behavior at 767/768px in both languages.
+  - **Expected**: Four focused cases pass: direct visits do not jump, selecting the active product or another product scrolls only below 768px, language switching retains position, and no horizontal overflow appears. Screenshots are under `/tmp/hissus-product-overview-review`.
+  - **Command/URL**: `/windows/products?tab=windows`, `/tw/windows/products?tab=windows`
+  - **Fail Case**: Enable reduced motion on mobile and select the current product again; then switch language while viewing its overview.
+  - **Expected**: The overview is reached without a smooth-scroll animation; language switching retains the current position. At 768px and above, product selection does not trigger an overview jump.
+  - **Command/URL**: `/windows/products`, `/tw/windows/products`
+- **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.

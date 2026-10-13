@@ -428,11 +428,21 @@ try {
         const selectionY = await page.evaluate(() => window.scrollY)
         await productLink.click()
         await page.waitForURL(`**/windows/products?tab=${tab}`)
-        await page.waitForTimeout(400)
-        assert.ok(
-          Math.abs((await page.evaluate(() => window.scrollY)) - selectionY) < 2,
-          `product selection retains scroll ${width} ${prefix} ${tab}`,
-        )
+        if (width < 768) {
+          await page.waitForFunction(() => {
+            const heading = document.querySelector('#product-overview-heading')
+            const header = document.querySelector('header')
+            const top = heading.getBoundingClientRect().top
+            const headerBottom = header.getBoundingClientRect().bottom
+            return top >= headerBottom + 8 && top <= headerBottom + 80
+          })
+        } else {
+          await page.waitForTimeout(400)
+          assert.ok(
+            Math.abs((await page.evaluate(() => window.scrollY)) - selectionY) < 2,
+            `desktop product selection retains scroll ${width} ${prefix} ${tab}`,
+          )
+        }
         checks++
 
         await page.locator('#product-details').waitFor()

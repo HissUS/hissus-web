@@ -11,6 +11,7 @@ import {
 } from '@/components/ui-wrapper'
 import { useLocale } from '@/hooks'
 import { cn, getAssetUrl } from '@/lib/utils'
+import { useProductOverviewScroll } from '@/features/homepage'
 import { useCatalogData } from '@/features/homepage/components/CatalogExplorer/useCatalogData'
 import { GalleryCarousel } from '@/features/homepage/components/CatalogExplorer/GalleryCarousel'
 
@@ -21,6 +22,7 @@ export function ProductsPage() {
   const search = useSearch({ strict: false }) as { tab?: string }
   const categories = useCatalogData()
   const active = categories.find((category) => category.id === search.tab) ?? categories[0]
+  const { overview, selectProduct } = useProductOverviewScroll(active.id)
   const descriptionText = t(active.descriptionKey ?? active.summaryKey ?? active.nameKey)
   const descriptionParts = descriptionText.split('\n- ')
   const descriptionLead = descriptionParts[0]
@@ -98,6 +100,7 @@ export function ProductsPage() {
                       search={{ tab: category.id } as never}
                       resetScroll={false}
                       hashScrollIntoView={false}
+                      onClick={(event) => selectProduct(event, category.id)}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
                         'group rounded-3xl border p-3 text-left shadow-sm transition-all duration-200 ring-2 ring-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-[--primary]/40 focus-visible:ring-offset-2',
@@ -158,14 +161,20 @@ export function ProductsPage() {
               </div>
             </section>
 
-            <section className="min-w-0 space-y-8 border-t border-gray-200 pt-8 xl:border-l xl:border-t-0 xl:border-gray-200 xl:pl-8 xl:pt-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both">
+            <section
+              ref={overview}
+              id="product-details"
+              aria-labelledby="product-overview-heading"
+              className="min-w-0 scroll-mt-40 space-y-8 border-t border-gray-200 pt-8 xl:border-l xl:border-t-0 xl:border-gray-200 xl:pl-8 xl:pt-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300 fill-mode-both"
+            >
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-[--primary]" aria-hidden="true" />
-                <h2 className="text-2xl font-bold text-gray-900">{t('products.page.overview')}</h2>
+                <h2 id="product-overview-heading" className="text-2xl font-bold text-gray-900">
+                  {t('products.page.overview')}
+                </h2>
               </div>
               <Card
                 className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5"
-                id="product-details"
               >
                 <div
                   className="h-2 bg-linear-to-r from-primary via-blue-500 to-indigo-600"
