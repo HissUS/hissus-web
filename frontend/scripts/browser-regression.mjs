@@ -206,12 +206,12 @@ try {
                 ),
               [
                 'company-hero-heading',
-                'about-heading',
-                'factory-steps-heading',
                 'photo-heading',
+                'factory-steps-heading',
+                'about-heading',
                 'company-contact-heading',
               ],
-              'homepage separates the About illustration and gallery with starting steps',
+              'homepage keeps the gallery near the hero and the About story below starting steps',
             )
             assert.equal(await page.locator('.factory-hero a').count(), 1)
             assert.equal(
@@ -536,7 +536,11 @@ try {
           getComputedStyle(document.querySelector('[data-factory-carousel]').parentElement)
             .opacity === '1',
       )
-      await next.scrollIntoViewIfNeeded()
+      // Center the arrow clear of the sticky header before measuring scroll retention.
+      // A merely visible arrow can sit behind the header and make Playwright scroll on click.
+      await next.evaluate((button) =>
+        button.scrollIntoView({ block: 'center', behavior: 'instant' }),
+      )
       assert.equal(await previous.isDisabled(), false)
       assert.equal(await next.isDisabled(), false)
       const initialX = (await gallery.locator('figure').first().boundingBox()).x

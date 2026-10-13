@@ -1013,3 +1013,21 @@
   - **Expected**: Starting steps still separate About and the gallery; no horizontal overflow appears, About bookmarks retain their destination, and language switching preserves page position. Gallery cycling and side arrows keep working.
   - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/about`, `/tw/factory/about`
 - **Publication**: Push the verified update to `factory-website` for Netlify testing. No live Netlify deployment was inspected and no real email was sent.
+
+### [FIX-013] Keep Gallery High and Move About Away from Hero (2026-10-12)
+
+- **Summary**: Applied the clarified homepage order: hero, gallery, “How we begin,” About HISSUS, contact. The gallery remains prominent near the top, while the About illustration and company story move below the starting steps. The existing gallery scroll test now centers its arrow clear of the sticky header before measuring, avoiding Playwright's automatic scrolling of an obscured click target.
+- **Affected Files**:
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript and lint, then run the existing production browser suite.
+  - **Expected**: Build and lint pass; 279 browser checks pass in both languages at 1440/390/320px, including the clarified section order.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && pnpm build && pnpm lint && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Fail Case**: Open localized About bookmarks or switch languages while scrolled into the reordered gallery.
+  - **Expected**: About redirects still target `#about` in its new position, language switching preserves scroll, and gallery looping and arrows work without narrow-screen overflow.
+  - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/about`, `/tw/factory/about`
+- **Publication**: Push the verified update to `factory-website` for the established Netlify testing workflow. No live deployment was inspected and no real email was sent.

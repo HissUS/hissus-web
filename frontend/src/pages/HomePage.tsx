@@ -10,9 +10,9 @@ export function HomePage() {
   return (
     <>
       <FactoryHero />
-      <CompanyAbout />
-      <FactorySteps />
       <FactoryGallery />
+      <FactorySteps />
+      <CompanyAbout />
       <CompanyContact compact />
     </>
   )
