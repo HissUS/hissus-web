@@ -5,11 +5,13 @@ import {
   GmpSection,
   FactoryImage,
   FACTORY_PHOTOS,
+  FactoryServices,
   Reveal,
 } from '@/features/homepage'
 
 export function ServicesPage() {
   const { t } = useTranslation()
+  const entrancePhoto = FACTORY_PHOTOS.find((photo) => photo.id === '1801')!
   return (
     <>
       <section className="company-section company-hero">
@@ -21,7 +23,7 @@ export function ServicesPage() {
           </div>
           <div className="company-service-image relative overflow-hidden">
             <FactoryImage
-              photo={FACTORY_PHOTOS[2]}
+              photo={entrancePhoto}
               priority
               className="aspect-[4/3] w-full object-cover"
             />
@@ -32,12 +34,7 @@ export function ServicesPage() {
           </div>
         </Reveal>
       </section>
-      <section className="company-section">
-        <Reveal className="company-container grid gap-8 lg:grid-cols-2 lg:gap-16">
-          <h2 className="company-heading">{t('company.scopeTitle')}</h2>
-          <p className="company-copy">{t('company.scopeDesc')}</p>
-        </Reveal>
-      </section>
+      <FactoryServices />
       <ExperienceSection />
       <GmpSection />
       <CompanyContact />

@@ -19,12 +19,28 @@ import photo1366_1800 from '@/assets/images/factory/1366-1800.webp'
 
 export const FACTORY_PHOTOS = [
   {
+    id: '1801',
+    width: 1800,
+    height: 1350,
+    src: photo1801_1800,
+    sources: [photo1801_640, photo1801_1200, photo1801_1800],
+    captionKey: 'company.photos.1801',
+  },
+  {
     id: '1555',
     width: 1800,
     height: 1350,
     src: photo1555_1800,
     sources: [photo1555_640, photo1555_1200, photo1555_1800],
     captionKey: 'company.photos.1555',
+  },
+  {
+    id: '1821',
+    width: 1800,
+    height: 1350,
+    src: photo1821_1800,
+    sources: [photo1821_640, photo1821_1200, photo1821_1800],
+    captionKey: 'company.photos.1821',
   },
   {
     id: '1771',
@@ -35,28 +51,12 @@ export const FACTORY_PHOTOS = [
     captionKey: 'company.photos.1771',
   },
   {
-    id: '1801',
-    width: 1800,
-    height: 1350,
-    src: photo1801_1800,
-    sources: [photo1801_640, photo1801_1200, photo1801_1800],
-    captionKey: 'company.photos.1801',
-  },
-  {
     id: '1811',
     width: 1800,
     height: 1350,
     src: photo1811_1800,
     sources: [photo1811_640, photo1811_1200, photo1811_1800],
     captionKey: 'company.photos.1811',
-  },
-  {
-    id: '1821',
-    width: 1800,
-    height: 1350,
-    src: photo1821_1800,
-    sources: [photo1821_640, photo1821_1200, photo1821_1800],
-    captionKey: 'company.photos.1821',
   },
   {
     id: '1366',

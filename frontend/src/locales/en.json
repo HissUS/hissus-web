@@ -247,7 +247,7 @@
   "company": {
     "eyebrow": "HISSUS · FACTORIES & FACILITIES",
     "heroTitle": "Build the space your business needs.",
-    "heroDesc": "Factory and facility setup and construction.",
+    "heroDesc": "Factory setup, from planning to operations.",
     "heroLink": "Explore our approach",
     "introLabel": "WHO WE ARE",
     "introTitle": "Meet HISSUS.",
@@ -293,12 +293,12 @@
     "email": "Email our team",
     "phone": "Call our team",
     "servicesTitle": "Factory & facility services",
-    "servicesDesc": "Helping companies establish spaces for their operations, with a construction approach shaped by our team’s hospital and cleanroom experience.",
+    "servicesDesc": "We connect the people, decisions and work needed to establish your factory, with services tailored to your project.",
     "scopeTitle": "Begin with a defined scope.",
     "scopeDesc": "Your facility needs, construction scope, responsibilities, budget, and cooperation terms form the basis of the project discussion. Specific services and deliverables are confirmed in the project agreement.",
     "aboutTitle": "Construction experience.\nA personal approach.",
     "aboutDesc": "HISSUS helps businesses establish factories and facilities. With hospital and cleanroom construction experience, our team brings a thoughtful, practical perspective to your next project.",
-    "aboutPrinciple": "We start by listening, so the conversation stays focused on what matters to your business.",
+    "aboutPrinciple": "We start by listening, then bring planning, construction and operations together through one point of coordination.",
     "contactPageTitle": "Discuss your project",
     "contactPageDesc": "Tell us about your factory or facility needs and what you would like to discuss.",
     "quoteLink": "Request a window & screen quote",
@@ -315,11 +315,11 @@
     "metadata": {
       "home": {
         "title": "Factory Setup & Construction | HISSUS",
-        "desc": "Factory and facility setup and construction informed by our team’s hospital and cleanroom experience. Explore facility photos and discuss your project with HISSUS."
+        "desc": "One-stop factory and facility coordination, from planning to operations. Explore facility photos and discuss your project with HISSUS."
       },
       "services": {
         "title": "Factory & Facility Services | HISSUS",
-        "desc": "Explore our construction approach and proposed Guaranteed Maximum Price model: a defined budget ceiling, transparent costs, and shared savings."
+        "desc": "Explore HISSUS factory services: site selection, permits, design, construction, operations, quality systems and human resources coordination."
       },
       "about": {
         "title": "About HISSUS",
@@ -400,8 +400,47 @@
       }
     },
     "aboutLabel": "ABOUT HISSUS",
-    "aboutLink": "Discover our construction approach",
-    "aboutImageAlt": "Illustrative facility planning workspace with architectural drawings and an industrial building model."
+    "aboutImageAlt": "Illustrative facility planning workspace with architectural drawings and an industrial building model.",
+    "coordination": {
+      "label": "ONE-STOP COORDINATION",
+      "title": "From choosing a site to running your factory.",
+      "desc": "One point of coordination brings your site, building and operational needs together throughout the project.",
+      "stages": {
+        "planning": "Planning & permits",
+        "building": "Design & construction",
+        "operations": "Operations & people"
+      },
+      "services": {
+        "site": {
+          "title": "Site selection",
+          "desc": "Identify and assess locations around your facility and operational needs."
+        },
+        "permits": {
+          "title": "Government permits & communication",
+          "desc": "Coordinate permit applications and communication with the relevant authorities."
+        },
+        "design": {
+          "title": "Architectural design",
+          "desc": "Coordinate building design around your space, workflow and facility requirements."
+        },
+        "construction": {
+          "title": "Construction",
+          "desc": "Bring the design into practice through coordinated construction planning and execution."
+        },
+        "operations": {
+          "title": "Factory operations",
+          "desc": "Support operational planning and the transition from facility setup to daily operations."
+        },
+        "quality": {
+          "title": "Quality systems",
+          "desc": "Help establish quality systems that support your production processes."
+        },
+        "people": {
+          "title": "Human resources",
+          "desc": "Coordinate staffing and human resources needs as your factory takes shape."
+        }
+      }
+    }
   },
   "gallery": {
     "previous": "Previous images",

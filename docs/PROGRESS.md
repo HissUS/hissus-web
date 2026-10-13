@@ -1031,3 +1031,31 @@
   - **Expected**: About redirects still target `#about` in its new position, language switching preserves scroll, and gallery looping and arrows work without narrow-screen overflow.
   - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/about`, `/tw/factory/about`
 - **Publication**: Push the verified update to `factory-website` for the established Netlify testing workflow. No live deployment was inspected and no real email was sent.
+
+### [FEAT-014] Bilingual One-Stop Factory Services and Curated Gallery Order (2026-10-12)
+
+- **Summary**: Removed the About HISSUS Services link and introduced the user-provided one-stop service scope through short homepage positioning and a three-stage Services overview. Reordered the gallery to start with the entrance, open factory floor and bright interior, and selected the Services entrance photograph by ID rather than gallery position.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/CompanyAbout.tsx`
+  - `frontend/src/features/homepage/components/FactoryServices.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/constants/factoryPhotos.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/pages/ServicesPage.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint and check translation parity.
+  - **Expected**: Checks pass. All new service headings, descriptions, homepage positioning and metadata are available in English and Traditional Chinese. The obsolete About link key is removed in both dictionaries.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales`
+  - **Action**: Run the existing production browser suite and review homepage/Services screenshots.
+  - **Expected**: 279 checks pass in both languages at 1440/390/320px. About has no outbound link. Services groups site selection and permits, design and construction, and operations, quality systems and human resources. The entrance remains its hero image; Experience/GMP and the agreed-scope note remain intact. The gallery’s first three captions match the requested order.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium SCREENSHOT_DIR=/tmp/hissus-one-stop-review pnpm test:browser`
+  - **Fail Case**: View the three-stage service list in Traditional Chinese at 320px, then cycle the gallery through the first and last photos or switch language while scrolled.
+  - **Expected**: All seven services remain readable without overflow. Gallery looping, viewer focus and language scroll retention continue to work; both locales use the same photo sequence. Quality-system support stays distinct from the Guaranteed Maximum Price construction model.
+  - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/services`, `/tw/factory/services`
+- **Publication**: Push verified changes to `factory-website` for the established Netlify testing workflow. Screenshots are stored under `/tmp/hissus-one-stop-review`; no live deployment was inspected and no real email was sent.

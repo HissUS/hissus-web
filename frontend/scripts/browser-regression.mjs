@@ -219,15 +219,20 @@ try {
               `${prefix}/factory/contact`,
             )
             const introduction = page.locator('#about')
-            assert.equal(
-              await introduction.getByRole('link').getAttribute('href'),
-              `${prefix}/factory/services`,
-            )
+            assert.equal(await introduction.getByRole('link').count(), 0)
             assert.equal(
               await introduction.getByRole('heading').innerText(),
               translations.company.aboutTitle,
             )
             assert.ok((await introduction.innerText()).includes(translations.company.aboutDesc))
+            assert.ok((await introduction.innerText()).includes(translations.company.aboutPrinciple))
+            assert.deepEqual(
+              await page.locator('#factory-gallery figure figcaption').allTextContents(),
+              ['1801', '1555', '1821', '1771', '1811', '1366'].map(
+                (id) => translations.company.photos[id],
+              ),
+              'gallery starts with the entrance, open factory floor and bright interior',
+            )
             assert.equal(await introduction.locator('img').count(), 1)
             assert.equal(
               await introduction.locator('img').getAttribute('alt'),
@@ -270,6 +275,36 @@ try {
             )
           }
           if (path === 'factory/services') {
+            const services = page.locator('section[aria-labelledby="factory-services-heading"]')
+            assert.equal(
+              await services.locator('h2').innerText(),
+              translations.company.coordination.title,
+            )
+            assert.ok((await services.innerText()).includes(translations.company.coordination.desc))
+            assert.deepEqual(
+              await services.locator('ol > li > h3').allTextContents(),
+              ['planning', 'building', 'operations'].map(
+                (key) => translations.company.coordination.stages[key],
+              ),
+            )
+            assert.deepEqual(
+              await services.locator('dt').allTextContents(),
+              ['site', 'permits', 'design', 'construction', 'operations', 'quality', 'people'].map(
+                (key) => translations.company.coordination.services[key].title,
+              ),
+              'all seven user-provided services are localized and grouped by stage',
+            )
+            assert.deepEqual(
+              await services.locator('dd').allTextContents(),
+              ['site', 'permits', 'design', 'construction', 'operations', 'quality', 'people'].map(
+                (key) => translations.company.coordination.services[key].desc,
+              ),
+            )
+            assert.equal(
+              await page.locator('.company-service-image img').getAttribute('alt'),
+              translations.company.photos['1801'],
+              'Services keeps the entrance image independently of gallery order',
+            )
             assert.equal(await page.locator('#experience').count(), 1)
             assert.equal(await page.locator('#gmp').count(), 1)
             assert.ok(

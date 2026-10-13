@@ -10,6 +10,7 @@ export {
   FactoryHero,
   FactoryGallery,
   FactorySteps,
+  FactoryServices,
   Reveal,
 } from './components'
 export { FACTORY_PHOTOS } from './constants'

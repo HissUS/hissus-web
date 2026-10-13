@@ -1,17 +1,12 @@
-import { Link } from '@tanstack/react-router'
-import { ArrowUpRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import aboutSmall from '@/assets/images/factory/company-about-640.webp'
 import aboutMedium from '@/assets/images/factory/company-about-1200.webp'
 import aboutFull from '@/assets/images/factory/company-about-full.webp'
-import { useLocale } from '@/hooks'
 import { getAssetUrl } from '@/lib/utils'
 import { Reveal } from './Reveal'
 
 export function CompanyAbout() {
   const { t } = useTranslation()
-  const { country } = useLocale()
-  const prefix = country ? `/${country}` : ''
   return (
     <section id="about" className="company-about" aria-labelledby="about-heading">
       <div className="company-about-art">
@@ -41,10 +36,6 @@ export function CompanyAbout() {
           <p className="mt-6 max-w-lg text-base leading-relaxed text-gray-600">
             {t('company.aboutPrinciple')}
           </p>
-          <Link to={`${prefix}/factory/services` as never} className="company-text-link mt-8">
-            {t('company.aboutLink')}
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
         </Reveal>
       </div>
     </section>
