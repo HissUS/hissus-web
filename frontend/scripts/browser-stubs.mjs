@@ -13,7 +13,8 @@ export async function installVerificationStub(page) {
             const frame = document.createElement('iframe');
             frame.src = 'https://challenges.cloudflare.com/test-frame';
             frame.title = 'Test-only verification';
-            frame.style.cssText = 'width:150px;height:140px;border:0';
+            frame.style.cssText = options.size === 'compact' ? 'width:150px;height:140px;border:0' : 'width:300px;height:65px;border:0';
+            frame.dataset.size = options.size;
             container.append(frame);
             window.__hissusVerification = {
               expire: () => options['expired-callback'](),

@@ -129,7 +129,7 @@ The gallery order is entrance IMG_1801, open factory floor IMG_1555, bright room
 
 ## Inquiry abuse protection
 
-Factory Contact and Window Quote include a compact Cloudflare Turnstile widget without changing their fields or business navigation. `useInquiry` includes the verified token with the POST, blocks unverified submission and resets the widget after each attempt. `netlify/turnstile.ts` performs server-side Siteverify; the shared function rejects invalid action/hostname/proof before any email and fails closed on missing configuration or provider outage. Public site key and server secret setup, key rotation, emergency sending pause and remaining global-budget limits are documented in [Netlify rate-limit review](../netlify-rate-limit-review.md). Browser/CSP fixtures stub all external verification and mail.
+Factory Contact and Window Quote include a Cloudflare Turnstile widget (normal size when at least 300px is available, compact on narrower screens) without changing their fields or business navigation. `useInquiry` includes the verified token with the POST, blocks unverified submission and resets the widget after each attempt. `netlify/turnstile.ts` performs server-side Siteverify; the shared function rejects invalid action/hostname/proof before any email and fails closed on missing configuration or provider outage. Public site key and server secret setup, key rotation, emergency sending pause and remaining global-budget limits are documented in [Netlify rate-limit review](../netlify-rate-limit-review.md). Browser/CSP fixtures stub all external verification and mail.
 
 ## Crawlable public pages
 

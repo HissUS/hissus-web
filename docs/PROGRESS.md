@@ -1326,3 +1326,26 @@
   - **Expected**: HTTP 404/noindex for unavailable routes; tracking/default-product duplicates consolidate to the correct clean canonical. Private routes/About aliases stay excluded from the public sitemap.
   - **Command/URL**: `/windows/missing`, `/tw/factory/missing`, `/fr/factory/home`, `/_prerender/factory-home.html`, `/windows/products?tab=windows&utm_source=test`
 - **Remaining verification**: Actual Netlify edge registration, query rewrites, live sending, Google coverage and field Core Web Vitals need owner/deployment evidence. The outbound proxy blocked a live production crawl. No indexing/ranking gain is claimed. Search Console setup, sitemap submission, file explanations, findings and future content recommendations are in `docs/seo-review.md`.
+
+### [FIX-024] Preserve Remote Turnstile Styling Without Narrow-Screen Clipping (2026-10-13)
+
+- **Summary**: Merged remote commits `dd6bed6` and `8f9e7f5`, preserving the normal-widget preference and 65px spacing alongside the noscript notice. Observe available form width to use compact verification only below 300px; resizing clears previous proof and cancels stale widget callbacks.
+- **Affected Files**:
+  - `frontend/src/features/inquiry/useTurnstile.ts`
+  - `frontend/src/features/inquiry/components/TurnstileVerification.tsx`
+  - `frontend/scripts/browser-stubs.mjs`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/netlify-rate-limit-review.md`
+  - `docs/seo-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/lint/locales and run browser/inquiry/SEO/CSP regressions after merging newer remote work.
+  - **Expected**: Normal size fits wider forms; compact fits both 288px form areas at a 320px viewport. Fixtures model both official widget dimensions. 297 browser checks, 27 inquiry tests, 75 SEO checks and six CSP pages pass; external providers remain stubbed.
+  - **Command/URL**: `cd frontend && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Action**: Resize each bilingual inquiry form from 390px to 320px and back; inspect legacy About anchors and unavailable routes for hydration errors.
+  - **Expected**: Eleven focused cases pass: normal/compact/normal transitions fit the forms and require fresh proof; preserved aliases and error pages hydrate without React errors.
+  - **Command/URL**: `/factory/contact`, `/tw/factory/contact`, `/windows/quote`, `/tw/windows/quote`, `/factory/about#about`, `/tw/factory/about#about`, `/factory/missing`, `/windows/missing`, `/tw/factory/missing`, `/tw/windows/missing`, `/fr/factory/home`
+  - **Fail Case**: Expire verification or resize below the normal widget's required width during form entry.
+  - **Expected**: No clipped verification UI or stale callback authorization; proof is reset and both email paths still require server verification. Production widget keys and live Cloudflare/Resend behavior remain owner checks.
+  - **Command/URL**: `/factory/contact`, `/windows/quote`

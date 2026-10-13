@@ -24,6 +24,8 @@ Factory Home introduces facility planning and construction coordination; Service
 
 Windows Home describes retractable screen doors/window screens. Products describes the actual single-handle, double-handle, multi-handle and pleated-window-screen categories, with photographs and demonstrations; Quote describes requesting those products. The implementation does not advertise unrelated replacement glass windows.
 
+The normal-size Turnstile preference from newer remote commits is preserved; the widget uses compact size only when the form has less than 300px available. Resize changes require fresh verification.
+
 Both business sets have English routes and `/tw` Traditional Chinese routes. Public sitemap canonicals total 18: six base public routes per language, plus three non-default product tabs per language. Login, Console, error pages, About aliases, tracking parameters, Functions and backing HTML are excluded. Login/Console remain accessible but noindex; no security or authentication claim is made for the console placeholder.
 
 ## Main files

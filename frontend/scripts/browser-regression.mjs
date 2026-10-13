@@ -109,6 +109,14 @@ try {
           false,
           'visible copy must not contain em dashes',
         )
+        if (path.endsWith('/contact') || path.endsWith('/quote')) {
+          await page.locator('[data-inquiry-verification] iframe').waitFor()
+          await page.waitForFunction(() => {
+            const container = document.querySelector('[data-inquiry-verification]')
+            return container.querySelector('iframe')?.offsetWidth <= container.clientWidth
+          })
+          checks++
+        }
         if (await page.locator('header').count()) {
           const translations = dictionaries[prefix ? 'zh-TW' : 'en']
           const windowSite = path.startsWith('windows/')

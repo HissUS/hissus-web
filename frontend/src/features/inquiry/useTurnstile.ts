@@ -54,6 +54,20 @@ export function useTurnstile(locale: string, resetKey: number, onVerify: (token:
   const container = useRef<HTMLDivElement>(null)
   const sitekey = import.meta.env.VITE_TURNSTILE_SITE_KEY?.trim()
   const [status, setStatus] = useState(sitekey ? 'loading' : 'unavailable')
+  const [compact, setCompact] = useState(false)
+  useEffect(() => {
+    const element = container.current
+    if (!element) return
+    const updateSize = () => setCompact(element.clientWidth < 300)
+    updateSize()
+    if (!window.ResizeObserver) {
+      window.addEventListener('resize', updateSize)
+      return () => window.removeEventListener('resize', updateSize)
+    }
+    const observer = new ResizeObserver(updateSize)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
   useEffect(() => {
     if (!sitekey) return
     let cancelled = false
@@ -69,7 +83,7 @@ export function useTurnstile(locale: string, resetKey: number, onVerify: (token:
           sitekey,
           action: 'hissus_inquiry',
           theme: 'light',
-          size: 'normal',
+          size: compact ? 'compact' : 'normal',
           language: locale === 'zh-TW' ? 'zh-tw' : 'en',
           callback: (token) => {
             if (!cancelled) {
@@ -102,6 +116,6 @@ export function useTurnstile(locale: string, resetKey: number, onVerify: (token:
       cancelled = true
       if (widget !== undefined) api?.remove(widget)
     }
-  }, [sitekey, locale, resetKey, onVerify])
+  }, [sitekey, locale, resetKey, onVerify, compact])
   return { container, status }
 }
