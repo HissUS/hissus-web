@@ -246,13 +246,13 @@
   },
   "company": {
     "eyebrow": "HISSUS · 工廠與設施建置",
-    "heroTitle": "從規劃到建置，打造您的理想廠房。",
-    "heroDesc": "以團隊的醫院與無塵室施工經驗，協助企業規劃與建置廠房。",
+    "heroTitle": "打造符合您營運需求的廠房。",
+    "heroDesc": "工廠與設施建置，從了解您的需求開始。",
     "heroLink": "了解我們的合作方式",
-    "introLabel": "我們的服務",
-    "introTitle": "為企業的下一步，打造合適空間。",
-    "introDesc": "我們協助企業建置工廠與設施。從了解您的需求開始，共同釐清工程範圍與合作條件。",
-    "introLink": "了解工廠與設施建置",
+    "introLabel": "關於我們",
+    "introTitle": "認識 HISSUS。",
+    "introDesc": "HISSUS 結合團隊的醫院與無塵室工程經驗，協助企業建置工廠與設施。",
+    "introLink": "了解 HISSUS",
     "experienceLabel": "團隊經驗",
     "experienceTitle": "來自高要求環境的工程經驗。",
     "experienceDesc": "我們團隊具備醫院與無塵室的建廠經驗，將這些經驗帶入設施建置的討論。每個專案都有不同需求；實際工程範圍與雙方責任，會在開工前共同確認。",
@@ -315,7 +315,7 @@
     "metadata": {
       "home": {
         "title": "工廠建置與工程服務 | HISSUS",
-        "desc": "與 HISSUS 洽談工廠與設施建置。團隊具備醫院與無塵室工程經驗，並推薦最高限價（GMP）合作模式。"
+        "desc": "HISSUS 結合團隊的醫院與無塵室工程經驗，協助企業建置工廠與設施。瀏覽廠房影像，了解如何開始洽談您的專案。"
       },
       "services": {
         "title": "工廠與設施建置 | HISSUS",
@@ -380,6 +380,24 @@
       "userBadge": "已收到需求",
       "businessLabel": "工廠與設施建置",
       "topicLabel": "詢問主題"
+    },
+    "startLabel": "從需求開始",
+    "startTitle": "合作從這裡開始。",
+    "startLink": "了解我們的工程合作方式",
+    "homeContactTitle": "有廠房或設施建置需求？與我們聊聊。",
+    "start": {
+      "needs": {
+        "title": "分享您的需求",
+        "desc": "告訴我們您的建置想法與想詢問的問題。"
+      },
+      "scope": {
+        "title": "釐清工程範圍",
+        "desc": "一起了解設施需求與預計涵蓋的工程內容。"
+      },
+      "approach": {
+        "title": "討論合作方式",
+        "desc": "討論雙方責任、預算及合適的合作條件。"
+      }
     }
   },
   "gallery": {

@@ -933,3 +933,31 @@
   - **Expected**: The carousel wraps without disabling either arrow; the viewer retains keyboard navigation/Escape and restores focus without scrolling. No duplicate photo nodes or page overflow are introduced. Controls remain visible on mobile and appear on desktop hover or keyboard focus.
   - **Command/URL**: `/factory/home#factory-gallery` and `/tw/factory/home#factory-gallery`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
 - **Visual review**: Desktop/mobile screenshots in `/tmp/hissus-factory-loop-review` were inspected. After local verification, the user authorized committing and pushing this gallery update to `factory-website` for Netlify testing. No Netlify deployment was started or inspected from this environment.
+
+### [FIX-010] Distinct and Concise Factory Homepage (2026-10-12)
+
+- **Summary**: Replaced the duplicated homepage Experience/GMP sections with the approved visual introduction: stronger hero copy and one CTA, a brief company introduction, the gallery higher on the page, three starting steps and a compact contact invitation. Services retains the full experience, scope and GMP explanations; English/Traditional Chinese copy and homepage metadata follow the revised narrative.
+- **Affected Files**:
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/features/homepage/components/FactoryHero.tsx`
+  - `frontend/src/features/homepage/components/FactorySteps.tsx`
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, check locale parity and run inquiry tests.
+  - **Expected**: All checks and 16 inquiry tests pass. New copy is bilingual with no em dashes; email behavior remains unchanged and tests use stub senders. Existing dependencies and photo assets are reused.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run production browser and CSP regressions.
+  - **Expected**: 287 checks pass in both languages at 1440/390/320px. Home has the approved section order, one hero CTA, About/Services links and a compact closing invitation; Services retains Experience/GMP and its existing contact copy. Gallery looping, matched hero heights, language/product scroll retention, routes and form feedback pass. Six CSP pages have zero violations; external media/mail responses are stubbed.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Switch languages while scrolled into the gallery, cycle through all photos, or follow the new About/Services links in Traditional Chinese.
+  - **Expected**: Page position is retained, all six photos remain in the loop, and links keep the `/tw` locale. Home contains neither full Experience nor GMP sections; both remain accessible on Services. No horizontal overflow appears at narrow widths.
+  - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/services`, `/tw/factory/services`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+- **Visual review and publication**: Full-page homepage screenshots in both languages at 1440/390px were inspected under `/tmp/hissus-home-story-review`. This verified update is published to the existing `factory-website` branch for the user's established Netlify testing workflow. No Netlify deployment was started or inspected from this environment, and no real email was sent.

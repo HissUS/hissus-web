@@ -246,13 +246,13 @@
   },
   "company": {
     "eyebrow": "HISSUS · FACTORIES & FACILITIES",
-    "heroTitle": "A clear foundation for your next facility.",
-    "heroDesc": "Factory setup and construction, informed by our team’s hospital and cleanroom experience.",
+    "heroTitle": "Build the space your business needs.",
+    "heroDesc": "Factory and facility setup and construction.",
     "heroLink": "Explore our approach",
-    "introLabel": "WHAT WE DO",
-    "introTitle": "Spaces for the work ahead.",
-    "introDesc": "We help companies establish factories and facilities. We start with a conversation about your needs and define the construction scope and cooperation terms together.",
-    "introLink": "Factory & facility services",
+    "introLabel": "WHO WE ARE",
+    "introTitle": "Meet HISSUS.",
+    "introDesc": "HISSUS helps companies establish factories and facilities, drawing on our team’s hospital and cleanroom construction experience.",
+    "introLink": "More about HISSUS",
     "experienceLabel": "OUR TEAM’S EXPERIENCE",
     "experienceTitle": "Experience in demanding environments.",
     "experienceDesc": "Our team brings hospital and cleanroom construction experience to conversations about your facility. Every project has its own requirements; the scope and responsibilities are agreed before work begins.",
@@ -315,7 +315,7 @@
     "metadata": {
       "home": {
         "title": "Factory Setup & Construction | HISSUS",
-        "desc": "Discuss factory and facility construction with HISSUS. Our team brings hospital and cleanroom experience and recommends considering Guaranteed Maximum Price cooperation."
+        "desc": "Factory and facility setup and construction informed by our team’s hospital and cleanroom experience. Explore facility photos and discuss your project with HISSUS."
       },
       "services": {
         "title": "Factory & Facility Services | HISSUS",
@@ -380,6 +380,24 @@
       "userBadge": "Request received",
       "businessLabel": "Factory & Facility Inquiry",
       "topicLabel": "Inquiry topic"
+    },
+    "startLabel": "A SIMPLE START",
+    "startTitle": "How we begin.",
+    "startLink": "Explore our construction approach",
+    "homeContactTitle": "Planning a factory or facility? Let’s talk.",
+    "start": {
+      "needs": {
+        "title": "Share your needs",
+        "desc": "Tell us what you’re planning and what you’d like to ask."
+      },
+      "scope": {
+        "title": "Define the scope",
+        "desc": "Clarify what the facility needs and what the construction should cover."
+      },
+      "approach": {
+        "title": "Discuss the approach",
+        "desc": "Talk through responsibilities, budget and cooperation terms."
+      }
     }
   },
   "gallery": {

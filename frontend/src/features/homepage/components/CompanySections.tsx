@@ -87,19 +87,31 @@ export function GmpSection() {
   )
 }
 
-export function CompanyContact() {
+export function CompanyContact({ compact = false }: { compact?: boolean } = {}) {
   const { t } = useTranslation()
   const { country } = useLocale()
   const prefix = country ? `/${country}` : ''
   return (
-    <section className="company-section company-contact" aria-labelledby="company-contact-heading">
+    <section
+      className={`company-contact ${compact ? 'py-12 sm:py-16' : 'company-section'}`}
+      aria-labelledby="company-contact-heading"
+    >
       <Reveal className="company-container grid items-end gap-8 lg:grid-cols-[1fr_auto]">
         <div>
-          <p className="text-sm font-medium tracking-widest">{t('company.contactLabel')}</p>
-          <h2 id="company-contact-heading" className="company-heading mt-8 max-w-3xl">
-            {t('company.contactTitle')}
+          {!compact && (
+            <p className="text-sm font-medium tracking-widest">{t('company.contactLabel')}</p>
+          )}
+          <h2
+            id="company-contact-heading"
+            className={`company-heading max-w-3xl ${compact ? '' : 'mt-8'}`}
+          >
+            {t(compact ? 'company.homeContactTitle' : 'company.contactTitle')}
           </h2>
-          <p className="mt-8 max-w-2xl leading-relaxed text-white/90">{t('company.contactDesc')}</p>
+          {!compact && (
+            <p className="mt-8 max-w-2xl leading-relaxed text-white/90">
+              {t('company.contactDesc')}
+            </p>
+          )}
         </div>
         <Link
           to={`${prefix}/factory/contact` as never}

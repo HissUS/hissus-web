@@ -2,7 +2,7 @@
 
 ## 🎯 Business Intent
 
-The company homepage now introduces factory/facility setup and construction, attributed team hospital/cleanroom experience, and a proposed Guaranteed Maximum Price model. Its shared sections are in `features/homepage/components/CompanySections.tsx`; HomePage composes them with an illustrative factory background hero and a six-photo gallery and a dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
+The company homepage gives a concise visual introduction to factory/facility setup and construction: a stronger hero with one project-discussion button, a brief company introduction, the six-photo looping gallery, three short starting steps and a compact contact invitation. Hospital/cleanroom experience appears briefly in the introduction. The detailed Experience and Guaranteed Maximum Price sections belong to Services. HomePage uses `FactoryHero.tsx`, `FactoryGallery.tsx`, `FactorySteps.tsx` and the compact variant of `CompanyContact` from `CompanySections.tsx`, plus the dedicated business switch in the shared header. Services, About, and Contact pages sit beside existing pages. See `docs/factory-website-review.md` for content, route, security, and verification details.
 
 The original screen homepage is retained in `src/pages/WindowScreenPage.tsx` at `/windows/home` and `/tw/windows/home`, using the original HeroSection, CatalogExplorer, and TrustSection. The catalog and quote pages use `/windows/products` and `/windows/quote`; old URLs redirect to them. The section below documents those preserved components.
 
@@ -102,6 +102,10 @@ Video cards request the actual YouTube thumbnail from `i.ytimg.com`, fall back t
 Footer contact rows have a shared 44px minimum height, aligned icons/text, and an 8px gap so plain-text address rows match linked rows. CompanyContact retains the project-discussion CTA and removes the email/phone shortcuts. The Traditional Chinese hero headline now reads 「從規劃到建置，打造您的理想廠房。」.
 
 Email wiring, separate business templates, sender-domain prerequisites, and generated client/team previews are documented in [inquiry-email-review.md](../inquiry-email-review.md).
+
+## Distinct factory homepage and Services content
+
+Home follows this order: hero → short introduction → photo gallery → “How we begin” → contact. Its introduction links to About; the three steps (“Share your needs”, “Define the scope”, “Discuss the approach”) link onward to Services for the full construction approach. The homepage contact band contains just its own short heading and the existing project-discussion button. Services and About keep the original full contact section; Services retains the complete Experience/GMP sections and contractual caveats. All new copy and metadata are bilingual JSON keys, with no em dashes, invented projects or additional service claims.
 
 ## Canonical routes and matched heroes
 

@@ -198,6 +198,48 @@ try {
             )
 
           if (path === 'factory/home') {
+            assert.equal(await page.locator('#experience, #gmp').count(), 0)
+            assert.deepEqual(
+              await page
+                .locator('main > section')
+                .evaluateAll((sections) =>
+                  sections.map((section) => section.getAttribute('aria-labelledby')),
+                ),
+              [
+                'company-hero-heading',
+                'intro-heading',
+                'photo-heading',
+                'factory-steps-heading',
+                'company-contact-heading',
+              ],
+              'homepage prioritizes introduction, photos and simple next steps',
+            )
+            assert.equal(await page.locator('.factory-hero a').count(), 1)
+            assert.equal(
+              await page.locator('.factory-hero a').getAttribute('href'),
+              `${prefix}/factory/contact`,
+            )
+            const introduction = page.locator('section[aria-labelledby="intro-heading"]')
+            assert.equal(
+              await introduction.getByRole('link').getAttribute('href'),
+              `${prefix}/factory/about`,
+            )
+            const steps = page.locator('section[aria-labelledby="factory-steps-heading"]')
+            assert.deepEqual(
+              await steps.locator('li h3').allTextContents(),
+              ['needs', 'scope', 'approach'].map((key) => translations.company.start[key].title),
+            )
+            assert.equal(
+              await steps.getByRole('link').getAttribute('href'),
+              `${prefix}/factory/services`,
+            )
+            const closing = page.locator('section[aria-labelledby="company-contact-heading"]')
+            assert.equal(
+              await closing.getByRole('heading').innerText(),
+              translations.company.homeContactTitle,
+            )
+            assert.equal(await closing.locator('p').count(), 0)
+            checks++
             factoryHeroHeight = (await page.locator('.factory-hero').boundingBox()).height
             assert.equal(
               await page
@@ -208,6 +250,19 @@ try {
                 .count(),
               0,
             )
+          }
+          if (path === 'factory/services') {
+            assert.equal(await page.locator('#experience').count(), 1)
+            assert.equal(await page.locator('#gmp').count(), 1)
+            assert.ok(
+              (await page.locator('#gmp').innerText()).includes(translations.company.gmpNote),
+            )
+            assert.ok(
+              (
+                await page.locator('section[aria-labelledby="company-contact-heading"]').innerText()
+              ).includes(translations.company.contactDesc),
+            )
+            checks++
           }
           if (path === 'windows/home') {
             const windowsHeight = (await page.locator('main section').first().boundingBox()).height

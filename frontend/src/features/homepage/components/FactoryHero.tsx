@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import heroSmall from '@/assets/images/factory/factory-hero-640.webp'
 import heroMedium from '@/assets/images/factory/factory-hero-1200.webp'
@@ -55,13 +55,6 @@ export function FactoryHero() {
             >
               {t('nav.discuss')}
               <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
-            </Link>
-            <Link
-              to={`${prefix}/factory/services` as never}
-              className="inline-flex items-center gap-4 px-2 py-2 text-white underline underline-offset-8"
-            >
-              {t('company.heroLink')}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </Reveal>
