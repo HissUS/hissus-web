@@ -5,7 +5,7 @@ import { Reveal } from './Reveal'
 const stages = [
   { key: 'planning', icon: ClipboardCheck, services: ['site', 'permits'] },
   { key: 'building', icon: HardHat, services: ['design', 'construction'] },
-  { key: 'operations', icon: Settings, services: ['operations', 'quality', 'people'] },
+  { key: 'operations', icon: Settings, services: ['operations', 'people'] },
 ] as const
 
 export function FactoryServices() {

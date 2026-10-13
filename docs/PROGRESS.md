@@ -1059,3 +1059,23 @@
   - **Expected**: All seven services remain readable without overflow. Gallery looping, viewer focus and language scroll retention continue to work; both locales use the same photo sequence. Quality-system support stays distinct from the Guaranteed Maximum Price construction model.
   - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/services`, `/tw/factory/services`
 - **Publication**: Push verified changes to `factory-website` for the established Netlify testing workflow. Screenshots are stored under `/tmp/hissus-one-stop-review`; no live deployment was inspected and no real email was sent.
+
+### [FIX-015] Balance Service Stages with Two Items Each (2026-10-12)
+
+- **Summary**: Combined factory operations and quality systems into “工廠營運與品質” / “Factory operations & quality,” preserving both capabilities in one concise description. Human resources remains the second item, so every service stage has two items in both languages.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/FactoryServices.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, check locale parity and run production browser regressions.
+  - **Expected**: Checks pass; 279 browser checks verify both languages at 1440/390/320px. Each service stage has exactly two items, with the merged operations/quality description localized and human resources retained.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Fail Case**: Open Traditional Chinese Services at 320px, then switch languages while scrolled into the service overview.
+  - **Expected**: Both versions display the same two-item grouping without missing translation keys or overflow. Quality-system support remains part of the merged item, separately from the GMP pricing explanation.
+  - **Command/URL**: `/factory/services`, `/tw/factory/services`
+- **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.

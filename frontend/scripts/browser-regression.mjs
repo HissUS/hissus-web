@@ -289,16 +289,23 @@ try {
             )
             assert.deepEqual(
               await services.locator('dt').allTextContents(),
-              ['site', 'permits', 'design', 'construction', 'operations', 'quality', 'people'].map(
+              ['site', 'permits', 'design', 'construction', 'operations', 'people'].map(
                 (key) => translations.company.coordination.services[key].title,
               ),
-              'all seven user-provided services are localized and grouped by stage',
+              'the complete service scope is localized with operations and quality combined',
             )
             assert.deepEqual(
               await services.locator('dd').allTextContents(),
-              ['site', 'permits', 'design', 'construction', 'operations', 'quality', 'people'].map(
+              ['site', 'permits', 'design', 'construction', 'operations', 'people'].map(
                 (key) => translations.company.coordination.services[key].desc,
               ),
+            )
+            assert.deepEqual(
+              await services.locator('ol > li').evaluateAll((stages) =>
+                stages.map((stage) => stage.querySelectorAll('dt').length),
+              ),
+              [2, 2, 2],
+              'each service stage has two items for a consistent layout',
             )
             assert.equal(
               await page.locator('.company-service-image img').getAttribute('alt'),

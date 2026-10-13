@@ -428,12 +428,8 @@
           "desc": "Bring the design into practice through coordinated construction planning and execution."
         },
         "operations": {
-          "title": "Factory operations",
-          "desc": "Support operational planning and the transition from facility setup to daily operations."
-        },
-        "quality": {
-          "title": "Quality systems",
-          "desc": "Help establish quality systems that support your production processes."
+          "title": "Factory operations & quality",
+          "desc": "Plan operations and establish quality systems as your facility moves into daily production."
         },
         "people": {
           "title": "Human resources",
