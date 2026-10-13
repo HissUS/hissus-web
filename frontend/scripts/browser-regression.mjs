@@ -25,7 +25,6 @@ const browser = await chromium.launch({
 const paths = [
   'factory/home',
   'factory/services',
-  'factory/about',
   'factory/contact',
   'windows/home',
   'windows/products?tab=windows',
@@ -207,7 +206,7 @@ try {
                 ),
               [
                 'company-hero-heading',
-                'intro-heading',
+                'about-heading',
                 'photo-heading',
                 'factory-steps-heading',
                 'company-contact-heading',
@@ -219,10 +218,29 @@ try {
               await page.locator('.factory-hero a').getAttribute('href'),
               `${prefix}/factory/contact`,
             )
-            const introduction = page.locator('section[aria-labelledby="intro-heading"]')
+            const introduction = page.locator('#about')
             assert.equal(
               await introduction.getByRole('link').getAttribute('href'),
-              `${prefix}/factory/about`,
+              `${prefix}/factory/services`,
+            )
+            assert.equal(
+              await introduction.getByRole('heading').innerText(),
+              translations.company.aboutTitle,
+            )
+            assert.ok((await introduction.innerText()).includes(translations.company.aboutDesc))
+            assert.equal(await introduction.locator('img').count(), 1)
+            assert.equal(
+              await introduction.locator('img').getAttribute('alt'),
+              translations.company.aboutImageAlt,
+            )
+            assert.equal(
+              await introduction
+                .locator('.company-about-blend')
+                .evaluate((element) =>
+                  getComputedStyle(element).backgroundImage.includes('linear-gradient'),
+                ),
+              true,
+              'the illustration fades into the section background',
             )
             const steps = page.locator('section[aria-labelledby="factory-steps-heading"]')
             assert.deepEqual(
@@ -632,7 +650,7 @@ try {
     for (const [oldPath, destination] of [
       ['/home', '/factory/home'],
       ['/services', '/factory/services'],
-      ['/about', '/factory/about'],
+      ['/about', '/factory/home'],
       ['/contact', '/factory/contact'],
       ['/window-screen-solutions', '/windows/home'],
       ['/products', '/windows/products'],
@@ -645,6 +663,20 @@ try {
       })
       await redirects.waitForURL(`${base}${prefix}${destination}?tab=single-handle#details`)
       await redirects.locator('h1').waitFor()
+      checks++
+    }
+    for (const aboutPath of ['/about', '/factory/about']) {
+      await redirects.goto(`${base}${prefix}${aboutPath}?campaign=about`, {
+        waitUntil: 'domcontentloaded',
+      })
+      await redirects.waitForURL(`${base}${prefix}/factory/home?campaign=about#about`)
+      await redirects.locator('#about').waitFor()
+      await redirects.waitForTimeout(300)
+      const aboutTop = (await redirects.locator('#about').boundingBox()).y
+      assert.ok(
+        aboutTop >= 0 && aboutTop < 180,
+        'About bookmarks open the homepage company section below the header',
+      )
       checks++
     }
     await redirects.goto(`${base}${prefix || '/'}?campaign=sample#intro`, {

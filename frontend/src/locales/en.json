@@ -296,9 +296,9 @@
     "servicesDesc": "Helping companies establish spaces for their operations, with a construction approach shaped by our team’s hospital and cleanroom experience.",
     "scopeTitle": "Begin with a defined scope.",
     "scopeDesc": "Your facility needs, construction scope, responsibilities, budget, and cooperation terms form the basis of the project discussion. Specific services and deliverables are confirmed in the project agreement.",
-    "aboutTitle": "One team. A thoughtful approach.",
-    "aboutDesc": "HISSUS is expanding its focus to factory setup and construction services while continuing to offer window and screen solutions. Our team brings hospital and cleanroom construction experience.",
-    "aboutPrinciple": "We believe a clear scope, transparent costs, and aligned interests are a useful foundation for a working relationship.",
+    "aboutTitle": "Construction experience.\nA personal approach.",
+    "aboutDesc": "HISSUS helps businesses establish factories and facilities. With hospital and cleanroom construction experience, our team brings a thoughtful, practical perspective to your next project.",
+    "aboutPrinciple": "We start by listening, so the conversation stays focused on what matters to your business.",
     "contactPageTitle": "Discuss your project",
     "contactPageDesc": "Tell us about your factory or facility needs and what you would like to discuss.",
     "quoteLink": "Request a window & screen quote",
@@ -398,7 +398,10 @@
         "title": "Discuss the approach",
         "desc": "Talk through responsibilities, budget and cooperation terms."
       }
-    }
+    },
+    "aboutLabel": "ABOUT HISSUS",
+    "aboutLink": "Discover our construction approach",
+    "aboutImageAlt": "Illustrative facility planning workspace with architectural drawings and an industrial building model."
   },
   "gallery": {
     "previous": "Previous images",

@@ -293,3 +293,46 @@ footer :focus-visible {
 .factory-hero :focus-visible {
   outline-color: white;
 }
+
+/* The company illustration flows into the page, with a quiet area behind the copy. */
+.company-about {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: white;
+  scroll-margin-top: 7rem;
+}
+.company-about-art {
+  position: relative;
+  order: 1;
+  height: clamp(16rem, 50vw, 24rem);
+}
+.company-about-blend {
+  background:
+    linear-gradient(to bottom, white, transparent 28%, transparent 72%, white),
+    linear-gradient(to right, white, transparent 8%, transparent 92%, white);
+}
+@media (min-width: 1024px) {
+  .company-about {
+    display: block;
+  }
+  .company-about-art {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+  .company-about-blend {
+    background:
+      linear-gradient(
+        to right,
+        white 4%,
+        rgb(255 255 255 / 97%) 26%,
+        rgb(255 255 255 / 86%) 45%,
+        transparent 72%
+      ),
+      linear-gradient(to bottom, white, transparent 16%, transparent 78%, white),
+      linear-gradient(to left, white, transparent 8%);
+  }
+}

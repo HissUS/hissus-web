@@ -20,7 +20,6 @@ const WindowScreenPage = lazyRouteComponent(
   () => import('../pages/WindowScreenPage'),
   'WindowScreenPage',
 )
-const AboutPage = lazyRouteComponent(() => import('../pages/AboutPage'), 'AboutPage')
 const ContactPage = lazyRouteComponent(() => import('../pages/ContactPage'), 'ContactPage')
 const LoginPage = lazyRouteComponent(() => import('../pages/LoginPage'), 'LoginPage')
 const ProductsPage = lazyRouteComponent(() => import('../pages/ProductsPage'), 'ProductsPage')
@@ -97,7 +96,6 @@ const publicPages = (
   [
     { path: SITE_PATHS.factory.home, component: HomePage },
     { path: SITE_PATHS.factory.services, component: ServicesPage },
-    { path: SITE_PATHS.factory.about, component: AboutPage },
     { path: SITE_PATHS.factory.contact, component: ContactPage },
     { path: SITE_PATHS.windows.home, component: WindowScreenPage },
     { path: SITE_PATHS.windows.products, component: ProductsPage },
@@ -112,6 +110,8 @@ const publicPages = (
 // Preserve locale, query selection and hash for bookmarked links.
 const aliases = {
   ...LEGACY_PATHS,
+  '/about': SITE_PATHS.factory.home,
+  '/factory/about': SITE_PATHS.factory.home,
   '/factory': SITE_PATHS.factory.home,
   '/windows': SITE_PATHS.windows.home,
 }
@@ -123,7 +123,8 @@ const legacyRoutes = Object.entries(aliases).flatMap(([path, destination]) => [
       throw redirect({
         to: destination as never,
         search: location.search as never,
-        hash: location.hash,
+        hash:
+          path === '/about' || path === '/factory/about' ? location.hash || 'about' : location.hash,
         replace: true,
       })
     },
@@ -135,7 +136,8 @@ const legacyRoutes = Object.entries(aliases).flatMap(([path, destination]) => [
       throw redirect({
         to: `/${params.country}${destination}` as never,
         search: location.search as never,
-        hash: location.hash,
+        hash:
+          path === '/about' || path === '/factory/about' ? location.hash || 'about' : location.hash,
         replace: true,
       })
     },

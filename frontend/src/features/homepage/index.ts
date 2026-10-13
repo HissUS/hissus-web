@@ -3,6 +3,7 @@ export {
   TrustSection,
   CatalogExplorer,
   CompanyContact,
+  CompanyAbout,
   ExperienceSection,
   GmpSection,
   FactoryImage,

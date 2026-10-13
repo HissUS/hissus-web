@@ -961,3 +961,37 @@
   - **Expected**: Page position is retained, all six photos remain in the loop, and links keep the `/tw` locale. Home contains neither full Experience nor GMP sections; both remain accessible on Services. No horizontal overflow appears at narrow widths.
   - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/services`, `/tw/factory/services`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
 - **Visual review and publication**: Full-page homepage screenshots in both languages at 1440/390px were inspected under `/tmp/hissus-home-story-review`. This verified update is published to the existing `factory-website` branch for the user's established Netlify testing workflow. No Netlify deployment was started or inspected from this environment, and no real email was sent.
+
+### [FIX-011] Integrated Homepage About Story with Blended Illustration (2026-10-12)
+
+- **Summary**: Combined “Who we are” and the former About page into one stronger bilingual company story directly after the homepage hero. Added a generated planning-workspace illustration that fades into white behind desktop copy and stacks softly beneath mobile copy; About bookmarks now redirect to the homepage section instead of repeating the content on a separate page.
+- **Affected Files**:
+  - `README.md`
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/src/pages/AboutPage.tsx` (removed; bookmarks remain supported)
+  - `frontend/src/router/index.tsx`
+  - `frontend/src/features/homepage/components/CompanyAbout.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/assets/index.css`
+  - `frontend/src/assets/images/factory/company-about-640.webp`
+  - `frontend/src/assets/images/factory/company-about-1200.webp`
+  - `frontend/src/assets/images/factory/company-about-full.webp`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, check locale parity and run inquiry regressions.
+  - **Expected**: All checks and 16 inquiry tests pass. New About copy/image alt text is bilingual; explicit headline breaks preserve natural reading. Email behavior is unchanged and tested with stub senders. No dependency or external CSP origin was added.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run production browser/CSP regressions and inspect the About section.
+  - **Expected**: 279 checks pass across both languages at 1440/390/320px, covering the combined About copy, section order, single generated image with gradient blending, Services link, direct/legacy About redirects, query/hash preservation, gallery looping and scroll retention. Six CSP pages have zero violations. Separate About-page checks are replaced by redirect checks; media/email externals remain stubbed.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Open `/factory/about?campaign=about`, `/about?campaign=about` or their `/tw` variants, including a supplied hash.
+  - **Expected**: Client routing resolves to the correct localized homepage, retains the query and existing hash, and defaults to `#about` when no hash is supplied. The default About anchor appears 112px below the viewport top in desktop/mobile checks. There is no second company-content page or redirect loop.
+  - **Command/URL**: `/factory/about?campaign=about`, `/tw/about?campaign=about`, `/factory/about?campaign=about#factory-gallery`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+- **Image and visual review**: The generated original remains at `/workspace/generated_images/exec-9bb141fb-9017-4787-a339-fc551c776248.png`. Three optimized 640/1200/1672px WebPs total 168,370 bytes. The fictional scene depicts no staff or identifiable client project; all six real gallery photos remain separate. Desktop/mobile/narrow screenshots in both languages were inspected under `/tmp/hissus-company-about-review`.
+- **Publication**: Publish the verified changes to the existing `factory-website` branch for the established Netlify testing workflow. No Netlify deployment was started or inspected from this environment, and no real email was sent.

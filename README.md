@@ -108,7 +108,7 @@ Disabled automatically in `prod` profile.
 | `/` | Redirects to `/factory/home` |
 | `/factory/home`, `/tw/factory/home` | Factory homepage, English / Traditional Chinese |
 | `/factory/services`, `/tw/factory/services` | Factory/facility services, experience and GMP |
-| `/factory/about`, `/tw/factory/about` | Company introduction |
+| `/factory/home#about`, `/tw/factory/home#about` | Company story; old About addresses redirect here |
 | `/factory/contact`, `/tw/factory/contact` | Facility inquiry form |
 | `/windows/home`, `/tw/windows/home` | Window and screen homepage |
 | `/windows/products`, `/tw/windows/products` | Full product catalog; `?tab=...` retains category selection |
