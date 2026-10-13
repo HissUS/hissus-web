@@ -200,6 +200,28 @@ test('method, media type, body size, origin and missing configuration have expli
   )
   assert.equal(sent.length, 0)
 })
+test('email pause switch blocks both forms before any provider call', async () => {
+  const handler = createInquiryHandler({
+    getConfig: () => ({
+      apiKey: 'test-only',
+      recipientEmail: 'team@example.com',
+      origins: ['https://hissus.com'],
+      emailsEnabled: false,
+    }),
+    sendMail: async () => {
+      throw new Error('sending is paused: provider must not be called')
+    },
+  })
+  for (const body of [valid, {
+    kind: 'facility', name: 'Test Company', subject: 'Facility setup',
+    email: valid.email, phone: '+1 469 288 3098', locale: 'en',
+  }]) {
+    const result = await run(handler, event(body))
+    assert.equal(result.statusCode, 503)
+    assert.equal(JSON.parse(result.body).code, 'UNAVAILABLE')
+    assert.ok(JSON.parse(result.body).requestId)
+  }
+})
 test('provider returned error or exception never claims success', async () => {
   for (const providerFailure of [
     { error: { message: 'mock failure' } },

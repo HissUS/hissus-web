@@ -87,3 +87,13 @@ Expect validation errors (400) until requests exceed the window, then an edge 42
 ## Remaining limits
 
 This rule limits the shared factory/window endpoint by IP/domain; changing the submitted email does not reset the key. Rotating IPs and hostnames can use other buckets. Turnstile, a global shared email cap and automatic spike alerts are still absent. Resend's own provider quotas are separate from this endpoint rule, and each accepted inquiry can send two messages. This fix does not establish protection against every spam campaign or volumetric DDoS attack.
+
+## Emergency sending pause (2026-10-12)
+
+The reported bounce pattern is consistent with automated form abuse; it does not establish the source of requests, a key compromise or deployed edge enforcement. Requests below five per minute per IP can still pass the declared limit. Origin headers can be spoofed by non-browser clients. Neither these checks nor the honeypot verifies a human or ownership of a submitted email address.
+
+The function now supports `INQUIRY_EMAIL_ENABLED`. With the setting absent, existing delivery behavior is preserved. When present, only `true` (case-insensitive, trimmed) enables sending; `false` or an invalid value pauses both forms before any Resend call. Paused valid requests return HTTP 503 / `UNAVAILABLE` with the existing localized form feedback and a request ID; the function never claims a paused inquiry reached the team. Logs contain the fixed `sending_disabled` reason and request ID, without submitted contact data.
+
+To pause after deploying this revision, set `INQUIRY_EMAIL_ENABLED=false` in Netlify for the Functions scope and relevant deploy contexts, then redeploy. Environment changes do not rewrite already published function bundles or old deploy permalinks. For an immediate stop across every deployment using an existing sending key, revoke that key in Resend. Legitimate form email stops too. Configure a replacement only after the desired protections are deployed and tested; keep keys in Netlify and never commit them or send them in chat.
+
+This switch is an emergency control, not a bot filter. Server-verified Turnstile and a shared global email budget remain outstanding; the user is choosing whether to add Turnstile or use Netlify-only protections. No dashboard settings or live provider calls were made. Seventeen stubbed inquiry tests cover the new pause path and existing sending behavior; local tests do not prove the production switch is enabled.

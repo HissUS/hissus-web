@@ -1156,3 +1156,20 @@
   - **Expected**: The overview is reached without a smooth-scroll animation; language switching retains the current position. At 768px and above, product selection does not trigger an overview jump.
   - **Command/URL**: `/windows/products`, `/tw/windows/products`
 - **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.
+
+### [FIX-020] Emergency Sending Pause for Both Inquiry Forms (2026-10-12)
+
+- **Summary**: Prioritized the reported email abuse during the SEO audit. Added an explicit `INQUIRY_EMAIL_ENABLED` control that pauses all inquiry email before provider calls while preserving current delivery when unset; it returns truthful existing service-unavailable feedback.
+- **Affected Files**:
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `docs/netlify-rate-limit-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Run actual-handler inquiry regressions, lint and Build/TypeScript.
+  - **Expected**: Seventeen stubbed inquiry tests pass, including both business types blocked without sending when paused. Existing validation, origins, edge metadata, email content and partial-success behavior remain intact.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry && pnpm lint && pnpm build`
+  - **Fail Case**: Set `INQUIRY_EMAIL_ENABLED=false` in a new Netlify function deployment, then submit either valid form.
+  - **Expected**: HTTP 503 / `UNAVAILABLE`, request ID and fixed pause log; no provider call and no false success message. Missing setting preserves delivery; explicitly invalid settings fail closed.
+  - **Command/URL**: `/factory/contact`, `/windows/quote`, `/.netlify/functions/quote`
+- **Deployment limit**: This revision must be deployed and the flag configured to pause live sending. Revoke the existing Resend key for an immediate stop, including old immutable deploys. No dashboard or provider action was taken; Turnstile/global-budget work remains pending user preference. The authorized SEO task remains in progress.

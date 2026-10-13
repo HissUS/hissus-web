@@ -134,7 +134,12 @@ function buildEmailHtml(opts: {
 type Mail = { from: string; to: string; replyTo: string; subject: string; html: string }
 type MailResult = { error: unknown; data?: unknown }
 type Dependencies = {
-  getConfig: () => { apiKey?: string; recipientEmail: string; origins: string[] }
+  getConfig: () => {
+    apiKey?: string
+    recipientEmail: string
+    origins: string[]
+    emailsEnabled?: boolean
+  }
   sendMail: (apiKey: string, mail: Mail) => Promise<MailResult>
 }
 
@@ -143,6 +148,10 @@ const dependencies: Dependencies = {
     apiKey: process.env.RESEND_API_KEY?.trim(),
     recipientEmail: process.env.QUOTE_RECIPIENT_EMAIL?.trim() || 'hiss.usatx@gmail.com',
     origins: getAllowedOrigins(process.env, buildOrigins),
+    // When explicitly configured, only "true" enables sending; a typo fails closed.
+    emailsEnabled:
+      process.env.INQUIRY_EMAIL_ENABLED === undefined ||
+      process.env.INQUIRY_EMAIL_ENABLED.trim().toLowerCase() === 'true',
   }),
   sendMail: (apiKey, mail) =>
     new Resend(apiKey).emails.send(mail, { signal: AbortSignal.timeout(8000) }),
@@ -201,6 +210,10 @@ export function createInquiryHandler(deps: Dependencies = dependencies) {
     if (headers.origin && !settings.origins.includes(headers.origin)) {
       console.error('Inquiry rejected', { requestId, reason: 'origin_denied' })
       return response(403, { code: 'ORIGIN_DENIED' })
+    }
+    if (settings.emailsEnabled === false) {
+      console.error('Inquiry sending paused', { requestId, reason: 'sending_disabled' })
+      return response(503, { code: 'UNAVAILABLE' })
     }
     if (!settings.apiKey) {
       console.error('Inquiry configuration unavailable', { requestId, reason: 'missing_api_key' })
