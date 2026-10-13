@@ -69,7 +69,7 @@ export function useTurnstile(locale: string, resetKey: number, onVerify: (token:
           sitekey,
           action: 'hissus_inquiry',
           theme: 'light',
-          size: 'compact',
+          size: 'normal',
           language: locale === 'zh-TW' ? 'zh-tw' : 'en',
           callback: (token) => {
             if (!cancelled) {
