@@ -995,3 +995,21 @@
   - **Command/URL**: `/factory/about?campaign=about`, `/tw/about?campaign=about`, `/factory/about?campaign=about#factory-gallery`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
 - **Image and visual review**: The generated original remains at `/workspace/generated_images/exec-9bb141fb-9017-4787-a339-fc551c776248.png`. Three optimized 640/1200/1672px WebPs total 168,370 bytes. The fictional scene depicts no staff or identifiable client project; all six real gallery photos remain separate. Desktop/mobile/narrow screenshots in both languages were inspected under `/tmp/hissus-company-about-review`.
 - **Publication**: Publish the verified changes to the existing `factory-website` branch for the established Netlify testing workflow. No Netlify deployment was started or inspected from this environment, and no real email was sent.
+
+### [FIX-012] Separate Homepage Image Sections with Starting Steps (2026-10-12)
+
+- **Summary**: Moved “How we begin” between About HISSUS and the factory gallery, giving the homepage a text section between its company illustration and project photos. The same order applies in both languages.
+- **Affected Files**:
+  - `frontend/src/pages/HomePage.tsx`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript and lint, then run the existing production browser regression suite.
+  - **Expected**: Build and lint pass; 279 browser checks pass across English and Traditional Chinese at 1440/390/320px. Section order is hero, About HISSUS, starting steps, gallery, contact.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && pnpm build && pnpm lint && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Fail Case**: Visit the localized homepage at narrow widths, follow an About bookmark, or switch languages while scrolled into the gallery.
+  - **Expected**: Starting steps still separate About and the gallery; no horizontal overflow appears, About bookmarks retain their destination, and language switching preserves page position. Gallery cycling and side arrows keep working.
+  - **Command/URL**: `/factory/home`, `/tw/factory/home`, `/factory/about`, `/tw/factory/about`
+- **Publication**: Push the verified update to `factory-website` for Netlify testing. No live Netlify deployment was inspected and no real email was sent.

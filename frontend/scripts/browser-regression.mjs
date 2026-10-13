@@ -207,11 +207,11 @@ try {
               [
                 'company-hero-heading',
                 'about-heading',
-                'photo-heading',
                 'factory-steps-heading',
+                'photo-heading',
                 'company-contact-heading',
               ],
-              'homepage prioritizes introduction, photos and simple next steps',
+              'homepage separates the About illustration and gallery with starting steps',
             )
             assert.equal(await page.locator('.factory-hero a').count(), 1)
             assert.equal(

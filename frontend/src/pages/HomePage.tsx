@@ -11,8 +11,8 @@ export function HomePage() {
     <>
       <FactoryHero />
       <CompanyAbout />
-      <FactoryGallery />
       <FactorySteps />
+      <FactoryGallery />
       <CompanyContact compact />
     </>
   )
