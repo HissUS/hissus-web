@@ -27,8 +27,7 @@ export function useInquiry(facility: boolean) {
     } else if (!firstName.trim() || !lastName.trim()) return 'quote.errors.nameRequired'
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return 'quote.errors.emailInvalid'
     if (!phone.trim()) return 'quote.errors.phoneRequired'
-    if (!(facility ? /^[+\d][\d ()-]{6,24}$/ : /^\d{10}$/).test(phone))
-      return 'quote.errors.phoneInvalid'
+    if (!/^[0-9]{10}$/.test(phone)) return 'quote.errors.phoneInvalid'
     if (!facility && !city.trim()) return 'quote.errors.cityRequired'
     if (!facility && !product) return 'quote.errors.productRequired'
     return null

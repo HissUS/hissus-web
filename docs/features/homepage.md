@@ -25,7 +25,7 @@ src/pages/WindowScreenPage.tsx
 
 ### 1. Hero Section (Owner: `homepage`)
 
-* **Visual**: Full-bleed `belc.jpg` background; gradient overlay `bg-linear-to-b from-transparent to-black/40`; image fades in with `animate-in fade-in duration-700`.
+* **Visual**: Full-bleed responsive WebP variants of the existing `belc.jpg` background; gradient overlay `bg-linear-to-b from-transparent to-black/40`; image fades in with `animate-in fade-in duration-700`.
 * **Typography**: `text-5xl font-bold tracking-tight text-white` headline; `text-xl text-white/90` subtitle.
 * **Dual CTAs** (locale-prefix-aware via `useLocale()`):
   * "Get A Quote" → `${prefix}/windows/quote` (`variant="default" size="lg"`)
@@ -80,7 +80,7 @@ Self-contained interactive product showcase. **No dependency on `products` featu
 | Key | Content |
 | --- | --- |
 | `homepage.hero.title` | "Modern Retractable Screens" |
-| `homepage.hero.subtitle` | "Safe, stylish, and award-winning retractable screen technology since 2017." |
+| `homepage.hero.subtitle` | "Retractable pleated screens for doors, windows and wider openings, configured around your space." |
 | `homepage.hero.explore` | "Explore Products" |
 | `products.spec.midgeProof` | "20 × 20 Midge Proof Strands" |
 | `products.spec.uvResistance` | "UPF 50+ UV Resistance" |
@@ -130,3 +130,7 @@ The gallery order is entrance IMG_1801, open factory floor IMG_1555, bright room
 ## Inquiry abuse protection
 
 Factory Contact and Window Quote include a compact Cloudflare Turnstile widget without changing their fields or business navigation. `useInquiry` includes the verified token with the POST, blocks unverified submission and resets the widget after each attempt. `netlify/turnstile.ts` performs server-side Siteverify; the shared function rejects invalid action/hostname/proof before any email and fails closed on missing configuration or provider outage. Public site key and server secret setup, key rotation, emergency sending pause and remaining global-budget limits are documented in [Netlify rate-limit review](../netlify-rate-limit-review.md). Browser/CSP fixtures stub all external verification and mail.
+
+## Crawlable public pages
+
+The existing React components render at build time and hydrate in the browser. Public SEO metadata, language alternates, canonical URLs and matching structured data use `src/lib/seo.ts`; sitemap/robots and host-aware preview indexing controls are documented in [SEO review](../seo-review.md). Catalog photos use responsive WebP variants of the unchanged originals, with accurate dimensions and descriptive bilingual alt text. Existing navigation, business separation, layout, galleries and inquiry Functions remain in place.

@@ -1,16 +1,7 @@
 import { ArrowLeftRight, Shield, Sun } from 'lucide-react'
-import dhScreendoor from '@/assets/images/double_handle/DH_screendoor.jpg'
-import mlFullview from '@/assets/images/multi_handle/ML_screendoor_fullview.jpg'
-import mlHori from '@/assets/images/multi_handle/ML_screendoor_hori.jpg'
-import mlInner from '@/assets/images/multi_handle/ML_screendoor_inner.jpg'
-import mlOutter from '@/assets/images/multi_handle/ML_screendoor_outter.jpg'
-import mlVert from '@/assets/images/multi_handle/ML_screendoor_vert.jpg'
-import shBackyard from '@/assets/images/single_handle/SH_backyard_screendoor.jpg'
-import shFront from '@/assets/images/single_handle/SH_front_screendoor.jpg'
-import shGarage from '@/assets/images/single_handle/SH_garage_screendoor.jpg'
-import shScreendoor from '@/assets/images/single_handle/SH_screendoor.jpg'
-import windowsImg from '@/assets/images/windows/windows.jpg'
 import type { CatalogCategory } from '../components/CatalogExplorer/types'
+
+import { screenImage } from './screenImages'
 
 const COMMON_SPECS = [
   { icon: Shield, labelKey: 'products.spec.midgeProof' },
@@ -29,11 +20,11 @@ export const CATALOG_DATA: CatalogCategory[] = [
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.wideSpan',
     images: [
-      { src: mlFullview, altKey: 'products.multiHandle' },
-      { src: mlHori, altKey: 'products.multiHandle' },
-      { src: mlInner, altKey: 'products.multiHandle' },
-      { src: mlOutter, altKey: 'products.multiHandle' },
-      { src: mlVert, altKey: 'products.multiHandle' },
+      screenImage('multi_handle/ML_screendoor_fullview.jpg', 'products.photos.mlFullview'),
+      screenImage('multi_handle/ML_screendoor_hori.jpg', 'products.photos.mlHori'),
+      screenImage('multi_handle/ML_screendoor_inner.jpg', 'products.photos.mlInner'),
+      screenImage('multi_handle/ML_screendoor_outter.jpg', 'products.photos.mlOutter'),
+      screenImage('multi_handle/ML_screendoor_vert.jpg', 'products.photos.mlVert'),
     ],
     videos: [
       { url: 'https://youtu.be/-A_QTFndg_A', titleKey: 'products.multiHandle' },
@@ -52,7 +43,7 @@ export const CATALOG_DATA: CatalogCategory[] = [
     descriptionKey: 'products.doubleHandleDescription',
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.entry',
-    images: [{ src: dhScreendoor, altKey: 'products.doubleHandle' }],
+    images: [screenImage('double_handle/DH_screendoor.jpg', 'products.photos.dhScreendoor')],
     videos: [
       { url: 'https://youtu.be/WVjZmSLttiM', titleKey: 'products.doubleHandle' },
       { url: 'https://youtu.be/f-OyCptcEXI', titleKey: 'products.doubleHandle' },
@@ -70,10 +61,10 @@ export const CATALOG_DATA: CatalogCategory[] = [
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.popular',
     images: [
-      { src: shFront, altKey: 'products.singleHandle' },
-      { src: shBackyard, altKey: 'products.singleHandle' },
-      { src: shGarage, altKey: 'products.singleHandle' },
-      { src: shScreendoor, altKey: 'products.singleHandle' },
+      screenImage('single_handle/SH_front_screendoor.jpg', 'products.photos.shFront'),
+      screenImage('single_handle/SH_backyard_screendoor.jpg', 'products.photos.shBackyard'),
+      screenImage('single_handle/SH_garage_screendoor.jpg', 'products.photos.shGarage'),
+      screenImage('single_handle/SH_screendoor.jpg', 'products.photos.shScreendoor'),
     ],
     videos: [{ url: 'https://youtu.be/YDsOInyymZI', titleKey: 'products.singleHandle' }],
     specs: COMMON_SPECS,
@@ -87,7 +78,7 @@ export const CATALOG_DATA: CatalogCategory[] = [
     descriptionKey: 'products.windowsDescription',
     availabilityKey: 'products.page.availability.available',
     statusKey: 'products.page.status.window',
-    images: [{ src: windowsImg, altKey: 'products.windows' }],
+    images: [screenImage('windows/windows.jpg', 'products.photos.windowsImg')],
     videos: [{ url: 'https://youtu.be/E988XNzyi-g', titleKey: 'products.windows' }],
     specs: COMMON_SPECS,
   },

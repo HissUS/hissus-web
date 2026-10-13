@@ -1,9 +1,7 @@
-import { usePageMetadata } from '../hooks/usePageMetadata'
 import { Outlet } from '@tanstack/react-router'
 import { useLocale } from '../hooks'
 
 export function AuthLayout() {
-  usePageMetadata()
   useLocale() // syncs i18n language with URL $country param
 
   return (

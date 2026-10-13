@@ -66,24 +66,28 @@ try {
           prefix ? 'zh-TW' : 'en',
         )
         const key = metadataKeys[path.split('?')[0]] || path
-        const expected = dictionaries[prefix ? 'zh-TW' : 'en'].company.metadata[key]
+        const metadata = dictionaries[prefix ? 'zh-TW' : 'en'].company.metadata
+        const expected = path.startsWith('windows/products')
+          ? metadata.productVariants.windows
+          : metadata[key]
         await page.waitForFunction((title) => document.title === title, expected.title)
         assert.equal(
           await page.locator('meta[name="description"]').getAttribute('content'),
           expected.desc,
         )
-        assert.deepEqual(
-          await page
-            .locator('link[data-hissus-locale]')
-            .evaluateAll((links) =>
-              links.map((link) => ({ lang: link.hreflang, href: link.href })),
-            ),
-          [
-            { lang: 'en', href: `https://hissus.com/${path.split('?')[0]}` },
-            { lang: 'zh-TW', href: `https://hissus.com/tw/${path.split('?')[0]}` },
-            { lang: 'x-default', href: `https://hissus.com/${path.split('?')[0]}` },
-          ],
-        )
+        if (key !== 'login' && key !== 'console')
+          assert.deepEqual(
+            await page
+              .locator('link[data-hissus-locale]')
+              .evaluateAll((links) =>
+                links.map((link) => ({ lang: link.hreflang, href: link.href })),
+              ),
+            [
+              { lang: 'en', href: `https://hissus.com/${path}` },
+              { lang: 'zh-TW', href: `https://hissus.com/tw/${path}` },
+              { lang: 'x-default', href: `https://hissus.com/${path}` },
+            ],
+          )
 
         assert.equal(
           await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth),
@@ -227,7 +231,9 @@ try {
               translations.company.aboutTitle,
             )
             assert.ok((await introduction.innerText()).includes(translations.company.aboutDesc))
-            assert.ok((await introduction.innerText()).includes(translations.company.aboutPrinciple))
+            assert.ok(
+              (await introduction.innerText()).includes(translations.company.aboutPrinciple),
+            )
             assert.deepEqual(
               await page.locator('#factory-gallery figure figcaption').allTextContents(),
               ['1801', '1555', '1821', '1771', '1811', '1366'].map(
@@ -303,9 +309,11 @@ try {
               ),
             )
             assert.deepEqual(
-              await services.locator('ol > li').evaluateAll((stages) =>
-                stages.map((stage) => stage.querySelectorAll('dt').length),
-              ),
+              await services
+                .locator('ol > li')
+                .evaluateAll((stages) =>
+                  stages.map((stage) => stage.querySelectorAll('dt').length),
+                ),
               [2, 2, 2],
               'each service stage has two items for a consistent layout',
             )
@@ -318,13 +326,19 @@ try {
             assert.equal(await page.locator('#gmp').count(), 1)
             assert.deepEqual(
               await page.locator('#gmp article h3').allTextContents(),
-              ['ceiling', 'transparent', 'savings'].map((key) => translations.company.gmp[key].title),
+              ['ceiling', 'transparent', 'savings'].map(
+                (key) => translations.company.gmp[key].title,
+              ),
             )
             assert.deepEqual(
               await page.locator('#gmp article p').allTextContents(),
-              ['ceiling', 'transparent', 'savings'].map((key) => translations.company.gmp[key].desc),
+              ['ceiling', 'transparent', 'savings'].map(
+                (key) => translations.company.gmp[key].desc,
+              ),
             )
-            assert.ok((await page.locator('#gmp').innerText()).includes(translations.company.gmpIntro))
+            assert.ok(
+              (await page.locator('#gmp').innerText()).includes(translations.company.gmpIntro),
+            )
             assert.ok(
               (await page.locator('#gmp').innerText()).includes(translations.company.gmpNote),
             )
@@ -797,7 +811,19 @@ try {
         await page.locator('select').nth(1).selectOption('windows')
       }
       await page.locator('input[type="email"]').fill('test@example.com')
-      await page.locator('input[type="tel"]').fill(facility ? '+886 912 345 678' : '4692883098')
+      if (facility) {
+        const phone = page.locator('input[type="tel"]')
+        assert.equal(await phone.getAttribute('maxlength'), '10')
+        assert.equal(await phone.getAttribute('inputmode'), 'numeric')
+        await phone.fill('abc')
+        assert.equal(await phone.inputValue(), '')
+        await phone.fill('123456789')
+        assert.equal(await phone.evaluate((input) => input.checkValidity()), false)
+        await phone.fill('12345678901')
+        assert.equal(await phone.inputValue(), '1234567890')
+        checks++
+      }
+      await page.locator('input[type="tel"]').fill('4692883098')
       let calls = 0
       await page.waitForFunction(() => !!window.__hissusVerification)
       await page.evaluate(() => window.__hissusVerification.expire())

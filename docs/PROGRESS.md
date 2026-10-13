@@ -1212,3 +1212,117 @@
   - **Expected**: No mail is sent. The server returns 403/503 and safe request IDs; browser submit stays disabled without proof and shows localized verification feedback. Never use public testing keys or a bypass in production.
   - **Command/URL**: `/factory/contact`, `/windows/quote`, `/.netlify/functions/quote`
 - **Owner setup still required**: Create a managed widget, configure the public site key for Builds and the secret for Functions, rotate the existing Resend key to disable older unprotected deployments, and redeploy. Live CAPTCHA, sending and rate enforcement remain unverified. Global sending caps and automatic alerts are not added. Publish this security fix before completing the ongoing SEO work.
+
+### [FIX-022] Verify Both Inquiry Proof Paths and Bound Factory Phone Input (2026-10-13)
+
+- **Summary**: Confirmed that all team/customer sending requires exact server-verified Turnstile action and hostname. Added both-form rejection/replay/outage coverage and enforced exactly ten ASCII phone digits in the factory browser and server schema.
+- **Affected Files**:
+  - `frontend/netlify/inquiry.ts`
+  - `frontend/src/features/inquiry/components/FacilityInquiryForm.tsx`
+  - `frontend/src/features/inquiry/useInquiry.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/netlify-rate-limit-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Run actual inquiry-handler/adapter regressions with provider fetch and sender stubs.
+  - **Expected**: 27 tests pass. Missing/malformed/invalid/expired/reused proof, wrong action/host, forged browser claims/headers and missing/unavailable verification produce no email calls. Real Siteverify request code is tested without provider access; phone punctuation, country prefixes, spaces, Unicode digits, invalid types and wrong lengths are rejected before providers.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+  - **Action**: Build with the public testing key and run production browser/CSP regressions.
+  - **Expected**: 285 browser checks and six CSP pages pass; both languages show digit-only ten-character factory input and reject nine-digit values. Expired proof disables both forms until fresh proof; safe feedback and payloads remain intact.
+  - **Command/URL**: `cd frontend && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Submit valid contact fields with an omitted token, failed Siteverify result, or already-consumed proof. Submit a factory phone such as `469-288-3098` directly to the adapter.
+  - **Expected**: 403 proof failure / 400 input failure, safe request ID, zero sends. Cloudflare owns expiry and atomic single-use enforcement across instances; no process-local cache is substituted.
+  - **Command/URL**: `/factory/contact`, `/windows/quote`, `/.netlify/functions/quote`, `/api/quote`
+- **Deployment limit**: Production key configuration, live replay/expiry behavior and Netlify enforcement require owner verification after redeployment. No real providers were contacted. Revoke the previous Resend key to disable older immutable deployments; shared global caps and automatic alerts remain outstanding.
+
+### [FEAT-023] Crawlable Bilingual Factory and Screen Pages (2026-10-13)
+
+- **Summary**: Added compatible build-time HTML rendering and hydration, unique per-business/page/category metadata, canonical/language/social markup, verified structured data, production sitemap/robots, real 404s and preview-host noindex. Optimized existing screen photographs without changing their design or discarding originals.
+- **Affected Files**:
+  - `README.md`
+  - `docs/PROGRESS.md`
+  - `docs/features/homepage.md`
+  - `docs/seo-review.md`
+  - `frontend/eslint.config.js`
+  - `frontend/netlify/edge-functions/seo.ts`
+  - `frontend/package.json`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/optimize-screen-images.mjs`
+  - `frontend/scripts/prerender.mjs`
+  - `frontend/scripts/seo-regression.mjs`
+  - `frontend/scripts/serve-built-site.mjs`
+  - `frontend/src/Application.tsx`
+  - `frontend/src/assets/images/belc-1200.webp`
+  - `frontend/src/assets/images/belc-1800.webp`
+  - `frontend/src/assets/images/belc-640.webp`
+  - `frontend/src/assets/images/double_handle/DH_screendoor-1200.webp`
+  - `frontend/src/assets/images/double_handle/DH_screendoor-1536.webp`
+  - `frontend/src/assets/images/double_handle/DH_screendoor-640.webp`
+  - `frontend/src/assets/images/logo.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_fullview-1200.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_fullview-1536.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_fullview-640.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-1200.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-1800.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_hori-640.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_inner-1200.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_inner-1536.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_inner-640.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_outter-1200.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_outter-1800.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_outter-640.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_vert-1200.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_vert-1536.webp`
+  - `frontend/src/assets/images/multi_handle/ML_screendoor_vert-640.webp`
+  - `frontend/src/assets/images/screen-image-manifest.json`
+  - `frontend/src/assets/images/single_handle/SH_backyard_screendoor-1200.webp`
+  - `frontend/src/assets/images/single_handle/SH_backyard_screendoor-1536.webp`
+  - `frontend/src/assets/images/single_handle/SH_backyard_screendoor-640.webp`
+  - `frontend/src/assets/images/single_handle/SH_front_screendoor-640.webp`
+  - `frontend/src/assets/images/single_handle/SH_front_screendoor-900.webp`
+  - `frontend/src/assets/images/single_handle/SH_garage_screendoor-1200.webp`
+  - `frontend/src/assets/images/single_handle/SH_garage_screendoor-1536.webp`
+  - `frontend/src/assets/images/single_handle/SH_garage_screendoor-640.webp`
+  - `frontend/src/assets/images/single_handle/SH_screendoor-640.webp`
+  - `frontend/src/assets/images/single_handle/SH_screendoor-720.webp`
+  - `frontend/src/assets/images/windows/windows-1200.webp`
+  - `frontend/src/assets/images/windows/windows-1536.webp`
+  - `frontend/src/assets/images/windows/windows-640.webp`
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `frontend/src/components/layout/MainLayout.tsx`
+  - `frontend/src/config/site.ts`
+  - `frontend/src/entry-server.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/GalleryCarousel.tsx`
+  - `frontend/src/features/homepage/components/CatalogExplorer/types.ts`
+  - `frontend/src/features/homepage/components/HeroSection.tsx`
+  - `frontend/src/features/homepage/constants/catalog.ts`
+  - `frontend/src/features/homepage/constants/screenImages.ts`
+  - `frontend/src/features/inquiry/components/TurnstileVerification.tsx`
+  - `frontend/src/hooks/usePageMetadata.ts`
+  - `frontend/src/layouts/AuthLayout.tsx`
+  - `frontend/src/lib/index.ts`
+  - `frontend/src/lib/seo.ts`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/main.tsx`
+  - `frontend/src/pages/LoginPage.tsx`
+  - `frontend/src/pages/ProductsPage.tsx`
+  - `frontend/src/router/index.tsx`
+  - `netlify.toml`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, locale parity and crawlable-output regression.
+  - **Expected**: Build/lint/locales pass; 30 rendered routes, 18 canonical public production URLs and 75 SEO checks pass. Raw HTML contains translated content/H1/metadata/JSON-LD before JavaScript; sitemap/XML, canonicals, public internal links/assets, statuses/aliases/query selection and host-indexing policy match expectations.
+  - **Command/URL**: `cd frontend && pnpm lint && pnpm check-locales && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo`
+  - **Action**: Render a deploy-preview context and restore production output after checking it.
+  - **Expected**: Preview pages are noindex and sitemap has zero canonicals; production output returns to 18. Preview-host Edge Function tests cover deploy previews and immutable production permalinks; API/Function responses are preserved.
+  - **Command/URL**: `cd frontend && CONTEXT=deploy-preview node scripts/prerender.mjs && CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo && CONTEXT=production node scripts/prerender.mjs`
+  - **Action**: Run browser/inquiry/CSP regressions and the actual Netlify Function bundler described in the rate-limit review.
+  - **Expected**: 285 browser checks, 27 inquiry tests and six CSP pages pass. Hydration/reloads, language and mobile product scrolling, photos/video fallback (including pre-hydration thumbnail failure), forms, keyboard and 1440/390/320px layouts remain functional. Bundler still emits API v2 and the 5/60s IP/domain declaration.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Request a missing route, unsupported locale or direct backing HTML path; inspect a product URL with tracking parameters.
+  - **Expected**: HTTP 404/noindex for unavailable routes; tracking/default-product duplicates consolidate to the correct clean canonical. Private routes/About aliases stay excluded from the public sitemap.
+  - **Command/URL**: `/windows/missing`, `/tw/factory/missing`, `/fr/factory/home`, `/_prerender/factory-home.html`, `/windows/products?tab=windows&utm_source=test`
+- **Remaining verification**: Actual Netlify edge registration, query rewrites, live sending, Google coverage and field Core Web Vitals need owner/deployment evidence. The outbound proxy blocked a live production crawl. No indexing/ranking gain is claimed. Search Console setup, sitemap submission, file explanations, findings and future content recommendations are in `docs/seo-review.md`.

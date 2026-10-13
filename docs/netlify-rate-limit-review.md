@@ -86,7 +86,7 @@ Expect validation errors (400) until requests exceed the window, then an edge 42
 
 ## Remaining limits
 
-This rule limits the shared factory/window endpoint by IP/domain; changing the submitted email does not reset the key. Rotating IPs and hostnames can use other buckets. Turnstile, a global shared email cap and automatic spike alerts are still absent. Resend's own provider quotas are separate from this endpoint rule, and each accepted inquiry can send two messages. This fix does not establish protection against every spam campaign or volumetric DDoS attack.
+This rule limits the shared factory/window endpoint by IP/domain; changing the submitted email does not reset the key. Rotating IPs and hostnames can use other buckets. Turnstile has since been added and is documented below. A global shared email cap and automatic spike alerts remain absent. Resend's own provider quotas are separate from this endpoint rule, and each accepted inquiry can send two messages. This fix does not establish protection against every spam campaign or volumetric DDoS attack.
 
 ## Emergency sending pause (2026-10-12)
 
@@ -96,7 +96,7 @@ The function now supports `INQUIRY_EMAIL_ENABLED`. With the setting absent, exis
 
 To pause after deploying this revision, set `INQUIRY_EMAIL_ENABLED=false` in Netlify for the Functions scope and relevant deploy contexts, then redeploy. Environment changes do not rewrite already published function bundles or old deploy permalinks. For an immediate stop across every deployment using an existing sending key, revoke that key in Resend. Legitimate form email stops too. Configure a replacement only after the desired protections are deployed and tested; keep keys in Netlify and never commit them or send them in chat.
 
-This switch is an emergency control, not a bot filter. Server-verified Turnstile and a shared global email budget remain outstanding; the user is choosing whether to add Turnstile or use Netlify-only protections. No dashboard settings or live provider calls were made. Seventeen stubbed inquiry tests cover the new pause path and existing sending behavior; local tests do not prove the production switch is enabled.
+This switch is an emergency control, not a bot filter. Server-verified Turnstile has since been added below; a shared global email budget remains outstanding. No dashboard settings or live provider calls were made. Seventeen stubbed inquiry tests cover the new pause path and existing sending behavior; local tests do not prove the production switch is enabled.
 
 
 ## Turnstile setup and verification (2026-10-12)
@@ -113,3 +113,13 @@ Both forms now require a fresh Cloudflare Turnstile token. The server calls Site
 The compact widget fits narrow forms without changing the site design. Netlify CSP adds only `https://challenges.cloudflare.com` to script/frame sources. Browser/CSP tests intercept that host, including a test-only frame, and never contact the real provider. For local stubbed browser tests, build with Cloudflare’s documented public testing site key: `VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build`. Never configure test keys in production. The server test suite uses fake tokens and stub verifiers/senders; it covers real Siteverify request construction without network calls.
 
 This is bot resistance, not proof of email-address ownership or a global sending budget. Distributed human/solver submissions can still consume provider quota; a shared global cap and automatic alert configuration remain outstanding. Actual dashboard setup, key rotation, live CAPTCHA behavior and deployed Netlify rate-limit enforcement must still be verified by the owner.
+
+## Expanded proof and phone validation (2026-10-13)
+
+Factory Contact now requires exactly ten ASCII phone digits in the browser and server schema. Spaces, punctuation, country prefixes, Unicode digits, non-string values and nine/eleven-digit values are rejected. The browser offers a numeric keyboard and limits input to ten digits. English and Traditional Chinese error messages specify this rule.
+
+`pnpm test:inquiry` now runs 27 tests. The expanded matrix covers both business payloads through the shared handler and deployed Request/Response adapter: omitted/blank/malformed tokens, invalid proof, Cloudflare `timeout-or-duplicate`, strict boolean success, exact action/host binding, spoofed browser verification fields and Origin/Host, missing secret, non-200 provider response, malformed JSON, timeout and network exception. Sender counters establish zero email calls on every rejection. Same-form, cross-form and simultaneous replays use the real Siteverify client with a fetch stub modeling Cloudflare single-use enforcement. Logs and responses are checked for safe fixed codes/request IDs without private values. Tests never call Cloudflare or Resend.
+
+Cloudflare, rather than a process-local token cache, enforces five-minute expiry and single-use tokens atomically across server instances. Every accepted inquiry requests server verification before either team or customer email. The browser's disabled button or claimed verification status is never authorization. The real request URL binds the proof hostname even when Origin is missing or forged. `/.netlify/functions/quote` and its existing `/api/quote` rewrite use the same protected function.
+
+These are code/test guarantees, not live dashboard evidence. After deploying the correct site key and function secret, verify a legitimate submission for each form, a direct request without proof, an invalid token, a consumed token, and a token older than five minutes. Rejections must produce no new entries in Resend. Never log/paste secrets or submitted customer data. Rotate the previous Resend key so older immutable deployments cannot send. Keep sending paused during setup or renewed abuse. CAPTCHA is bot resistance, not email ownership verification; distributed abuse/global budgets still require the separate controls described above.

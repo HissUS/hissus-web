@@ -1,27 +1,13 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { RouterProvider } from '@tanstack/react-router'
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import './assets/index.css'
-import './i18n'
+import i18n from './i18n'
 import { router } from './router'
+import { Application } from './Application'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60, // 1 minute
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-})
-
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
-    </QueryClientProvider>
-  </StrictMode>,
-)
+// Keep prerendered content visible until its route and language are ready.
+await i18n.changeLanguage(window.location.pathname.startsWith('/tw/') ? 'zh-TW' : 'en')
+await router.load()
+const root = document.getElementById('root')!
+const application = <Application router={router} />
+if (root.dataset.prerender === 'true') hydrateRoot(root, application)
+else createRoot(root).render(application)

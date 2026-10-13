@@ -28,6 +28,42 @@ status = 301
 force = true
 
 [[redirects]]
+from = "/index.html"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/factory/"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/windows/"
+to = "/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/factory/"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/"
+to = "/tw/windows/home"
+status = 301
+force = true
+
+[[redirects]]
 from = "/tw"
 to = "/tw/factory/home"
 status = 301
@@ -141,10 +177,305 @@ to = "/tw/windows/quote"
 status = 301
 force = true
 
+# Public HTML is rendered during the build; unknown routes return real 404s.
+[[redirects]]
+from = "/_prerender/*"
+to = "/404.html"
+status = 404
+force = true
+
+[[redirects]]
+from = "/windows/products"
+to = "/_prerender/windows-products-single-handle.html"
+status = 200
+force = true
+query = { tab = "single-handle" }
+
+[[redirects]]
+from = "/windows/products"
+to = "/_prerender/windows-products-multi-handle.html"
+status = 200
+force = true
+query = { tab = "multi-handle" }
+
+[[redirects]]
+from = "/windows/products"
+to = "/_prerender/windows-products-double-handle.html"
+status = 200
+force = true
+query = { tab = "double-handle" }
+
+[[redirects]]
+from = "/windows/products"
+to = "/_prerender/windows-products-windows.html"
+status = 200
+force = true
+query = { tab = "windows" }
+
+[[redirects]]
+from = "/factory/home"
+to = "/_prerender/factory-home.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/factory/home/"
+to = "/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/factory/services"
+to = "/_prerender/factory-services.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/factory/services/"
+to = "/factory/services"
+status = 301
+force = true
+
+[[redirects]]
+from = "/factory/contact"
+to = "/_prerender/factory-contact.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/factory/contact/"
+to = "/factory/contact"
+status = 301
+force = true
+
+[[redirects]]
+from = "/windows/home"
+to = "/_prerender/windows-home.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/windows/home/"
+to = "/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/windows/products"
+to = "/_prerender/windows-products.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/windows/products/"
+to = "/windows/products"
+status = 301
+force = true
+
+[[redirects]]
+from = "/windows/quote"
+to = "/_prerender/windows-quote.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/windows/quote/"
+to = "/windows/quote"
+status = 301
+force = true
+
+[[redirects]]
+from = "/login"
+to = "/_prerender/login.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/login/"
+to = "/login"
+status = 301
+force = true
+
+[[redirects]]
+from = "/console"
+to = "/_prerender/console.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/console/"
+to = "/console"
+status = 301
+force = true
+
+[[redirects]]
+from = "/factory/about"
+to = "/_prerender/factory-about.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/factory/about/"
+to = "/factory/about"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/products"
+to = "/_prerender/tw-windows-products-single-handle.html"
+status = 200
+force = true
+query = { tab = "single-handle" }
+
+[[redirects]]
+from = "/tw/windows/products"
+to = "/_prerender/tw-windows-products-multi-handle.html"
+status = 200
+force = true
+query = { tab = "multi-handle" }
+
+[[redirects]]
+from = "/tw/windows/products"
+to = "/_prerender/tw-windows-products-double-handle.html"
+status = 200
+force = true
+query = { tab = "double-handle" }
+
+[[redirects]]
+from = "/tw/windows/products"
+to = "/_prerender/tw-windows-products-windows.html"
+status = 200
+force = true
+query = { tab = "windows" }
+
+[[redirects]]
+from = "/tw/factory/home"
+to = "/_prerender/tw-factory-home.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/factory/home/"
+to = "/tw/factory/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/factory/services"
+to = "/_prerender/tw-factory-services.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/factory/services/"
+to = "/tw/factory/services"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/factory/contact"
+to = "/_prerender/tw-factory-contact.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/factory/contact/"
+to = "/tw/factory/contact"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/home"
+to = "/_prerender/tw-windows-home.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/windows/home/"
+to = "/tw/windows/home"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/products"
+to = "/_prerender/tw-windows-products.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/windows/products/"
+to = "/tw/windows/products"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/quote"
+to = "/_prerender/tw-windows-quote.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/windows/quote/"
+to = "/tw/windows/quote"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/login"
+to = "/_prerender/tw-login.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/login/"
+to = "/tw/login"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/console"
+to = "/_prerender/tw-console.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/console/"
+to = "/tw/console"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/factory/about"
+to = "/_prerender/tw-factory-about.html"
+status = 200
+force = true
+
+[[redirects]]
+from = "/tw/factory/about/"
+to = "/tw/factory/about"
+status = 301
+force = true
+
+[[redirects]]
+from = "/tw/windows/*"
+to = "/_prerender/tw-windows-not-found.html"
+status = 404
+
+[[redirects]]
+from = "/tw/*"
+to = "/_prerender/tw-not-found.html"
+status = 404
+
+[[redirects]]
+from = "/windows/*"
+to = "/_prerender/windows-not-found.html"
+status = 404
+
 [[redirects]]
 from = "/*"
-to = "/index.html"
-status = 200
+to = "/404.html"
+status = 404
+
 # Production static hosting policy; Vite development uses its own HMR policy.
 [[headers]]
 for = "/*"
@@ -159,3 +490,8 @@ Content-Security-Policy = "default-src 'self'; script-src 'self' https://challen
 for = "/assets/*"
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
+
+# Covers deploy previews, branch deploys and immutable production permalinks.
+[[edge_functions]]
+function = "seo"
+path = "/*"

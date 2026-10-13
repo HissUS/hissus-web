@@ -49,9 +49,14 @@ export function FacilityInquiryForm() {
               name="phone"
               type="tel"
               autoComplete="tel"
-              maxLength={25}
+              inputMode="numeric"
+              pattern="[0-9]{10}"
+              minLength={10}
+              maxLength={10}
               value={inquiry.phone}
-              onChange={(event) => inquiry.setPhone(event.target.value)}
+              onChange={(event) => {
+                if (/^[0-9]{0,10}$/.test(event.target.value)) inquiry.setPhone(event.target.value)
+              }}
               required
             />
           </label>

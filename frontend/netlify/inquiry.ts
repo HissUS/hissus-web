@@ -72,7 +72,7 @@ const facilityInquirySchema = z.object({
   ...sharedFields,
   kind: z.literal('facility'),
   name: text(160),
-  phone: text(25).regex(/^[+\d][\d ()-]{6,24}$/),
+  phone: z.string().regex(/^[0-9]{10}$/),
   subject: text(200),
 })
 

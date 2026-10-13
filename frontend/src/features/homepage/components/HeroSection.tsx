@@ -25,6 +25,14 @@ export function HeroSection() {
     <section aria-label={t('homepage.hero.title')} className={styles.section}>
       <img
         src={getAssetUrl(SITE_CONFIG.assets.heroImage)}
+        srcSet={SITE_CONFIG.assets.heroSources
+          .map(({ src, width }) => `${getAssetUrl(src)} ${width}w`)
+          .join(', ')}
+        sizes="100vw"
+        width={1800}
+        height={1031}
+        fetchPriority="high"
+        loading="eager"
         alt=""
         aria-hidden="true"
         className={styles.image}

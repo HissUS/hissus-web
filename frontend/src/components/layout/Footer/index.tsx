@@ -73,6 +73,10 @@ export function Footer() {
             <img
               src={getAssetUrl(SITE_CONFIG.assets.logo)}
               alt="Hissus"
+              width={569}
+              height={268}
+              loading="lazy"
+              decoding="async"
               className="h-18 w-auto brightness-0 invert opacity-80 sm:h-16"
             />
           </div>

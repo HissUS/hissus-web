@@ -106,7 +106,7 @@ test('screen inquiry notifies team and customer; HTML is escaped', async () => {
   assert.equal(sent[1].subject, '[HISS US WINDOWS QUOTE] Request received - Pleated Window Screen')
   assert.ok(sent.every((mail) => mail.html.includes('Window & Screen Quote')))
 })
-test('Chinese facility inquiry accepts a company name, international phone and inquiry subject', async () => {
+test('Chinese facility inquiry accepts a company name, 10-digit phone and inquiry subject', async () => {
   const { handler, sent } = fixture()
   const result = await run(
     handler,
@@ -115,7 +115,7 @@ test('Chinese facility inquiry accepts a company name, international phone and i
       name: '測試公司 <b>Test</b>',
       subject: '詢問最高限價 <script>test</script>',
       email: valid.email,
-      phone: '+886 912 345 678',
+      phone: valid.phone,
       message: '想了解合作方式',
       locale: 'zh-TW',
     }),
@@ -165,7 +165,7 @@ test('facility input requires only its own bounded name/contact/subject fields',
     kind: 'facility',
     name: 'Sample Company',
     email: valid.email,
-    phone: '+1 469 288 3098',
+    phone: valid.phone,
     subject: 'Facility setup',
     locale: 'en',
   }
@@ -231,7 +231,7 @@ test('email pause switch blocks both forms before any provider call', async () =
       name: 'Test Company',
       subject: 'Facility setup',
       email: valid.email,
-      phone: '+1 469 288 3098',
+      phone: valid.phone,
       locale: 'en',
     },
   ]) {
@@ -317,7 +317,7 @@ test('modern function keeps identical team/customer mail for both businesses and
         name: 'Sample <Company>',
         subject: 'Setup & GMP',
         email: valid.email,
-        phone: '+886 912 345 678',
+        phone: valid.phone,
         message: '<script>test</script>\nSecond line',
         locale,
       },
@@ -398,7 +398,7 @@ test('Netlify deploy permalink accepts inquiries while unrelated sites remain re
     name: 'Sample Company',
     subject: 'Facility setup',
     email: valid.email,
-    phone: '+1 469 288 3098',
+    phone: valid.phone,
     locale: 'en',
   }
   const allowed = await run(
@@ -679,4 +679,261 @@ test('actual verification client posts proof only to Cloudflare with a bounded t
   assert.deepEqual(await verifyTurnstileToken('mock-server-secret', 'mock-human-token'), proof)
   fetchMock.mock.mockImplementation(async () => new Response('', { status: 503 }))
   await assert.rejects(verifyTurnstileToken('mock-server-secret', 'mock-human-token'))
+})
+
+const facilityPayload = {
+  kind: 'facility',
+  name: 'Sample Co.',
+  subject: 'Factory setup',
+  email: valid.email,
+  phone: valid.phone,
+  locale: 'en',
+}
+const inquiries = [valid, facilityPayload]
+const secureSettings = {
+  apiKey: 'test-only',
+  recipientEmail: 'team@example.com',
+  origins: ['https://hissus.com', 'https://www.hissus.com'],
+  turnstileSecret: 'server-secret',
+}
+
+test('both forms reject missing, malformed, failed, expired and wrong-host/action tokens through both adapters', async (context) => {
+  const logs = []
+  context.mock.method(console, 'error', (...args) => logs.push(args))
+  const cases = [
+    [undefined, undefined, 403],
+    ['', undefined, 403],
+    ['   ', undefined, 403],
+    [null, undefined, 400],
+    [123, undefined, 400],
+    [{}, undefined, 400],
+    [[], undefined, 400],
+    ['x'.repeat(2049), undefined, 400],
+    ['private-token', { success: false, 'error-codes': ['invalid-input-response'] }, 403],
+    ['private-token', { success: false, 'error-codes': ['timeout-or-duplicate'] }, 403],
+    ['private-token', { success: 'true', hostname: 'hissus.com', action: 'hissus_inquiry' }, 403],
+    ['private-token', { success: true, hostname: 'hissus.com', action: 'another_form' }, 403],
+    [
+      'private-token',
+      { success: true, hostname: 'untrusted.example', action: 'hissus_inquiry' },
+      403,
+    ],
+    ['private-token', { success: true, hostname: 'www.hissus.com', action: 'hissus_inquiry' }, 403],
+    ['private-token', { success: true }, 403],
+    ['private-token', null, 403],
+    ['private-token', 'private-response', 403],
+  ]
+  for (const modern of [false, true]) {
+    for (const [token, proof, status] of cases) {
+      let sends = 0
+      let verifies = 0
+      const handler = (modern ? createInquiryFunction : createInquiryHandler)({
+        getConfig: () => secureSettings,
+        verifyToken: async () => {
+          verifies++
+          return proof
+        },
+        sendMail: async () => {
+          sends++
+          return { error: null }
+        },
+      })
+      for (const payload of inquiries) {
+        const body = JSON.stringify({
+          ...payload,
+          turnstileToken: token,
+          verified: true,
+          success: true,
+          captchaVerified: true,
+          'cf-turnstile-response': 'forged',
+        })
+        const response = modern
+          ? await handler(publicRequest(payload, { body }))
+          : await run(handler, event(payload, { body }))
+        assert.equal(modern ? response.status : response.statusCode, status)
+        const data = modern ? await response.json() : JSON.parse(response.body)
+        assert.equal(data.code, status === 400 ? 'INVALID_INPUT' : 'VERIFICATION_REQUIRED')
+        assert.deepEqual(Object.keys(data).sort(), ['code', 'requestId'])
+      }
+      assert.equal(sends, 0)
+      assert.equal(verifies, proof === undefined ? 0 : 2)
+    }
+  }
+  const output = JSON.stringify(logs)
+  for (const privateValue of [
+    'private-token',
+    'server-secret',
+    'private-response',
+    valid.email,
+    valid.phone,
+  ])
+    assert.equal(output.includes(privateValue), false)
+})
+
+test('actual Siteverify outages, bad JSON and missing secret never send for either business', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const fetchMock = context.mock.method(globalThis, 'fetch')
+  for (const modern of [false, true]) {
+    for (const secret of [undefined, 'server-secret']) {
+      for (const failure of [
+        () => new Response('', { status: 503 }),
+        () => new Response('{broken'),
+        () => {
+          throw new DOMException('private-timeout', 'TimeoutError')
+        },
+        () => {
+          throw new TypeError('private-network-error')
+        },
+      ]) {
+        let sends = 0
+        let verifies = 0
+        fetchMock.mock.mockImplementation(async () => {
+          verifies++
+          return failure()
+        })
+        const handler = (modern ? createInquiryFunction : createInquiryHandler)({
+          getConfig: () => ({ ...secureSettings, turnstileSecret: secret }),
+          sendMail: async () => {
+            sends++
+            return { error: null }
+          },
+        })
+        for (const payload of inquiries) {
+          const response = modern
+            ? await handler(publicRequest(payload))
+            : await run(handler, event(payload))
+          assert.equal(modern ? response.status : response.statusCode, 503)
+          const data = modern ? await response.json() : JSON.parse(response.body)
+          assert.equal(data.code, secret ? 'VERIFICATION_UNAVAILABLE' : 'UNAVAILABLE')
+          assert.deepEqual(Object.keys(data).sort(), ['code', 'requestId'])
+        }
+        assert.equal(sends, 0)
+        assert.equal(verifies, secret ? 2 : 0)
+      }
+    }
+  }
+})
+
+test('real verification path rejects same-form, cross-form and simultaneous replay for both forms', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const fetchMock = context.mock.method(globalThis, 'fetch')
+  for (const firstPayload of inquiries) {
+    const seen = new Set()
+    let sends = 0
+    fetchMock.mock.mockImplementation(async (url, options) => {
+      assert.equal(url, 'https://challenges.cloudflare.com/turnstile/v0/siteverify')
+      assert.equal(options.body.get('secret'), 'server-secret')
+      const token = options.body.get('response')
+      if (seen.has(token))
+        return Response.json({ success: false, 'error-codes': ['timeout-or-duplicate'] })
+      seen.add(token)
+      return Response.json({ success: true, hostname: 'hissus.com', action: 'hissus_inquiry' })
+    })
+    const handler = createInquiryFunction({
+      getConfig: () => secureSettings,
+      sendMail: async () => {
+        sends++
+        return { error: null }
+      },
+    })
+    assert.equal((await handler(publicRequest(firstPayload))).status, 200)
+    assert.equal(sends, 2)
+    for (const payload of inquiries)
+      assert.equal((await handler(publicRequest(payload))).status, 403)
+    assert.equal(sends, 2)
+    const responses = await Promise.all(
+      inquiries.map((payload) =>
+        handler(publicRequest({ ...payload, turnstileToken: 'another-token' })),
+      ),
+    )
+    assert.deepEqual(responses.map((response) => response.status).sort(), [200, 403])
+    assert.equal(sends, 4)
+  }
+})
+
+test('proof hostname must match request URL, irrespective of forged or omitted Origin/Host', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  let sends = 0
+  const handler = createInquiryFunction({
+    getConfig: () => secureSettings,
+    verifyToken: async () => ({ success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }),
+    sendMail: async () => {
+      sends++
+      return { error: null }
+    },
+  })
+  for (const payload of inquiries) {
+    for (const origin of [undefined, 'https://hissus.com']) {
+      const response = await handler(
+        new Request('https://www.hissus.com/.netlify/functions/quote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            host: 'hissus.com',
+            ...(origin ? { origin } : {}),
+          },
+          body: JSON.stringify({
+            ...payload,
+            turnstileToken: 'private-token',
+            hostname: 'hissus.com',
+          }),
+        }),
+      )
+      assert.equal(response.status, 403)
+      assert.equal((await response.json()).code, 'VERIFICATION_REQUIRED')
+    }
+  }
+  assert.equal(sends, 0)
+  // A missing Origin never skips proof verification, but a valid server-verified token works.
+  for (const payload of inquiries)
+    assert.equal(
+      (await handler(publicRequest(payload, { headers: { 'Content-Type': 'application/json' } })))
+        .status,
+      200,
+    )
+  assert.equal(sends, 4)
+})
+
+test('factory phone accepts only exactly ten ASCII digits before any provider access', async () => {
+  let verifies = 0
+  let sends = 0
+  const handler = createInquiryFunction({
+    getConfig: () => secureSettings,
+    verifyToken: async () => {
+      verifies++
+      return { success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }
+    },
+    sendMail: async () => {
+      sends++
+      return { error: null }
+    },
+  })
+  for (const phone of [
+    '',
+    '123456789',
+    '12345678901',
+    '469-288-3098',
+    '(469)2883098',
+    '+14692883098',
+    '469288309a',
+    ' 4692883098',
+    '4692883098 ',
+    '４６９２８８３０９８',
+    4692883098,
+    null,
+    [],
+    {},
+  ]) {
+    const result = await handler(publicRequest({ ...facilityPayload, phone }))
+    assert.equal(result.status, 400, String(phone))
+    assert.equal((await result.json()).code, 'INVALID_INPUT')
+  }
+  assert.equal(verifies, 0)
+  assert.equal(sends, 0)
+  assert.equal(
+    (await handler(publicRequest({ ...facilityPayload, phone: '0123456789' }))).status,
+    200,
+  )
+  assert.equal(verifies, 1)
+  assert.equal(sends, 2)
 })

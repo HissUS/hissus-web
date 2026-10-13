@@ -7,6 +7,8 @@ import {
   redirect,
   ScrollRestoration,
   useLocation,
+  notFound,
+  type RouterHistory,
 } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { AuthLayout } from '../layouts/AuthLayout'
@@ -14,6 +16,7 @@ import { MainLayout } from '../layouts/MainLayout'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { SITE_PATHS, LEGACY_PATHS, getSiteSection } from '@/lib'
+import { usePageMetadata } from '@/hooks/usePageMetadata'
 const HomePage = lazyRouteComponent(() => import('../pages/HomePage'), 'HomePage')
 const ServicesPage = lazyRouteComponent(() => import('../pages/ServicesPage'), 'ServicesPage')
 const WindowScreenPage = lazyRouteComponent(
@@ -28,6 +31,7 @@ const QuotePage = lazyRouteComponent(() => import('../pages/QuotePage'), 'QuoteP
 // ─── Root ────────────────────────────────────────────────────────────────────
 
 function RootComponent() {
+  usePageMetadata()
   const location = useLocation()
   const { i18n } = useTranslation()
   const locale = location.pathname.startsWith('/tw/') ? 'zh-TW' : 'en'
@@ -55,7 +59,7 @@ function RootComponent() {
 
   return (
     <>
-      <ScrollRestoration />
+      {!import.meta.env.SSR && <ScrollRestoration />}
       <Outlet />
     </>
   )
@@ -104,7 +108,14 @@ const publicPages = (
   ] as const
 ).flatMap(({ path, component }) => [
   createRoute({ getParentRoute: () => mainLayoutRoute, path, component }),
-  createRoute({ getParentRoute: () => mainLayoutRoute, path: `/$country${path}`, component }),
+  createRoute({
+    getParentRoute: () => mainLayoutRoute,
+    path: `/$country${path}`,
+    component,
+    beforeLoad: ({ params }) => {
+      if (params.country !== 'tw') throw notFound()
+    },
+  }),
 ])
 
 // Preserve locale, query selection and hash for bookmarked links.
@@ -133,6 +144,7 @@ const legacyRoutes = Object.entries(aliases).flatMap(([path, destination]) => [
     getParentRoute: () => rootRoute,
     path: `/$country${path}`,
     beforeLoad: ({ params, location }) => {
+      if (params.country !== 'tw') throw notFound()
       throw redirect({
         to: `/${params.country}${destination}` as never,
         search: location.search as never,
@@ -147,6 +159,7 @@ const countryIndex = createRoute({
   getParentRoute: () => rootRoute,
   path: '/$country',
   beforeLoad: ({ params, location }) => {
+    if (params.country !== 'tw') throw notFound()
     throw redirect({
       to: `/${params.country}/factory/home` as never,
       search: location.search as never,
@@ -174,12 +187,16 @@ const loginCountryRoute = createRoute({
   getParentRoute: () => authLayoutRoute,
   path: '/$country/login',
   component: LoginPage,
+  beforeLoad: ({ params }) => {
+    if (params.country !== 'tw') throw notFound()
+  },
 })
 
 function NotFoundPage() {
   const { t } = useTranslation()
-  const prefix = window.location.pathname.startsWith('/tw/') ? '/tw' : ''
-  const homePath = SITE_PATHS[getSiteSection(window.location.pathname)].home
+  const { pathname } = useLocation()
+  const prefix = pathname.startsWith('/tw/') ? '/tw' : ''
+  const homePath = SITE_PATHS[getSiteSection(pathname)].home
   return (
     <div className="company-container py-16">
       <h1 className="company-heading">{t('company.notFoundTitle')}</h1>
@@ -201,7 +218,13 @@ const routeTree = rootRoute.addChildren([
   authLayoutRoute.addChildren([loginRoute, loginCountryRoute]),
 ])
 
-export const router = createRouter({ routeTree })
+export function createSiteRouter(history?: RouterHistory) {
+  const siteRouter = createRouter({ routeTree, ...(history ? { history, isServer: true } : {}) })
+  // Route data is loaded before hydration. Keep TanStack's SSR boundary tree on both sides.
+  siteRouter.ssr = { manifest: undefined }
+  return siteRouter
+}
+export const router = createSiteRouter()
 
 declare module '@tanstack/react-router' {
   interface Register {

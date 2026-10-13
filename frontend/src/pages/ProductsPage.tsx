@@ -112,7 +112,15 @@ export function ProductsPage() {
                       <div className="flex flex-col gap-3 sm:flex-row">
                         <div className="relative h-44 w-full shrink-0 overflow-hidden rounded-2xl bg-gray-100 sm:h-24 sm:w-32">
                           <img
-                            src={thumbnail ? getAssetUrl(thumbnail.src) : ''}
+                            src={
+                              thumbnail
+                                ? getAssetUrl(thumbnail.sources?.[0].src ?? thumbnail.src)
+                                : ''
+                            }
+                            width={thumbnail?.width}
+                            height={thumbnail?.height}
+                            loading="lazy"
+                            decoding="async"
                             alt={thumbnail ? t(thumbnail.altKey) : t(category.nameKey)}
                             className="h-full w-full object-cover"
                           />
@@ -173,9 +181,7 @@ export function ProductsPage() {
                   {t('products.page.overview')}
                 </h2>
               </div>
-              <Card
-                className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5"
-              >
+              <Card className="overflow-hidden border-transparent shadow-xl ring-1 ring-black/5">
                 <div
                   className="h-2 bg-linear-to-r from-primary via-blue-500 to-indigo-600"
                   aria-hidden="true"
@@ -192,7 +198,7 @@ export function ProductsPage() {
 
                   <div className="space-y-2">
                     <CardTitle className="wrap-break-word text-2xl text-gray-900 sm:text-3xl">
-                      {t(active.nameKey)}
+                      <h3>{t(active.nameKey)}</h3>
                     </CardTitle>
                     <div className="h-px w-full bg-gray-200" aria-hidden="true" />
                     <CardDescription className="max-w-3xl text-base leading-relaxed text-gray-600 wrap-break-word">

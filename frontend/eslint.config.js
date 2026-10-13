@@ -21,8 +21,13 @@ export default defineConfig([
     },
   },
   {
-    // Shadcn variant exports and the code-based router are intentional boundaries.
-    files: ['src/components/ui/button.tsx', 'src/components/ui/badge.tsx', 'src/router/index.tsx'],
+    // Shadcn variant exports and the code-based router and build-time rendering entry are intentional boundaries.
+    files: [
+      'src/components/ui/button.tsx',
+      'src/components/ui/badge.tsx',
+      'src/router/index.tsx',
+      'src/entry-server.tsx',
+    ],
     rules: { 'react-refresh/only-export-components': 'off' },
   },
 ])

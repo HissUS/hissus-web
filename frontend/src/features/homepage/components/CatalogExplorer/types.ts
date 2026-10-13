@@ -8,6 +8,9 @@ export interface CatalogSpec {
 export interface CatalogImage {
   src: string
   altKey: string
+  width?: number
+  height?: number
+  sources?: { src: string; width: number }[]
 }
 
 export interface CatalogVideo {

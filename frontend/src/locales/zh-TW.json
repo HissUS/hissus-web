@@ -26,7 +26,7 @@
     "hero": {
       "cta": "取得報價",
       "explore": "瀏覽產品",
-      "subtitle": "自 2017 年起，提供安全、時尚且屢獲殊榮的捲簾紗窗技術。",
+      "subtitle": "捲收式摺疊紗門與紗窗，依您的空間需求選擇合適配置。",
       "title": "現代捲簾紗窗"
     },
     "trust": {
@@ -108,7 +108,7 @@
       "nameRequired": "名字與姓氏為必填。",
       "emailInvalid": "請輸入有效的電子郵件地址。",
       "phoneRequired": "電話號碼為必填。",
-      "phoneInvalid": "請輸入有效的電話號碼。",
+      "phoneInvalid": "請輸入 10 位數字的電話號碼，不含空格或符號。",
       "cityRequired": "請選擇一個德州城市。",
       "productRequired": "請選擇一個產品。",
       "submitFailed": "目前無法寄送您的詢問，請稍後再試或以電子郵件聯絡我們。"
@@ -241,8 +241,21 @@
       "trackless": "無軌道設計",
       "uvResistance": "UPF 50+ 抗紫外線"
     },
-    "title": "產品目錄",
-    "viewDetails": "查看詳情"
+    "title": "摺疊紗門與紗窗",
+    "viewDetails": "查看詳情",
+    "photos": {
+      "mlFullview": "多把手摺疊紗門圍合有頂露台",
+      "mlHori": "多把手露台紗門安裝正面",
+      "mlInner": "有頂露台內側的摺疊紗門",
+      "mlOutter": "摺疊紗門圍合露台的外觀",
+      "mlVert": "寬幅露台開口的直向紗門把手",
+      "dhScreendoor": "雙開門上的雙把手摺疊紗門",
+      "shFront": "入口門上的單把手摺疊紗門",
+      "shBackyard": "露台門口的單把手摺疊紗門",
+      "shGarage": "室內門口的單把手摺疊紗門",
+      "shScreendoor": "玻璃滑門旁的摺疊紗門",
+      "windowsImg": "兩扇相鄰窗戶上的摺疊紗窗"
+    }
   },
   "company": {
     "eyebrow": "HISSUS · 工廠與設施建置",
@@ -314,32 +327,32 @@
     "privacy": "您提供的聯絡資料將用於回覆此次詢問。請勿填入機密專案資訊。",
     "metadata": {
       "home": {
-        "title": "工廠建置與工程服務 | HISSUS",
-        "desc": "HISSUS 提供從規劃到營運的工廠與設施一站式統籌服務。瀏覽設施照片，與團隊討論您的建廠需求。"
+        "title": "工廠建置與設施規劃 | HISS US",
+        "desc": "HISS US 結合團隊的醫院與無塵室工程經驗，協助場地選擇、建築設計、工程統籌及營運準備。瀏覽設施影像，洽談您的建廠需求。"
       },
       "services": {
-        "title": "工廠與設施建置 | HISSUS",
-        "desc": "了解 HISSUS 建廠統籌服務：場地選擇、政府許可、建築設計、工程營建、工廠營運、品質系統與人力資源。"
+        "title": "工廠規劃與工程營建統籌 | HISS US",
+        "desc": "了解 HISS US 建廠一站式統籌服務：場地選擇、政府許可、建築設計、工程營建、工廠營運與品質系統，以及人力資源。"
       },
       "about": {
         "title": "關於我們 | HISSUS",
         "desc": "認識 HISSUS 的工廠與設施工程服務，以及持續提供的門窗與紗窗解決方案。"
       },
       "contact": {
-        "title": "洽談您的專案 | HISSUS",
-        "desc": "聯絡 HISSUS，分享您的工廠與設施建置需求。"
+        "title": "洽談工廠建置專案 | HISS US",
+        "desc": "與 HISS US 洽談工廠建置、工業設施規劃及工程統籌需求。分享您的專案想法、詢問主題與聯絡資料。"
       },
       "screens": {
-        "title": "門窗與紗窗解決方案 | HISSUS",
-        "desc": "瀏覽 HISSUS 可收折紗門產品、實際安裝圖庫與操作示範。"
+        "title": "摺疊紗門與紗窗解決方案 | HISS US",
+        "desc": "了解 HISS US 單把手、雙把手、多把手摺疊紗門及紗窗，瀏覽安裝照片與操作影片，選擇適合的產品並提出詢價。"
       },
       "products": {
-        "title": "門窗與紗窗產品目錄 | HISSUS",
-        "desc": "探索單把手、雙把手、多把手紗門及紗窗解決方案。"
+        "title": "摺疊紗門與紗窗產品 | HISS US",
+        "desc": "比較 HISS US 捲收式摺疊紗門與紗窗，查看各款產品的照片、操作示範、配置及客製化選項，了解適合您的門窗方案。"
       },
       "quote": {
-        "title": "門窗與紗窗詢價 | HISSUS",
-        "desc": "向 HISSUS 提交門窗與紗窗產品詢問。"
+        "title": "紗門與紗窗詢價 | HISS US",
+        "desc": "向 HISS US 提出單把手、雙把手、多把手紗門或摺疊紗窗詢價，提供所在地點、所需產品與聯絡資料。"
       },
       "login": {
         "title": "登入 | HISSUS",
@@ -348,6 +361,24 @@
       "console": {
         "title": "管理介面 | HISSUS",
         "desc": "HISSUS 管理介面。"
+      },
+      "productVariants": {
+        "singleHandle": {
+          "title": "單把手捲收式摺疊紗門 | HISS US",
+          "desc": "查看適用於前門與後院門的單把手摺疊紗門，瀏覽產品照片與操作示範，了解客製化選項並提出詢價。"
+        },
+        "multiHandle": {
+          "title": "適用於寬幅開口的多把手摺疊紗門 | HISS US",
+          "desc": "了解適用於寬幅開口的多把手捲收式摺疊紗門，查看產品照片、操作示範及配置選項，洽談客製化與詢價需求。"
+        },
+        "doubleHandle": {
+          "title": "雙把手捲收式摺疊紗門 | HISS US",
+          "desc": "了解適用於大型出入口的雙把手摺疊紗門，瀏覽產品照片與操作示範，查看客製化選項並提出詢價。"
+        },
+        "windows": {
+          "title": "摺疊紗窗 | HISS US",
+          "desc": "了解兼顧通風與防蟲的 HISS US 摺疊紗窗，查看產品照片、操作示範及客製化選項，洽談您的門窗需求。"
+        }
       }
     },
     "console": "管理介面: 即將推出",
@@ -467,6 +498,7 @@
     "loading": "正在載入驗證…",
     "expired": "驗證已過期，請重新驗證。",
     "unavailable": "驗證暫時無法使用，請稍後再試或透過電子郵件聯絡我們。",
-    "required": "請先完成驗證，再送出您的需求。"
+    "required": "請先完成驗證，再送出您的需求。",
+    "noScript": "請啟用 JavaScript，完成驗證後送出表單。"
   }
 }

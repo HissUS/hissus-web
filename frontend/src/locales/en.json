@@ -26,7 +26,7 @@
     "hero": {
       "cta": "Get Quote",
       "explore": "Explore Products",
-      "subtitle": "Safe, stylish, and award-winning retractable screen technology since 2017.",
+      "subtitle": "Retractable pleated screens for doors and windows, with configurations to suit your space.",
       "title": "Modern Retractable Screens"
     },
     "trust": {
@@ -108,7 +108,7 @@
       "nameRequired": "First and last name are required.",
       "emailInvalid": "Please enter a valid email address.",
       "phoneRequired": "Phone number is required.",
-      "phoneInvalid": "Please enter a valid phone number.",
+      "phoneInvalid": "Please enter a 10-digit phone number using digits only.",
       "cityRequired": "Please select a Texas city.",
       "productRequired": "Please select a product.",
       "submitFailed": "We could not send your request. Please try again or contact us by email."
@@ -241,12 +241,25 @@
       "trackless": "Trackless Design",
       "uvResistance": "UPF 50+ UV Resistance"
     },
-    "title": "Product Catalog",
-    "viewDetails": "View Details"
+    "title": "Screen doors & window screens",
+    "viewDetails": "View Details",
+    "photos": {
+      "mlFullview": "Multi-handle pleated screens enclosing a covered patio",
+      "mlHori": "Front view of a multi-handle patio screen installation",
+      "mlInner": "Interior view of pleated screens along a covered patio",
+      "mlOutter": "Exterior view of a patio enclosed with pleated screens",
+      "mlVert": "Vertical handles on a wide patio screen opening",
+      "dhScreendoor": "Double-handle pleated screen fitted to a double doorway",
+      "shFront": "Single-handle pleated screen fitted to a front door",
+      "shBackyard": "Single-handle pleated screen fitted to a patio doorway",
+      "shGarage": "Single-handle pleated screen at an interior doorway",
+      "shScreendoor": "Pleated screen alongside a sliding glass door",
+      "windowsImg": "Pleated window screens fitted to two adjacent windows"
+    }
   },
   "company": {
     "eyebrow": "HISSUS · FACTORIES & FACILITIES",
-    "heroTitle": "Build the space your business needs.",
+    "heroTitle": "Build the factory your business needs.",
     "heroDesc": "Factory setup, from planning to operations.",
     "heroLink": "Explore our approach",
     "introLabel": "WHO WE ARE",
@@ -314,32 +327,32 @@
     "privacy": "We use these contact details to respond to your inquiry. Please do not include confidential project information.",
     "metadata": {
       "home": {
-        "title": "Factory Setup & Construction | HISSUS",
-        "desc": "One-stop factory and facility coordination, from planning to operations. Explore facility photos and discuss your project with HISSUS."
+        "title": "Factory Setup & Facility Planning | HISS US",
+        "desc": "Plan your factory with HISS US: site selection, design, construction coordination and operational readiness, informed by hospital and cleanroom experience."
       },
       "services": {
-        "title": "Factory & Facility Services | HISSUS",
-        "desc": "Explore HISSUS factory services: site selection, permits, design, construction, operations, quality systems and human resources coordination."
+        "title": "Factory Planning & Construction Coordination | HISS US",
+        "desc": "Explore coordinated factory development: site selection, permits, architectural design, construction, operations and quality systems, and human resources."
       },
       "about": {
         "title": "About HISSUS",
         "desc": "Meet HISSUS: factory and facility construction informed by our team’s experience, alongside our window and screen solutions."
       },
       "contact": {
-        "title": "Discuss Your Project | HISSUS",
-        "desc": "Contact HISSUS to discuss your factory or facility needs."
+        "title": "Factory Project Inquiry | HISS US",
+        "desc": "Discuss factory setup, industrial facility planning and construction coordination with HISS US. Tell our team about your project and contact details."
       },
       "screens": {
-        "title": "Window & Screen Solutions | HISSUS",
-        "desc": "Browse HISSUS retractable screen products, real installation galleries, and demonstrations."
+        "title": "Retractable Screen Doors & Window Screens | HISS US",
+        "desc": "Discover HISS US single-handle, double-handle and multi-handle pleated screen doors and window screens. View installation photos and request a quote."
       },
       "products": {
-        "title": "Window & Screen Product Catalog | HISSUS",
-        "desc": "Explore single-handle, double-handle, multi-handle, and window screen solutions."
+        "title": "Pleated Screen Doors & Window Screens | HISS US",
+        "desc": "Compare HISS US retractable pleated screen doors and window screens. Explore product photos, demonstrations, configurations and customization options."
       },
       "quote": {
-        "title": "Request a Screen Quote | HISSUS",
-        "desc": "Send a window or screen product inquiry to HISSUS."
+        "title": "Screen Door & Window Screen Quotes | HISS US",
+        "desc": "Request a HISS US quote for single-handle, double-handle or multi-handle screen doors and pleated window screens. Share your location and product needs."
       },
       "login": {
         "title": "Login | HISSUS",
@@ -348,6 +361,24 @@
       "console": {
         "title": "Console | HISSUS",
         "desc": "HISSUS console."
+      },
+      "productVariants": {
+        "singleHandle": {
+          "title": "Single-Handle Retractable Screen Doors | HISS US",
+          "desc": "Explore single-handle pleated screens for front and backyard doors. View product photos, demonstrations and customization options, and request a quote."
+        },
+        "multiHandle": {
+          "title": "Multi-Handle Screens for Wide Door Openings | HISS US",
+          "desc": "Explore multi-handle retractable pleated screens for wider openings. View product photos and demonstrations, compare configurations and request a quote."
+        },
+        "doubleHandle": {
+          "title": "Double-Handle Retractable Screen Doors | HISS US",
+          "desc": "Explore double-handle retractable pleated screens for larger entryways. View product photos, demonstrations and customization options, and request a quote."
+        },
+        "windows": {
+          "title": "Pleated Window Screens | HISS US",
+          "desc": "Explore HISS US pleated window screens for ventilation and insect protection. View product photos, demonstrations and customization options, and request a quote."
+        }
       }
     },
     "console": "Console: coming soon",
@@ -467,6 +498,7 @@
     "loading": "Loading verification…",
     "expired": "Verification expired. Please verify again.",
     "unavailable": "Verification is temporarily unavailable. Please try again or contact us by email.",
-    "required": "Please complete verification before sending your request."
+    "required": "Please complete verification before sending your request.",
+    "noScript": "Enable JavaScript to verify and send this form."
   }
 }

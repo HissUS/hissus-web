@@ -5,7 +5,7 @@ export function LoginPage() {
 
   return (
     <div className="mx-auto mt-16 max-w-sm">
-      <h2 className="text-2xl font-semibold text-gray-900">{t('auth.loginTitle')}</h2>
+      <h1 className="text-2xl font-semibold text-gray-900">{t('auth.loginTitle')}</h1>
       <form className="mt-6 space-y-4">
         <div>
           <label htmlFor="login-email" className="block text-sm font-medium text-gray-700">

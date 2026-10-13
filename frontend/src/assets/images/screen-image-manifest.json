@@ -1,0 +1,210 @@
+{
+  "single_handle/SH_backyard_screendoor.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "single_handle/SH_backyard_screendoor-640.webp",
+        "width": 640
+      },
+      {
+        "file": "single_handle/SH_backyard_screendoor-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "single_handle/SH_backyard_screendoor-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "single_handle/SH_front_screendoor.jpg": {
+    "width": 900,
+    "height": 1200,
+    "sources": [
+      {
+        "file": "single_handle/SH_front_screendoor-640.webp",
+        "width": 640
+      },
+      {
+        "file": "single_handle/SH_front_screendoor-900.webp",
+        "width": 900
+      }
+    ]
+  },
+  "single_handle/SH_garage_screendoor.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "single_handle/SH_garage_screendoor-640.webp",
+        "width": 640
+      },
+      {
+        "file": "single_handle/SH_garage_screendoor-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "single_handle/SH_garage_screendoor-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "single_handle/SH_screendoor.jpg": {
+    "width": 720,
+    "height": 960,
+    "sources": [
+      {
+        "file": "single_handle/SH_screendoor-640.webp",
+        "width": 640
+      },
+      {
+        "file": "single_handle/SH_screendoor-720.webp",
+        "width": 720
+      }
+    ]
+  },
+  "multi_handle/ML_screendoor_fullview.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "multi_handle/ML_screendoor_fullview-640.webp",
+        "width": 640
+      },
+      {
+        "file": "multi_handle/ML_screendoor_fullview-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "multi_handle/ML_screendoor_fullview-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "multi_handle/ML_screendoor_hori.jpg": {
+    "width": 1800,
+    "height": 1350,
+    "sources": [
+      {
+        "file": "multi_handle/ML_screendoor_hori-640.webp",
+        "width": 640
+      },
+      {
+        "file": "multi_handle/ML_screendoor_hori-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "multi_handle/ML_screendoor_hori-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "multi_handle/ML_screendoor_inner.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "multi_handle/ML_screendoor_inner-640.webp",
+        "width": 640
+      },
+      {
+        "file": "multi_handle/ML_screendoor_inner-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "multi_handle/ML_screendoor_inner-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "multi_handle/ML_screendoor_outter.jpg": {
+    "width": 1800,
+    "height": 1350,
+    "sources": [
+      {
+        "file": "multi_handle/ML_screendoor_outter-640.webp",
+        "width": 640
+      },
+      {
+        "file": "multi_handle/ML_screendoor_outter-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "multi_handle/ML_screendoor_outter-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "multi_handle/ML_screendoor_vert.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "multi_handle/ML_screendoor_vert-640.webp",
+        "width": 640
+      },
+      {
+        "file": "multi_handle/ML_screendoor_vert-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "multi_handle/ML_screendoor_vert-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "double_handle/DH_screendoor.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "double_handle/DH_screendoor-640.webp",
+        "width": 640
+      },
+      {
+        "file": "double_handle/DH_screendoor-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "double_handle/DH_screendoor-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "windows/windows.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "sources": [
+      {
+        "file": "windows/windows-640.webp",
+        "width": 640
+      },
+      {
+        "file": "windows/windows-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "windows/windows-1536.webp",
+        "width": 1536
+      }
+    ]
+  },
+  "belc.jpg": {
+    "width": 1800,
+    "height": 1031,
+    "sources": [
+      {
+        "file": "belc-640.webp",
+        "width": 640
+      },
+      {
+        "file": "belc-1200.webp",
+        "width": 1200
+      },
+      {
+        "file": "belc-1800.webp",
+        "width": 1800
+      }
+    ]
+  }
+}

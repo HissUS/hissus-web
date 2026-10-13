@@ -38,6 +38,14 @@ function getYouTubeId(url: string): string | null {
   return null
 }
 
+// A prerendered poster may fail before React attaches its error handler.
+function restorePoster(image: HTMLImageElement | null, fallback?: string) {
+  if (image?.complete && image.naturalWidth === 0 && fallback && !image.dataset.fallback) {
+    image.dataset.fallback = 'true'
+    image.src = getAssetUrl(fallback)
+  }
+}
+
 export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   const { t } = useTranslation()
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -115,7 +123,7 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
   return (
     <>
       <div className="flex items-center justify-between px-4 mb-3">
-        <h2 className="text-md font-semibold text-gray-800">{t('products.gallery.imagesTitle')}</h2>
+        <h3 className="text-md font-semibold text-gray-800">{t('products.gallery.imagesTitle')}</h3>
       </div>
       <div className="group relative min-w-0 max-w-full overflow-x-clip">
         <div className="w-full max-w-full overflow-hidden" ref={emblaRef}>
@@ -134,8 +142,12 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                   <img
                     src={getAssetUrl(img.src)}
                     alt={t(img.altKey)}
-                    width="1200"
-                    height="900"
+                    srcSet={img.sources
+                      ?.map(({ src, width }) => `${getAssetUrl(src)} ${width}w`)
+                      .join(', ')}
+                    sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                    width={img.width}
+                    height={img.height}
                     loading="lazy"
                     decoding="async"
                     className="w-full aspect-4/3 object-cover transition-transform duration-300 group-hover/image:scale-[1.03]"
@@ -178,10 +190,10 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
       {videoItems.length > 0 ? (
         <div className="mt-6">
           <div className="flex items-center justify-between px-4">
-            <h2 className="text-md font-semibold text-gray-800">
+            <h3 className="text-md font-semibold text-gray-800">
               {' '}
               {t('products.gallery.videosTitle')}
-            </h2>
+            </h3>
           </div>
           <div className="group relative mt-3 min-w-0 max-w-full overflow-x-clip">
             <div className="w-full overflow-hidden" ref={videoEmblaRef}>
@@ -206,13 +218,8 @@ export function GalleryCarousel({ images, videos = [] }: GalleryCarouselProps) {
                             height="360"
                             loading="lazy"
                             className="absolute inset-0 h-full w-full object-cover"
-                            onError={(event) => {
-                              const fallback = images[0]?.src
-                              if (fallback && !event.currentTarget.dataset.fallback) {
-                                event.currentTarget.dataset.fallback = 'true'
-                                event.currentTarget.src = getAssetUrl(fallback)
-                              }
-                            }}
+                            ref={(image) => restorePoster(image, images[0]?.src)}
+                            onError={(event) => restorePoster(event.currentTarget, images[0]?.src)}
                           />
                           {isActive && (
                             <iframe
