@@ -464,7 +464,8 @@ try {
             .opacity === '1',
       )
       await next.scrollIntoViewIfNeeded()
-      assert.equal(await previous.isDisabled(), true)
+      assert.equal(await previous.isDisabled(), false)
+      assert.equal(await next.isDisabled(), false)
       const initialX = (await gallery.locator('figure').first().boundingBox()).x
       const initialY = await media.evaluate(() => window.scrollY)
       await next.click()
@@ -484,6 +485,49 @@ try {
         Math.abs((await gallery.locator('figure').first().boundingBox()).x - initialX) < 2,
         'carousel keyboard returns to first photo',
       )
+      checks++
+      const leadingPhoto = () =>
+        carousel.locator('figure button').evaluateAll((buttons) => {
+          const left = buttons[0].closest('[data-factory-carousel]').getBoundingClientRect().left
+          const distances = buttons.map((button) =>
+            Math.abs(button.getBoundingClientRect().left - left),
+          )
+          return distances.indexOf(Math.min(...distances))
+        })
+      const firstImage = await carousel.locator('figure img').first().boundingBox()
+      const previousBox = await previous.boundingBox()
+      const nextBox = await next.boundingBox()
+      assert.ok(previousBox.x < nextBox.x, 'gallery arrows occupy opposite sides')
+      for (const arrow of [previousBox, nextBox]) {
+        assert.ok(
+          arrow.y >= firstImage.y && arrow.y + arrow.height <= firstImage.y + firstImage.height,
+          'gallery arrows overlay the photos rather than sitting below them',
+        )
+        assert.ok(arrow.width >= 44 && arrow.height >= 44, 'gallery arrows retain touch targets')
+      }
+      await media.emulateMedia({ reducedMotion: 'reduce' })
+      await previous.click()
+      await media.waitForTimeout(50)
+      assert.equal(await leadingPhoto(), 5, 'previous wraps from the first to the last photo')
+      await next.click()
+      await media.waitForTimeout(50)
+      assert.equal(await leadingPhoto(), 0, 'next wraps from the last to the first photo')
+      for (let index = 1; index <= 6; index++) {
+        await next.click()
+        await media.waitForTimeout(50)
+        assert.equal(await leadingPhoto(), index % 6, 'every original photo remains in the loop')
+      }
+      assert.ok(
+        Math.abs((await media.evaluate(() => window.scrollY)) - initialY) < 2,
+        'looping controls retain the page position',
+      )
+      await media.keyboard.press('ArrowLeft')
+      await media.waitForTimeout(50)
+      assert.equal(await leadingPhoto(), 5, 'keyboard navigation wraps backward')
+      await media.keyboard.press('ArrowRight')
+      await media.waitForTimeout(50)
+      assert.equal(await leadingPhoto(), 0, 'keyboard navigation wraps forward')
+      await media.emulateMedia({ reducedMotion: 'no-preference' })
       checks++
       const trigger = gallery.locator('figure button').first()
       await trigger.click()

@@ -8,7 +8,7 @@ import { Reveal } from './Reveal'
 export function FactoryGallery() {
   const { t } = useTranslation()
   const { selected, dialog, open, move, close } = useFactoryGallery()
-  const { viewport, position, scroll } = useFactoryCarousel()
+  const { viewport, scroll } = useFactoryCarousel()
   const photo = selected === null ? null : FACTORY_PHOTOS[selected]
   return (
     <section
@@ -27,6 +27,7 @@ export function FactoryGallery() {
         <Reveal className="mt-16">
           <div
             data-factory-carousel
+            className="group relative min-w-0 max-w-full overflow-x-clip"
             role="region"
             aria-label={t('company.photosLabel')}
             aria-roledescription={t('gallery.carousel')}
@@ -48,12 +49,12 @@ export function FactoryGallery() {
                       type="button"
                       onClick={(event) => open(index, event.currentTarget)}
                       aria-label={t('company.viewPhoto', { caption: t(item.captionKey) })}
-                      className="group relative block w-full overflow-hidden rounded-2xl bg-gray-200"
+                      className="group/image relative block w-full overflow-hidden rounded-2xl bg-gray-200"
                     >
                       <FactoryImage
                         photo={item}
                         sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
-                        className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover/image:scale-[1.03]"
                       />
                       <Expand
                         className="absolute bottom-4 right-4 h-8 w-8 rounded bg-black/60 p-1 text-white"
@@ -67,24 +68,21 @@ export function FactoryGallery() {
                 ))}
               </div>
             </div>
-            <div className="mt-8 flex justify-end gap-4">
-              {(['previous', 'next'] as const).map((direction) => (
-                <button
-                  key={direction}
-                  type="button"
-                  onClick={() => scroll(direction)}
-                  disabled={!position[direction]}
-                  aria-label={t(`gallery.${direction}`)}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 transition-colors hover:border-primary hover:text-primary disabled:cursor-default disabled:opacity-35"
-                >
-                  {direction === 'previous' ? (
-                    <ChevronLeft aria-hidden="true" />
-                  ) : (
-                    <ChevronRight aria-hidden="true" />
-                  )}
-                </button>
-              ))}
-            </div>
+            {(['previous', 'next'] as const).map((direction) => (
+              <button
+                key={direction}
+                type="button"
+                onClick={() => scroll(direction)}
+                aria-label={t(`gallery.${direction}`)}
+                className={`absolute top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/70 text-gray-700 shadow-md backdrop-blur-md transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100 ${direction === 'previous' ? 'left-2 md:left-3' : 'right-2 md:right-3'}`}
+              >
+                {direction === 'previous' ? (
+                  <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
+            ))}
           </div>
         </Reveal>
       </div>

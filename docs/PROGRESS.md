@@ -911,3 +911,25 @@
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **Evidence and limits**: Current maintained official Netlify source/fixture and published bundler 16.3.0 were inspected; direct documentation requests were proxy-blocked. Temporary tooling retained release-age/checksum/lockfile verification and added no repository dependency. The user's remote path-only commit `d48f899` was fetched and preserved before editing. No push, deployment, real email or secret change was performed. Netlify account access is unavailable; deployed rule registration and HTTP 429 remain unverified. The review document provides exact registration checks and a bounded invalid-input Console test for manual production verification.
 - **Publication update**: The user subsequently authorized committing and pushing this fix to `factory-website`. No Netlify deployment was started or inspected from this environment; live rule registration and HTTP 429 still require the documented verification.
+
+### [FIX-009] Looping Factory Gallery with Window-Style Side Arrows (2026-10-12)
+
+- **Summary**: Matched the factory gallery to the window gallery's continuous looping and translucent circular side arrows. All six original photos, bilingual captions, touch dragging, reduced-motion behavior and native full-size viewer remain available; the user selected the requested gallery changes without the optional photo counter.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/FactoryGallery.tsx`
+  - `frontend/src/features/homepage/hooks/useFactoryCarousel.ts`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript and lint the gallery and updated regression script.
+  - **Expected**: Production build and lint pass. Existing Embla is reused with loop enabled; no dependency or asset changes are needed. Both controls remain active and occupy the left/right sides of the photos, with 44px touch targets.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint`
+  - **Action**: Run the production browser and CSP regressions.
+  - **Expected**: 275 browser checks pass in both languages at 1440/390/320px, including a complete forward six-photo cycle and backward wrapping, keyboard wrapping, reduced motion, side-arrow placement and page-position retention. Six CSP pages have zero violations; external player/mail responses are stubbed.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`
+  - **Fail Case**: Move backward from the first photo and forward from the last, then open and close a photo viewer.
+  - **Expected**: The carousel wraps without disabling either arrow; the viewer retains keyboard navigation/Escape and restores focus without scrolling. No duplicate photo nodes or page overflow are introduced. Controls remain visible on mobile and appear on desktop hover or keyboard focus.
+  - **Command/URL**: `/factory/home#factory-gallery` and `/tw/factory/home#factory-gallery`; `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+- **Visual review**: Desktop/mobile screenshots in `/tmp/hissus-factory-loop-review` were inspected. After local verification, the user authorized committing and pushing this gallery update to `factory-website` for Netlify testing. No Netlify deployment was started or inspected from this environment.
