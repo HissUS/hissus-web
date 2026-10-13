@@ -1349,3 +1349,17 @@
   - **Fail Case**: Expire verification or resize below the normal widget's required width during form entry.
   - **Expected**: No clipped verification UI or stale callback authorization; proof is reset and both email paths still require server verification. Production widget keys and live Cloudflare/Resend behavior remain owner checks.
   - **Command/URL**: `/factory/contact`, `/windows/quote`
+
+### [FIX-025] Footer Factory Link Opens Factory Home (2026-10-13)
+
+- **Summary**: Pointed the footer's existing Factory & Facility Services link to the factory homepage, retaining the current language and link label.
+- **Affected Files**:
+  - `frontend/src/components/layout/Footer/index.tsx`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript and lint; inspect generated English and Traditional Chinese footer links.
+  - **Expected**: Build/lint pass. Footer factory link opens `/factory/home` in English and `/tw/factory/home` in Traditional Chinese on both business sites.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint`; `/windows/home`, `/tw/windows/home`, `/factory/home`, `/tw/factory/home`
+  - **Fail Case**: Use the footer factory link while viewing the Chinese window site.
+  - **Expected**: It opens the Chinese factory homepage, preserving language.
+  - **Command/URL**: `/tw/windows/home`

@@ -131,7 +131,7 @@ export function Footer() {
                 {t('footer.businesses')}
               </h3>
               <Link
-                to={`${prefix}/factory/services` as never}
+                to={`${prefix}/factory/home` as never}
                 className="inline-flex items-center text-sm hover:text-white hover:underline"
               >
                 {t('nav.services')}
