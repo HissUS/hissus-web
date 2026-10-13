@@ -1094,3 +1094,21 @@
   - **Expected**: Chinese shows the requested sentence; English retains its existing operations/quality description.
   - **Command/URL**: `/tw/factory/services`, `/factory/services`
 - **Publication**: Push to `factory-website` for Netlify testing. No live deployment was inspected.
+
+### [FIX-017] Give the Cooperation Model a Distinct Layout (2026-10-12)
+
+- **Summary**: Replaced the GMP section’s numbered three-column cards with a navy summary panel and three vertical icon-led benefit rows on a soft blue background. Desktop displays the summary and benefits side by side; mobile stacks them, distinguishing this section from one-stop service coordination.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/scripts/browser-regression.mjs`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint and run production browser regressions with layout screenshots.
+  - **Expected**: Build and lint pass; 279 browser checks pass in both languages at 1440/390/320px. All three GMP principle headings/descriptions, model introduction and contract/certification clarification remain intact. No dependency, image or translation change is introduced.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && pnpm build && pnpm lint && CHROMIUM_PATH=/usr/bin/chromium SCREENSHOT_DIR=/tmp/hissus-gmp-layout-review pnpm test:browser`
+  - **Fail Case**: View Traditional Chinese Services at 320px and switch languages while scrolled into the GMP section.
+  - **Expected**: The summary and three benefits remain readable without horizontal overflow; the original locale scroll-retention behavior and contractual caveats remain. The GMP section uses vertical benefit rows, while service coordination retains three stages with two items each.
+  - **Command/URL**: `/factory/services#gmp`, `/tw/factory/services#gmp`
+- **Publication**: Push verified changes to `factory-website` for Netlify testing. Layout screenshots are stored under `/tmp/hissus-gmp-layout-review`; no live deployment was inspected and no real email was sent.

@@ -314,6 +314,15 @@ try {
             )
             assert.equal(await page.locator('#experience').count(), 1)
             assert.equal(await page.locator('#gmp').count(), 1)
+            assert.deepEqual(
+              await page.locator('#gmp article h3').allTextContents(),
+              ['ceiling', 'transparent', 'savings'].map((key) => translations.company.gmp[key].title),
+            )
+            assert.deepEqual(
+              await page.locator('#gmp article p').allTextContents(),
+              ['ceiling', 'transparent', 'savings'].map((key) => translations.company.gmp[key].desc),
+            )
+            assert.ok((await page.locator('#gmp').innerText()).includes(translations.company.gmpIntro))
             assert.ok(
               (await page.locator('#gmp').innerText()).includes(translations.company.gmpNote),
             )

@@ -51,35 +51,45 @@ export function GmpSection() {
     { key: 'savings', icon: Handshake },
   ]
   return (
-    <section id="gmp" className="company-section" aria-labelledby="gmp-heading">
+    <section id="gmp" className="company-section bg-blue-50/60" aria-labelledby="gmp-heading">
       <Reveal className="company-container">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="company-eyebrow">{t('company.gmpLabel')}</p>
-            <h2 id="gmp-heading" className="company-heading mt-8">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="rounded-3xl bg-slate-950 p-6 text-white sm:p-10">
+            <p className="text-sm font-semibold tracking-widest text-blue-100">
+              {t('company.gmpLabel')}
+            </p>
+            <h2 id="gmp-heading" className="company-heading mt-6">
               {t('company.gmpTitle')}
             </h2>
+            <div className="mt-8 border-t border-white/20 pt-8">
+              <p className="text-4xl font-medium tracking-tight sm:text-5xl">GMP</p>
+              <p className="mt-3 text-sm leading-relaxed text-blue-100">
+                {t('company.gmpFull')}
+              </p>
+              <p className="mt-6 text-base leading-relaxed text-slate-200">
+                {t('company.gmpIntro')}
+              </p>
+            </div>
           </div>
-          <div className="lg:pt-8">
-            <p className="text-sm font-semibold text-primary">GMP / {t('company.gmpFull')}</p>
-            <p className="company-copy mt-4">{t('company.gmpIntro')}</p>
+          <div className="divide-y divide-blue-200/70">
+            {items.map(({ key, icon: Icon }) => (
+              <article key={key} className="flex gap-5 py-7 first:pt-0 last:pb-0 sm:gap-6">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-white text-primary sm:h-14 sm:w-14">
+                  <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.25} aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-medium sm:text-2xl">
+                    {t(`company.gmp.${key}.title`)}
+                  </h3>
+                  <p className="mt-3 leading-relaxed text-gray-600">
+                    {t(`company.gmp.${key}.desc`)}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
-          {items.map(({ key, icon: Icon }, i) => (
-            <article key={key} className="border-t border-gray-300 pt-8">
-              <div className="flex items-center justify-between text-primary">
-                <Icon className="h-8 w-8" strokeWidth={1.25} aria-hidden="true" />
-                <span className="text-sm tabular-nums" aria-hidden="true">
-                  0{i + 1}
-                </span>
-              </div>
-              <h3 className="mt-8 text-2xl font-medium">{t(`company.gmp.${key}.title`)}</h3>
-              <p className="mt-4 leading-relaxed text-gray-600">{t(`company.gmp.${key}.desc`)}</p>
-            </article>
-          ))}
-        </div>
-        <p className="mt-16 max-w-4xl border-l-2 border-primary pl-8 text-sm leading-relaxed text-gray-600">
+        <p className="mt-8 max-w-5xl text-sm leading-relaxed text-slate-600">
           {t('company.gmpNote')}
         </p>
       </Reveal>
