@@ -13,7 +13,7 @@ export function TurnstileVerification({
   return (
     <div className="space-y-3" aria-label={t('verification.label')}>
       <p className="text-sm text-gray-600">{t('verification.label')}</p>
-      <div ref={container} data-inquiry-verification className="min-h-35" />
+      <div ref={container} data-inquiry-verification className="min-h-[65px]" />
       {status !== 'ready' && (
         <p
           role={status === 'loading' ? undefined : 'alert'}
