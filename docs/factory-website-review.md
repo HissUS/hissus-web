@@ -123,4 +123,4 @@ The factory gallery starts with the glass-front entrance (1801), open factory fl
 
 ## Cooperation model presentation (2026-10-12)
 
-The GMP section now has a navy summary panel and a vertical list of its three principles against a soft blue background. Desktop uses two columns; mobile stacks the summary above the list. This gives the cooperation model a different rhythm from the three numbered service-stage columns. All English/Traditional Chinese GMP content remains intact, including the agreed-scope/approved-change conditions and clarification that this is a pricing model.
+The GMP section now has a light-gray summary panel, subtle gray borders and icons, and a vertical list of its three principles on a white background. Desktop uses two columns; mobile stacks the summary above the list. This gives the cooperation model a different rhythm from the three numbered service-stage columns. All English/Traditional Chinese GMP content remains intact, including the agreed-scope/approved-change conditions and clarification that this is a pricing model.

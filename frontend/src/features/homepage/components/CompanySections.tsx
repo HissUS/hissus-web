@@ -51,30 +51,30 @@ export function GmpSection() {
     { key: 'savings', icon: Handshake },
   ]
   return (
-    <section id="gmp" className="company-section bg-blue-50/60" aria-labelledby="gmp-heading">
+    <section id="gmp" className="company-section" aria-labelledby="gmp-heading">
       <Reveal className="company-container">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="rounded-3xl bg-slate-950 p-6 text-white sm:p-10">
-            <p className="text-sm font-semibold tracking-widest text-blue-100">
+          <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 text-gray-950 sm:p-10">
+            <p className="text-sm font-semibold tracking-widest text-gray-500">
               {t('company.gmpLabel')}
             </p>
             <h2 id="gmp-heading" className="company-heading mt-6">
               {t('company.gmpTitle')}
             </h2>
-            <div className="mt-8 border-t border-white/20 pt-8">
+            <div className="mt-8 border-t border-gray-200 pt-8">
               <p className="text-4xl font-medium tracking-tight sm:text-5xl">GMP</p>
-              <p className="mt-3 text-sm leading-relaxed text-blue-100">
+              <p className="mt-3 text-sm leading-relaxed text-gray-500">
                 {t('company.gmpFull')}
               </p>
-              <p className="mt-6 text-base leading-relaxed text-slate-200">
+              <p className="mt-6 text-base leading-relaxed text-gray-600">
                 {t('company.gmpIntro')}
               </p>
             </div>
           </div>
-          <div className="divide-y divide-blue-200/70">
+          <div className="divide-y divide-gray-200">
             {items.map(({ key, icon: Icon }) => (
               <article key={key} className="flex gap-5 py-7 first:pt-0 last:pb-0 sm:gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-white text-primary sm:h-14 sm:w-14">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 sm:h-14 sm:w-14">
                   <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.25} aria-hidden="true" />
                 </div>
                 <div>
@@ -89,7 +89,7 @@ export function GmpSection() {
             ))}
           </div>
         </div>
-        <p className="mt-8 max-w-5xl text-sm leading-relaxed text-slate-600">
+        <p className="mt-8 max-w-5xl text-sm leading-relaxed text-gray-600">
           {t('company.gmpNote')}
         </p>
       </Reveal>

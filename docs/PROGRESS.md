@@ -1112,3 +1112,23 @@
   - **Expected**: The summary and three benefits remain readable without horizontal overflow; the original locale scroll-retention behavior and contractual caveats remain. The GMP section uses vertical benefit rows, while service coordination retains three stages with two items each.
   - **Command/URL**: `/factory/services#gmp`, `/tw/factory/services#gmp`
 - **Publication**: Push verified changes to `factory-website` for Netlify testing. Layout screenshots are stored under `/tmp/hissus-gmp-layout-review`; no live deployment was inspected and no real email was sent.
+
+### [FIX-018] Soften the GMP Section Palette (2026-10-12)
+
+- **Summary**: Replaced the prominent navy/blue GMP palette with a white section, a light-gray summary panel and subtle gray borders, text and icons. The two-column summary/vertical-benefits layout and all bilingual content remain intact.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `docs/features/homepage.md`
+  - `docs/factory-website-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript and lint.
+  - **Expected**: Both checks pass; changes are limited to color classes and documentation.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint`
+  - **Action**: Check the production GMP section and inspect screenshots in English and Traditional Chinese at 1440/390/320px.
+  - **Expected**: Six page checks pass with all principle headings/descriptions, model introduction and contract clarification intact, no horizontal overflow and no browser errors. The neutral panel blends with the existing page; mobile still stacks the summary above the benefits.
+  - **Command/URL**: `/factory/services#gmp`, `/tw/factory/services#gmp`; screenshots under `/tmp/hissus-gmp-neutral-review`.
+  - **Fail Case**: View Services at 320px in either language.
+  - **Expected**: Text stays legible on the light backgrounds and the summary/benefits stay within the viewport.
+  - **Command/URL**: `/factory/services#gmp`, `/tw/factory/services#gmp`
+- **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.

@@ -121,4 +121,4 @@ The gallery order is entrance IMG_1801, open factory floor IMG_1555, bright room
 
 ## Distinct GMP cooperation layout
 
-`GmpSection` uses a pale blue section with a dark navy summary panel for the model name, headline and introduction. Budget ceiling, transparent costs and shared savings appear as three vertical icon-led rows beside it on desktop and beneath it on mobile. Removing the numbered three-column cards distinguishes the pricing model from the one-stop service stages. The original bilingual GMP definition, contract/approved-change terms and certification clarification remain unchanged.
+`GmpSection` uses a white section with a softly bordered light-gray summary panel for the model name, headline and introduction. Budget ceiling, transparent costs and shared savings appear as three vertical icon-led rows beside it on desktop and beneath it on mobile. Removing the numbered three-column cards distinguishes the pricing model from the one-stop service stages. The original bilingual GMP definition, contract/approved-change terms and certification clarification remain unchanged.
