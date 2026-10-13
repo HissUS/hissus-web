@@ -19,7 +19,13 @@ buildSync({
   format: 'cjs',
   outfile: output,
 })
-const { createInquiryHandler, config } = require(output)
+const {
+  createInquiryHandler,
+  createInquiryFunction,
+  config,
+  default: netlifyFunction,
+  ...otherExports
+} = require(output)
 const diagnosticsOutput = join(temporary, 'diagnostics.cjs')
 buildSync({
   entryPoints: ['netlify/inquiryDiagnostics.ts'],
@@ -48,9 +54,9 @@ const event = (body, extras = {}) => ({
   isBase64Encoded: false,
   ...extras,
 })
-function fixture(results = []) {
+function fixture(results = [], modern = false) {
   const sent = []
-  const handler = createInquiryHandler({
+  const handler = (modern ? createInquiryFunction : createInquiryHandler)({
     getConfig: () => ({
       apiKey: 'test-only',
       recipientEmail: 'team@example.com',
@@ -212,9 +218,111 @@ test('confirmation failure reports team receipt without encouraging duplicate ma
   assert.deepEqual(JSON.parse(result.body), { success: true, confirmationSent: false })
 })
 test('Netlify edge limits are declared; this test does not establish deployed enforcement', () => {
+  assert.equal(typeof netlifyFunction, 'function')
+  assert.equal(Object.hasOwn(otherExports, 'handler'), false)
+  assert.equal(config.path, '/.netlify/functions/quote')
   assert.equal(config.rateLimit.windowLimit, 5)
   assert.equal(config.rateLimit.windowSize, 60)
   assert.deepEqual(config.rateLimit.aggregateBy, ['ip', 'domain'])
+})
+
+const publicRequest = (body, extras = {}) =>
+  new Request('https://hissus.com/.netlify/functions/quote', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: 'https://hissus.com' },
+    body: JSON.stringify(body),
+    ...extras,
+  })
+
+test('modern public entry preserves validation, method, size, origin and request ID responses', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const { handler, sent } = fixture([], true)
+  for (const [input, status, code] of [
+    [publicRequest({}), 400, 'INVALID_INPUT'],
+    [publicRequest(valid, { body: '{' }), 400, 'INVALID_INPUT'],
+    [new Request('https://hissus.com/.netlify/functions/quote'), 405, 'METHOD_NOT_ALLOWED'],
+    [publicRequest(valid, { method: 'PUT' }), 405, 'METHOD_NOT_ALLOWED'],
+    [publicRequest(valid, { body: 'x'.repeat(22001) }), 413, 'TOO_LARGE'],
+    [publicRequest(valid, { body: '中'.repeat(6000) }), 413, 'TOO_LARGE'],
+    [publicRequest(valid, { headers: { 'content-type': 'text/plain' } }), 415, 'INVALID_INPUT'],
+    [
+      publicRequest(valid, {
+        headers: { 'content-type': 'application/json', origin: 'https://untrusted.example' },
+      }),
+      403,
+      'ORIGIN_DENIED',
+    ],
+  ]) {
+    const result = await handler(input)
+    assert.ok(result instanceof Response)
+    assert.equal(result.status, status)
+    const data = await result.json()
+    assert.equal(data.code, code)
+    assert.equal(result.headers.get('x-request-id'), data.requestId)
+    assert.equal(result.headers.get('cache-control'), 'no-store')
+    if (status === 405) assert.equal(result.headers.get('allow'), 'POST')
+  }
+  // The deployed default export itself rejects empty submissions before provider access.
+  assert.equal((await netlifyFunction(publicRequest({}))).status, 400)
+  assert.equal(sent.length, 0)
+})
+
+test('modern function keeps identical team/customer mail for both businesses and languages', async () => {
+  for (const locale of ['en', 'zh-TW']) {
+    for (const payload of [
+      { ...valid, locale },
+      {
+        kind: 'facility',
+        name: 'Sample <Company>',
+        subject: 'Setup & GMP',
+        email: valid.email,
+        phone: '+886 912 345 678',
+        message: '<script>test</script>\nSecond line',
+        locale,
+      },
+    ]) {
+      const previous = fixture()
+      const modern = fixture([], true)
+      const expected = await run(previous.handler, event(payload))
+      const actual = await modern.handler(publicRequest(payload))
+      assert.equal(actual.status, expected.statusCode)
+      assert.deepEqual(await actual.json(), JSON.parse(expected.body))
+      assert.deepEqual(modern.sent, previous.sent)
+      assert.equal(modern.sent.length, 2)
+    }
+  }
+  for (const failure of [
+    { error: { name: 'validation_error', message: 'mock rejection' } },
+    new Error('mock transport failure'),
+  ]) {
+    const { handler, sent } = fixture([failure], true)
+    assert.equal((await handler(publicRequest(valid))).status, 502)
+    assert.equal(sent.length, 1)
+  }
+  const partial = fixture([{ error: null }, { error: { message: 'mock failure' } }], true)
+  const receipt = await partial.handler(publicRequest(valid))
+  assert.equal(receipt.status, 200)
+  assert.deepEqual(await receipt.json(), { success: true, confirmationSent: false })
+})
+
+test('modern request reader cancels oversized streams before consuming the remaining body', async () => {
+  let pulls = 0
+  let cancelled = false
+  const stream = new ReadableStream({
+    pull(controller) {
+      pulls++
+      controller.enqueue(new Uint8Array(9000))
+    },
+    cancel() {
+      cancelled = true
+    },
+  })
+  const { handler, sent } = fixture([], true)
+  const response = await handler(publicRequest(valid, { body: stream, duplex: 'half' }))
+  assert.equal(response.status, 413)
+  assert.equal(cancelled, true)
+  assert.ok(pulls <= 3)
+  assert.equal(sent.length, 0)
 })
 
 test('Netlify deploy permalink accepts inquiries while unrelated sites remain rejected', async (context) => {

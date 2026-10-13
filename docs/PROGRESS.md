@@ -884,3 +884,30 @@
   - **Expected**: Markup is displayed as text in email bodies; subject text remains a single line with the correct business prefix. Notification failure still returns 502 without claiming success; optional customer-confirmation failure retains team-receipt success.
   - **Command/URL**: `cd frontend && pnpm test:inquiry`
 - **Sending status**: Previews and handler checks use stub senders. No real email, secret, dashboard or deployment was changed. Deploy the latest branch commit for the revised email templates.
+
+### [FIX-008] Discoverable Netlify Inquiry Rate-Limit Metadata (2026-10-12)
+
+- **Summary**: Reproduced Netlify omitting inline rate-limit metadata for the legacy `handler` entry, even with the user's explicit endpoint path. Migrated only the public entry to the modern default Request/Response API using an adapter over the existing inquiry core; actual Netlify bundling now emits API v2, the unchanged endpoint and the required IP/domain rule.
+- **Affected Files**:
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/verify-netlify-function.mjs`
+  - `docs/netlify-rate-limit-review.md`
+  - `docs/inquiry-email-review.md`
+  - `docs/security-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, check locale parity and run inquiry regressions.
+  - **Expected**: All checks and 16 inquiry tests pass. The actual default export accepts native Request/Response; 400/405/413/415/403, no-store responses and request IDs remain correct. Valid mocked submissions produce identical team/customer emails for both businesses/languages; provider failures and partial success remain truthful.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Bundle the real function with Netlify's published bundler and inspect its generated manifest and compiled exports.
+  - **Expected**: Exactly one endpoint, API version 2, a default export plus named config, and a `rate_limit` traffic rule with sliding window 5/60 and IP/domain keys. Before migration, the same bundler emitted API version 1 with no traffic rule. Generated Lambda bootstrap exports are expected. This verifies local discovery, not live registration/enforcement.
+  - **Command/URL**: `cd frontend && NETLIFY_BUNDLER_MODULE=/tmp/hissus-netlify-rate-tooling/node_modules/@netlify/zip-it-and-ship-it/dist/main.js node scripts/verify-netlify-function.mjs`
+  - **Action**: Run existing production browser/CSP checks and generate temporary mail previews.
+  - **Expected**: 269 browser checks pass; six CSP pages have zero violations. Eight email templates, selector and subject manifest remain byte-identical to tracked previews; mail/media are stubbed. Temporary comparison output is `/tmp/hissus-rate-email-previews`.
+  - **Command/URL**: With production preview on port 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp && node scripts/preview-inquiry-emails.mjs /tmp/hissus-rate-email-previews`
+  - **Fail Case**: Pass the modern entry an oversized streaming body, invalid origin, unsupported method or empty JSON submission.
+  - **Expected**: Oversized streams are cancelled before further consumption and return 413; invalid origins return 403; unsupported methods return 405 with Allow: POST; empty JSON returns 400. No mail is sent in these cases.
+  - **Command/URL**: `cd frontend && pnpm test:inquiry`
+- **Evidence and limits**: Current maintained official Netlify source/fixture and published bundler 16.3.0 were inspected; direct documentation requests were proxy-blocked. Temporary tooling retained release-age/checksum/lockfile verification and added no repository dependency. The user's remote path-only commit `d48f899` was fetched and preserved before editing. No push, deployment, real email or secret change was performed. Netlify account access is unavailable; deployed rule registration and HTTP 429 remain unverified. The review document provides exact registration checks and a bounded invalid-input Console test for manual production verification.
+- **Publication update**: The user subsequently authorized committing and pushing this fix to `factory-website`. No Netlify deployment was started or inspected from this environment; live rule registration and HTTP 429 still require the documented verification.

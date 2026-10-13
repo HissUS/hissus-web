@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { inquirySchema, getAllowedOrigins, getMailFailureDetails } from '..'
-import type { Config, Handler } from '@netlify/functions'
+import type { Config, HandlerEvent } from '@netlify/functions'
 import { Resend } from 'resend'
 import buildOrigins from '../../.netlify/inquiry-origins.json'
 import en from '../../src/locales/en.json'
@@ -158,12 +158,17 @@ export const config: Config = {
   },
 }
 
-export function createInquiryHandler(deps: Dependencies = dependencies): Handler {
-  return async (event) => {
+type InquiryEvent = Pick<HandlerEvent, 'httpMethod' | 'headers' | 'body' | 'isBase64Encoded'>
+
+export function createInquiryHandler(deps: Dependencies = dependencies) {
+  return async (event: InquiryEvent) => {
     const requestId = randomUUID()
     const logMailFailure = (phase: 'notification' | 'confirmation', error: unknown) =>
       console.error('Inquiry mail failed', { requestId, phase, ...getMailFailureDetails(error) })
-    const response = (statusCode: number, body: Record<string, unknown>) => ({
+    const response = (
+      statusCode: number,
+      body: Record<string, unknown>,
+    ): { statusCode: number; headers: Record<string, string>; body: string } => ({
       statusCode,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -296,4 +301,47 @@ export function createInquiryHandler(deps: Dependencies = dependencies): Handler
   }
 }
 
-export const handler = createInquiryHandler()
+// Bound the modern Request stream before creating the existing inquiry event.
+async function readInquiryBody(request: Request) {
+  if (
+    request.method !== 'POST' ||
+    !request.headers.get('content-type')?.toLowerCase().startsWith('application/json') ||
+    !request.body
+  )
+    return ''
+  const reader = request.body.getReader()
+  const chunks: Uint8Array[] = []
+  let size = 0
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      size += value.byteLength
+      // Feed a bounded oversized sentinel to the existing 413 response path.
+      if (size > 16384) return 'x'.repeat(16385)
+      chunks.push(value)
+    }
+    return Buffer.concat(chunks).toString('utf8')
+  } catch {
+    // An unreadable body follows the existing malformed-JSON response path.
+    return '{'
+  } finally {
+    await reader.cancel().catch(() => {})
+  }
+}
+
+export function createInquiryFunction(deps: Dependencies = dependencies) {
+  const handleInquiry = createInquiryHandler(deps)
+  return async (request: Request) => {
+    const result = await handleInquiry({
+      httpMethod: request.method,
+      headers: Object.fromEntries(request.headers),
+      body: await readInquiryBody(request),
+      isBase64Encoded: false,
+    })
+    return new Response(result.body, { status: result.statusCode, headers: result.headers })
+  }
+}
+
+// Netlify discovers inline rateLimit configuration only for its modern API entry.
+export default createInquiryFunction()

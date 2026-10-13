@@ -2,6 +2,8 @@
 
 The factory and window forms share the Netlify `quote` function and Resend integration. No live email was sent during this review.
 
+The function now has a modern Request/Response entry so Netlify's bundler can discover its rate-limit configuration. Existing email output is unchanged. See [rate-limit evidence and production verification](netlify-rate-limit-review.md); local metadata discovery is verified, while deployed rule registration and HTTP 429 remain unverified.
+
 The implementation is configured to send from **HISSUS <quotes@hissus.com>**. Team notifications go to **hiss.usatx@gmail.com**, unless the server variable `QUOTE_RECIPIENT_EMAIL` overrides it. The customer copy goes to the email entered in the form. Team messages set Reply-To to the visitor; customer messages set Reply-To to the team inbox.
 
 | Business | Team receives | Client receives |
