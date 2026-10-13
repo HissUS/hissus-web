@@ -1079,3 +1079,18 @@
   - **Expected**: Both versions display the same two-item grouping without missing translation keys or overflow. Quality-system support remains part of the merged item, separately from the GMP pricing explanation.
   - **Command/URL**: `/factory/services`, `/tw/factory/services`
 - **Publication**: Push verified changes to `factory-website` for Netlify testing. No live deployment was inspected and no real email was sent.
+
+### [FIX-016] Shorten Chinese Operations Description (2026-10-12)
+
+- **Summary**: Changed the Traditional Chinese operations/quality description to “協助營運規劃與品質系統建立，銜接設施建置與生產。” as requested. English copy is unchanged.
+- **Affected Files**:
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Check locale parity and inspect the scoped diff.
+  - **Expected**: Locale parity passes; the only website change removes “日常” from the requested Chinese sentence.
+  - **Command/URL**: `cd frontend && pnpm check-locales`; `git diff -- frontend/src/locales/zh-TW.json frontend/src/locales/en.json`
+  - **Fail Case**: Switch from Traditional Chinese Services to English.
+  - **Expected**: Chinese shows the requested sentence; English retains its existing operations/quality description.
+  - **Command/URL**: `/tw/factory/services`, `/factory/services`
+- **Publication**: Push to `factory-website` for Netlify testing. No live deployment was inspected.
