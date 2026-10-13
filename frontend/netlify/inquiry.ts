@@ -55,6 +55,7 @@ const sharedFields = {
   message: z.string().trim().max(4000).default(''),
   locale: z.enum(['en', 'zh-TW']).default('en'),
   website: z.string().max(0).default(''),
+  turnstileToken: z.string().trim().max(2048).default(''),
 }
 
 const screenInquirySchema = z.object({

@@ -1,5 +1,6 @@
 import { chromium } from 'playwright'
 import assert from 'node:assert/strict'
+import { installVerificationStub } from './browser-stubs.mjs'
 import { mkdirSync, readFileSync } from 'node:fs'
 const dictionaries = Object.fromEntries(
   ['en', 'zh-TW'].map((locale) => [
@@ -38,6 +39,7 @@ const thumbnail = readFileSync(
 // External thumbnails and players are stubbed; local assets and CSP remain real.
 async function newPage(options) {
   const page = await browser.newPage(options)
+  await installVerificationStub(page)
   await page.route('https://i.ytimg.com/**', (route) =>
     route.fulfill({ contentType: 'image/webp', body: thumbnail }),
   )
@@ -797,6 +799,12 @@ try {
       await page.locator('input[type="email"]').fill('test@example.com')
       await page.locator('input[type="tel"]').fill(facility ? '+886 912 345 678' : '4692883098')
       let calls = 0
+      await page.waitForFunction(() => !!window.__hissusVerification)
+      await page.evaluate(() => window.__hissusVerification.expire())
+      assert.equal(await page.locator('button[type="submit"]').isDisabled(), true)
+      await page.evaluate(() => window.__hissusVerification.complete())
+      await page.waitForFunction(() => !document.querySelector('button[type="submit"]').disabled)
+      checks++
       await page.route('**/.netlify/functions/quote', async (route) => {
         calls++
         await route.fulfill({
@@ -813,6 +821,7 @@ try {
       await page.unroute('**/.netlify/functions/quote')
       await page.route('**/.netlify/functions/quote', async (route) => {
         const data = route.request().postDataJSON()
+        assert.ok(data.turnstileToken.startsWith('test-human-token-'))
         assert.equal(data.kind, facility ? 'facility' : 'screen')
         if (facility) {
           assert.equal(data.name, 'Sample Company')

@@ -126,3 +126,7 @@ The gallery order is entrance IMG_1801, open factory floor IMG_1555, bright room
 ## Mobile window product selection
 
 `ProductsPage` uses `useProductOverviewScroll` from the existing homepage/catalog feature. An ordinary product-card selection below 768px requests a scroll only after the selected category renders; selecting the current category also works. The overview section now owns `#product-details`, including its heading. The scroll accounts for the sticky header and a small gap, uses smooth motion by default and instant motion for reduced-motion users. Desktop selections, initial/direct visits, language switches and modified clicks do not request this scroll. The router still uses `resetScroll={false}` and `hashScrollIntoView={false}` for product links.
+
+## Inquiry abuse protection
+
+Factory Contact and Window Quote include a compact Cloudflare Turnstile widget without changing their fields or business navigation. `useInquiry` includes the verified token with the POST, blocks unverified submission and resets the widget after each attempt. `netlify/turnstile.ts` performs server-side Siteverify; the shared function rejects invalid action/hostname/proof before any email and fails closed on missing configuration or provider outage. Public site key and server secret setup, key rotation, emergency sending pause and remaining global-budget limits are documented in [Netlify rate-limit review](../netlify-rate-limit-review.md). Browser/CSP fixtures stub all external verification and mail.

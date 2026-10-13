@@ -29,13 +29,16 @@ try {
           apiKey: 'preview-only',
           recipientEmail: 'hiss.usatx@gmail.com',
           origins: ['https://hissus.com'],
+          turnstileSecret: 'preview-only',
         }),
+        verifyToken: async () => ({ success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }),
         sendMail: async (_, mail) => {
           messages.push(mail)
           return { error: null, data: { id: 'preview-not-sent' } }
         },
       })
       const sample = {
+        turnstileToken: 'preview-only-token',
         kind,
         locale,
         email: 'client@example.com',

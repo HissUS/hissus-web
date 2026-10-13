@@ -1,4 +1,4 @@
-import { useInquiry } from '@/features/inquiry'
+import { useInquiry, TurnstileVerification } from '@/features/inquiry'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui-wrapper'
 import { CATALOG_DATA } from '../features/homepage/constants/catalog'
@@ -93,6 +93,9 @@ export function QuotePage() {
     pending,
     submitted,
     copyFailed,
+    turnstileToken,
+    setTurnstileToken,
+    verificationResetKey,
     error,
     handleSubmit,
     reset,
@@ -249,6 +252,7 @@ export function QuotePage() {
             {t(error)}
           </div>
         )}
+        <TurnstileVerification resetKey={verificationResetKey} onVerify={setTurnstileToken} />
         {submitted && (
           <div role="status" className="text-base text-green-800">
             {t(copyFailed ? 'company.copyFailed' : 'quote.sentNotice')}
@@ -256,7 +260,7 @@ export function QuotePage() {
         )}
 
         <div className="flex items-center gap-3">
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" disabled={pending || !turnstileToken}>
             {t(pending ? 'company.sending' : 'quote.send')}
           </Button>
           <Button disabled={pending} variant="outline" type="button" onClick={reset}>

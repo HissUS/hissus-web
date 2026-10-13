@@ -1173,3 +1173,42 @@
   - **Expected**: HTTP 503 / `UNAVAILABLE`, request ID and fixed pause log; no provider call and no false success message. Missing setting preserves delivery; explicitly invalid settings fail closed.
   - **Command/URL**: `/factory/contact`, `/windows/quote`, `/.netlify/functions/quote`
 - **Deployment limit**: This revision must be deployed and the flag configured to pause live sending. Revoke the existing Resend key for an immediate stop, including old immutable deploys. No dashboard or provider action was taken; Turnstile/global-budget work remains pending user preference. The authorized SEO task remains in progress.
+
+### [FEAT-021] Server-Verified Turnstile for Both Inquiry Forms (2026-10-12)
+
+- **Summary**: Added the approved free Cloudflare Turnstile integration to factory and window forms. All sending requires server-verified, single-use proof for the exact action and request hostname; missing configuration and verification outages fail closed. Existing email templates, endpoint, per-IP edge rule and emergency pause are retained.
+- **Affected Files**:
+  - `README.md`
+  - `netlify.toml`
+  - `frontend/netlify/functions/quote.ts`
+  - `frontend/netlify/inquiry.ts`
+  - `frontend/netlify/index.ts`
+  - `frontend/netlify/turnstile.ts`
+  - `frontend/src/features/inquiry/useInquiry.ts`
+  - `frontend/src/features/inquiry/useTurnstile.ts`
+  - `frontend/src/features/inquiry/components/FacilityInquiryForm.tsx`
+  - `frontend/src/features/inquiry/components/TurnstileVerification.tsx`
+  - `frontend/src/features/inquiry/components/index.ts`
+  - `frontend/src/features/inquiry/index.ts`
+  - `frontend/src/pages/QuotePage.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/scripts/browser-stubs.mjs`
+  - `frontend/scripts/browser-regression.mjs`
+  - `frontend/scripts/csp-regression.mjs`
+  - `frontend/scripts/inquiry-regression.mjs`
+  - `frontend/scripts/preview-inquiry-emails.mjs`
+  - `docs/features/homepage.md`
+  - `docs/netlify-rate-limit-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, locale parity and actual-handler inquiry tests.
+  - **Expected**: Build/lint/locales pass; 22 tests pass. Both businesses retain their team/client email contents. Missing, invalid, wrong-action/host, expired/replayed and unavailable verification never send. The real Siteverify request client is exercised using a stub fetch; no provider is contacted.
+  - **Command/URL**: `cd frontend && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build && pnpm lint && pnpm check-locales && pnpm test:inquiry`
+  - **Action**: Run production browser/CSP regressions with stubbed verification, then inspect Netlify bundling metadata.
+  - **Expected**: 283 browser checks and six CSP pages pass. Expiry disables submit until fresh proof; payloads contain proof and normal feedback remains truthful. The actual Netlify bundler still emits API v2 and the 5/60s IP/domain rule. Local bundling does not prove live enforcement.
+  - **Command/URL**: With preview on 4173: `cd frontend && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser && CHROMIUM_PATH=/usr/bin/chromium pnpm test:csp`; bundler command in `docs/netlify-rate-limit-review.md`.
+  - **Fail Case**: Submit with no token, a rejected token, a token issued for another hostname/action, or unavailable server verification; try the browser with missing public key.
+  - **Expected**: No mail is sent. The server returns 403/503 and safe request IDs; browser submit stays disabled without proof and shows localized verification feedback. Never use public testing keys or a bypass in production.
+  - **Command/URL**: `/factory/contact`, `/windows/quote`, `/.netlify/functions/quote`
+- **Owner setup still required**: Create a managed widget, configure the public site key for Builds and the secret for Functions, rotate the existing Resend key to disable older unprotected deployments, and redeploy. Live CAPTCHA, sending and rate enforcement remain unverified. Global sending caps and automatic alerts are not added. Publish this security fix before completing the ongoing SEO work.

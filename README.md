@@ -120,7 +120,7 @@ Business roots (`/factory`, `/windows`) lead to their homepages. Old public path
 
 For Netlify deployment, the repository-root `netlify.toml` selects base directory `frontend`, build command `pnpm build`, publish directory `dist`, and functions directory `netlify/functions`. These directories resolve beneath `frontend`. Keep dashboard settings consistent with the file and deploy the branch containing it. Node 24 and pnpm 11.25.0 are pinned for the build. `pnpm dev` is for local development only.
 
-Both forms use the existing Netlify quote function. See [email previews and Resend setup](docs/inquiry-email-review.md) before testing delivery. A plain Vite development server does not run Netlify Functions.
+Both forms require server-verified Cloudflare Turnstile proof before the existing Netlify quote function sends mail. Configure `VITE_TURNSTILE_SITE_KEY` for Builds and `TURNSTILE_SECRET_KEY` for Functions in Netlify, then redeploy. Keep `INQUIRY_EMAIL_ENABLED=false` to pause sending during setup. See [abuse controls and Turnstile setup](docs/netlify-rate-limit-review.md#turnstile-setup-and-verification-2026-10-12). Both forms use the existing Netlify quote function. See [email previews and Resend setup](docs/inquiry-email-review.md) before testing delivery. A plain Vite development server does not run Netlify Functions.
 
 `pnpm build` prepares the function's allowed origins from Netlify's public build URL variables before compiling. The generated `.netlify/inquiry-origins.json` stays ignored and is bundled only into the server function; API keys remain runtime-only. Deploy the latest commit and test its newest deployment address because older deploy permalinks retain their old code.
 
@@ -155,6 +155,8 @@ cd frontend
 # Check all locale files for missing/extra keys vs en.json
 pnpm check-locales
 pnpm test:inquiry
+# Build with your site key, or the public Cloudflare testing key for stubbed tests only:
+VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build
 # Start production preview in another terminal: pnpm preview --host 0.0.0.0 --port 4173
 # Install Chromium if needed: pnpm exec playwright install chromium
 pnpm test:browser

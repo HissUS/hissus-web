@@ -36,6 +36,16 @@ buildSync({
 })
 const { getAllowedOrigins, getMailFailureDetails } = require(diagnosticsOutput)
 
+const verificationOutput = join(temporary, 'turnstile.cjs')
+buildSync({
+  entryPoints: ['netlify/turnstile.ts'],
+  bundle: true,
+  platform: 'node',
+  format: 'cjs',
+  outfile: verificationOutput,
+})
+const { verifyTurnstileToken } = require(verificationOutput)
+
 process.on('exit', () => rmSync(temporary, { recursive: true, force: true }))
 const valid = {
   firstName: 'Test',
@@ -50,7 +60,7 @@ const valid = {
 const event = (body, extras = {}) => ({
   httpMethod: 'POST',
   headers: { 'content-type': 'application/json', origin: 'https://hissus.com' },
-  body: JSON.stringify(body),
+  body: JSON.stringify({ turnstileToken: 'test-human-token', ...body }),
   isBase64Encoded: false,
   ...extras,
 })
@@ -61,7 +71,9 @@ function fixture(results = [], modern = false) {
       apiKey: 'test-only',
       recipientEmail: 'team@example.com',
       origins: ['https://hissus.com'],
+      turnstileSecret: 'test-secret',
     }),
+    verifyToken: async () => ({ success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }),
     sendMail: async (_, mail) => {
       sent.push(mail)
       const result = results.shift()
@@ -212,10 +224,17 @@ test('email pause switch blocks both forms before any provider call', async () =
       throw new Error('sending is paused: provider must not be called')
     },
   })
-  for (const body of [valid, {
-    kind: 'facility', name: 'Test Company', subject: 'Facility setup',
-    email: valid.email, phone: '+1 469 288 3098', locale: 'en',
-  }]) {
+  for (const body of [
+    valid,
+    {
+      kind: 'facility',
+      name: 'Test Company',
+      subject: 'Facility setup',
+      email: valid.email,
+      phone: '+1 469 288 3098',
+      locale: 'en',
+    },
+  ]) {
     const result = await run(handler, event(body))
     assert.equal(result.statusCode, 503)
     assert.equal(JSON.parse(result.body).code, 'UNAVAILABLE')
@@ -252,7 +271,7 @@ const publicRequest = (body, extras = {}) =>
   new Request('https://hissus.com/.netlify/functions/quote', {
     method: 'POST',
     headers: { 'content-type': 'application/json', origin: 'https://hissus.com' },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ turnstileToken: 'test-human-token', ...body }),
     ...extras,
   })
 
@@ -358,7 +377,17 @@ test('Netlify deploy permalink accepts inquiries while unrelated sites remain re
   assert.ok(origins.includes(permalink))
   const sent = []
   const handler = createInquiryHandler({
-    getConfig: () => ({ apiKey: 'test-only', recipientEmail: 'team@example.com', origins }),
+    getConfig: () => ({
+      apiKey: 'test-only',
+      recipientEmail: 'team@example.com',
+      origins,
+      turnstileSecret: 'test-secret',
+    }),
+    verifyToken: async () => ({
+      success: true,
+      hostname: new URL(permalink).hostname,
+      action: 'hissus_inquiry',
+    }),
     sendMail: async (_, mail) => {
       sent.push(mail)
       return { error: null }
@@ -525,4 +554,129 @@ test('diagnostics distinguish access, quota, transport and timeout without expos
   })
   assert.deepEqual(unknown, { reason: 'provider_rejected', providerCode: 'unknown' })
   assert.equal(getMailFailureDetails(new TypeError('private-token')).reason, 'mail_transport_error')
+})
+
+test('missing Turnstile proof blocks both businesses before verification or mail', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const { handler, sent } = fixture()
+  for (const payload of [
+    { ...valid, turnstileToken: '' },
+    {
+      kind: 'facility',
+      name: 'Sample Co.',
+      subject: 'Setup',
+      email: valid.email,
+      phone: valid.phone,
+      turnstileToken: '',
+    },
+  ]) {
+    const result = await run(handler, event(payload))
+    assert.equal(result.statusCode, 403)
+    assert.equal(JSON.parse(result.body).code, 'VERIFICATION_REQUIRED')
+  }
+  assert.equal(sent.length, 0)
+})
+
+test('server rejects failed, expired/replayed, wrong-action and wrong-host tokens before mail', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  for (const proof of [
+    { success: false },
+    { success: false, 'error-codes': ['timeout-or-duplicate'] },
+    { success: true, hostname: 'hissus.com', action: 'another_form' },
+    { success: true, hostname: 'untrusted.example', action: 'hissus_inquiry' },
+    { success: true, hostname: 'www.hissus.com', action: 'hissus_inquiry' },
+    { success: true },
+    null,
+  ]) {
+    let sends = 0
+    const handler = createInquiryHandler({
+      getConfig: () => ({
+        apiKey: 'test-only',
+        recipientEmail: 'team@example.com',
+        origins: ['https://hissus.com', 'https://www.hissus.com'],
+        turnstileSecret: 'server-secret',
+      }),
+      verifyToken: async () => proof,
+      sendMail: async () => {
+        sends++
+        return { error: null }
+      },
+    })
+    const result = await run(handler, event(valid))
+    assert.equal(result.statusCode, 403)
+    assert.equal(JSON.parse(result.body).code, 'VERIFICATION_REQUIRED')
+    assert.equal(sends, 0)
+    assert.ok(!result.body.includes('test-human-token'))
+    assert.ok(!result.body.includes('server-secret'))
+  }
+})
+
+test('missing server secret and verification outages fail closed without sending', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  for (const turnstileSecret of [undefined, 'server-secret']) {
+    const handler = createInquiryHandler({
+      getConfig: () => ({
+        apiKey: 'test-only',
+        recipientEmail: 'team@example.com',
+        origins: ['https://hissus.com'],
+        turnstileSecret,
+      }),
+      verifyToken: async () => {
+        throw new Error('mock outage')
+      },
+      sendMail: async () => {
+        throw new Error('mail must not run')
+      },
+    })
+    const result = await run(handler, event(valid))
+    assert.equal(result.statusCode, 503)
+    assert.equal(
+      JSON.parse(result.body).code,
+      turnstileSecret ? 'VERIFICATION_UNAVAILABLE' : 'UNAVAILABLE',
+    )
+  }
+})
+
+test('a verified single-use token sends once; replay cannot send another notification', async (context) => {
+  context.mock.method(console, 'error', () => {})
+  const seen = new Set()
+  const sent = []
+  const handler = createInquiryFunction({
+    getConfig: () => ({
+      apiKey: 'test-only',
+      recipientEmail: 'team@example.com',
+      origins: ['https://hissus.com'],
+      turnstileSecret: 'server-secret',
+    }),
+    verifyToken: async (secret, token) => {
+      assert.equal(secret, 'server-secret')
+      if (seen.has(token)) return { success: false }
+      seen.add(token)
+      return { success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }
+    },
+    sendMail: async (_, mail) => {
+      sent.push(mail)
+      return { error: null }
+    },
+  })
+  assert.equal((await handler(publicRequest(valid))).status, 200)
+  assert.equal(sent.length, 2)
+  assert.equal((await handler(publicRequest(valid))).status, 403)
+  assert.equal(sent.length, 2)
+})
+
+test('actual verification client posts proof only to Cloudflare with a bounded timeout', async (context) => {
+  const proof = { success: true, hostname: 'hissus.com', action: 'hissus_inquiry' }
+  const fetchMock = context.mock.method(globalThis, 'fetch', async (url, options) => {
+    assert.equal(url, 'https://challenges.cloudflare.com/turnstile/v0/siteverify')
+    assert.equal(options.method, 'POST')
+    assert.equal(options.headers['Content-Type'], 'application/x-www-form-urlencoded')
+    assert.equal(options.body.get('secret'), 'mock-server-secret')
+    assert.equal(options.body.get('response'), 'mock-human-token')
+    assert.ok(options.signal instanceof AbortSignal)
+    return Response.json(proof)
+  })
+  assert.deepEqual(await verifyTurnstileToken('mock-server-secret', 'mock-human-token'), proof)
+  fetchMock.mock.mockImplementation(async () => new Response('', { status: 503 }))
+  await assert.rejects(verifyTurnstileToken('mock-server-secret', 'mock-human-token'))
 })

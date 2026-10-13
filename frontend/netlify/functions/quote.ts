@@ -1,5 +1,12 @@
 import { randomUUID } from 'node:crypto'
-import { inquirySchema, getAllowedOrigins, getMailFailureDetails } from '..'
+import {
+  inquirySchema,
+  getAllowedOrigins,
+  getMailFailureDetails,
+  verifyTurnstileToken,
+  INQUIRY_ACTION,
+} from '..'
+import type { TurnstileResult } from '..'
 import type { Config, HandlerEvent } from '@netlify/functions'
 import { Resend } from 'resend'
 import buildOrigins from '../../.netlify/inquiry-origins.json'
@@ -139,8 +146,10 @@ type Dependencies = {
     recipientEmail: string
     origins: string[]
     emailsEnabled?: boolean
+    turnstileSecret?: string
   }
   sendMail: (apiKey: string, mail: Mail) => Promise<MailResult>
+  verifyToken?: (secret: string, token: string) => Promise<TurnstileResult>
 }
 
 const dependencies: Dependencies = {
@@ -152,7 +161,9 @@ const dependencies: Dependencies = {
     emailsEnabled:
       process.env.INQUIRY_EMAIL_ENABLED === undefined ||
       process.env.INQUIRY_EMAIL_ENABLED.trim().toLowerCase() === 'true',
+    turnstileSecret: process.env.TURNSTILE_SECRET_KEY?.trim(),
   }),
+  verifyToken: verifyTurnstileToken,
   sendMail: (apiKey, mail) =>
     new Resend(apiKey).emails.send(mail, { signal: AbortSignal.timeout(8000) }),
 }
@@ -167,7 +178,9 @@ export const config: Config = {
   },
 }
 
-type InquiryEvent = Pick<HandlerEvent, 'httpMethod' | 'headers' | 'body' | 'isBase64Encoded'>
+type InquiryEvent = Pick<HandlerEvent, 'httpMethod' | 'headers' | 'body' | 'isBase64Encoded'> & {
+  hostname?: string
+}
 
 export function createInquiryHandler(deps: Dependencies = dependencies) {
   return async (event: InquiryEvent) => {
@@ -220,6 +233,40 @@ export function createInquiryHandler(deps: Dependencies = dependencies) {
       return response(503, { code: 'UNAVAILABLE' })
     }
     const inquiry = parsed.data
+    if (!settings.turnstileSecret) {
+      console.error('Inquiry verification unavailable', {
+        requestId,
+        reason: 'missing_verification_secret',
+      })
+      return response(503, { code: 'UNAVAILABLE' })
+    }
+    if (!inquiry.turnstileToken) return response(403, { code: 'VERIFICATION_REQUIRED' })
+    try {
+      const verification = await (deps.verifyToken ?? verifyTurnstileToken)(
+        settings.turnstileSecret,
+        inquiry.turnstileToken,
+      )
+      const expectedHostname =
+        event.hostname ?? (headers.origin ? new URL(headers.origin).hostname : undefined)
+      const allowedHostnames = settings.origins.map((origin) => new URL(origin).hostname)
+      if (
+        verification?.success !== true ||
+        verification.action !== INQUIRY_ACTION ||
+        !verification.hostname ||
+        !allowedHostnames.includes(verification.hostname) ||
+        !expectedHostname ||
+        verification.hostname !== expectedHostname
+      ) {
+        console.error('Inquiry verification rejected', { requestId, reason: 'verification_denied' })
+        return response(403, { code: 'VERIFICATION_REQUIRED' })
+      }
+    } catch {
+      console.error('Inquiry verification unavailable', {
+        requestId,
+        reason: 'verification_unavailable',
+      })
+      return response(503, { code: 'VERIFICATION_UNAVAILABLE' })
+    }
     const { email, phone, message, locale: lang, kind } = inquiry
     const dictionary = lang === 'zh-TW' ? zhTW : en
     const s = dictionary.quote.email
@@ -351,6 +398,7 @@ export function createInquiryFunction(deps: Dependencies = dependencies) {
       headers: Object.fromEntries(request.headers),
       body: await readInquiryBody(request),
       isBase64Encoded: false,
+      hostname: new URL(request.url).hostname,
     })
     return new Response(result.body, { status: result.statusCode, headers: result.headers })
   }

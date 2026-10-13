@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui-wrapper'
 import { useInquiry } from '../useInquiry'
+import { TurnstileVerification } from './TurnstileVerification'
 
 const inputClass =
   'h-11 rounded-md border px-3 py-2 text-base shadow-sm focus:ring-2 focus:ring-primary/40'
@@ -94,6 +95,10 @@ export function FacilityInquiryForm() {
           />
         </label>
       </fieldset>
+      <TurnstileVerification
+        resetKey={inquiry.verificationResetKey}
+        onVerify={inquiry.setTurnstileToken}
+      />
       {inquiry.error && (
         <div role="alert" className="text-base text-destructive">
           {t(inquiry.error)}
@@ -105,7 +110,7 @@ export function FacilityInquiryForm() {
         </div>
       )}
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={inquiry.pending}>
+        <Button type="submit" disabled={inquiry.pending || !inquiry.turnstileToken}>
           {t(inquiry.pending ? 'company.sending' : 'company.sendInquiry')}
         </Button>
         <Button type="button" variant="outline" disabled={inquiry.pending} onClick={inquiry.reset}>

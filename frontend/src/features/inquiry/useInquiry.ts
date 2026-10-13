@@ -17,6 +17,8 @@ export function useInquiry(facility: boolean) {
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const [verificationResetKey, setVerificationResetKey] = useState(0)
 
   function validate() {
     if (facility) {
@@ -40,6 +42,10 @@ export function useInquiry(facility: boolean) {
     const err = validate()
     if (err) {
       setError(err)
+      return
+    }
+    if (!turnstileToken) {
+      setError('verification.required')
       return
     }
 
@@ -73,6 +79,7 @@ export function useInquiry(facility: boolean) {
         body: JSON.stringify({
           kind: facility ? 'facility' : 'screen',
           website,
+          turnstileToken,
           ...(facility ? { name, subject } : { firstName, lastName, city, product }),
           email,
           phone,
@@ -94,7 +101,13 @@ export function useInquiry(facility: boolean) {
                 : code === 'UNAVAILABLE'
                   ? 'unavailable'
                   : 'submitFailed'
-        setError(`quoteErrors.${key}`)
+        setError(
+          code === 'VERIFICATION_REQUIRED'
+            ? 'verification.required'
+            : code === 'VERIFICATION_UNAVAILABLE'
+              ? 'verification.unavailable'
+              : `quoteErrors.${key}`,
+        )
         return
       }
 
@@ -121,10 +134,14 @@ export function useInquiry(facility: boolean) {
       console.error('Quote submission failed', err instanceof Error ? err.name : 'UnknownError')
     } finally {
       setPending(false)
+      setTurnstileToken('')
+      setVerificationResetKey((key) => key + 1)
     }
   }
 
   function reset() {
+    setTurnstileToken('')
+    setVerificationResetKey((key) => key + 1)
     setName('')
     setSubject('')
     setFirstName('')
@@ -141,6 +158,9 @@ export function useInquiry(facility: boolean) {
   }
 
   return {
+    turnstileToken,
+    setTurnstileToken,
+    verificationResetKey,
     name,
     setName,
     subject,

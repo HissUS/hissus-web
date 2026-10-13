@@ -461,5 +461,12 @@
     "tooLarge": "Your message is too long. Please shorten it and try again.",
     "rateLimited": "Too many requests. Please wait before trying again.",
     "unavailable": "The inquiry service is temporarily unavailable. Please contact us by email."
+  },
+  "verification": {
+    "label": "Verify that you are human before sending.",
+    "loading": "Loading verification…",
+    "expired": "Verification expired. Please verify again.",
+    "unavailable": "Verification is temporarily unavailable. Please try again or contact us by email.",
+    "required": "Please complete verification before sending your request."
   }
 }

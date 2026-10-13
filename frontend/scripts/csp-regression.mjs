@@ -1,5 +1,6 @@
 import { chromium } from 'playwright'
 import { readFileSync } from 'node:fs'
+import { installVerificationStub } from './browser-stubs.mjs'
 const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
 ;(async () => {
   const policy = readFileSync(new URL('../../netlify.toml', import.meta.url), 'utf8').match(
@@ -10,6 +11,7 @@ const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:4173'
     args: ['--no-sandbox'],
   })
   const page = await browser.newPage()
+  await installVerificationStub(page)
   let violations = []
   await page.exposeFunction('recordViolation', (v) => violations.push(v))
   await page.addInitScript(() => {
