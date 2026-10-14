@@ -142,3 +142,7 @@ Both business sites describe service in Texas in English and Traditional Chinese
 ## Taiwanese companies establishing factories in Texas
 
 The owner confirmed experience helping Taiwanese companies set up factories in Texas. `ExperienceSection` now includes a bilingual “From Taiwan to Texas” client-experience note beside a compact tan-and-white Taiwan illustration. This represents client origins and Texas factory work, rather than a Taiwan office or Taiwanese project location. Existing hospital/cleanroom experience, service coverage, map order, navigation and forms remain intact. The extra introductory paragraph in the USA/Texas map section was removed at the owner's request.
+
+## Combined experience and geographic connection
+
+Factory Services now presents team experience and service coverage in one `ExperienceSection` after one-stop coordination. A single headline and short Taiwanese-client/Texas-factory paragraph lead into the existing invitation to discuss other USA projects; hospital and cleanroom experience are two compact icon/list items. `FactoryServiceArea` now renders the combined diagram within that section: the existing Taiwan and USA artwork, Texas highlighted, and a responsive dotted SVG connection with localized place labels. No raster images were changed. The old separate service-area section, repeated experience introduction and bulky experience rows were removed. Existing `#experience`, `#service-area` and `#taiwan-texas-experience` bookmarks still have destinations.

@@ -266,12 +266,9 @@
     "introTitle": "Meet HISSUS.",
     "introDesc": "HISSUS helps companies establish factories and facilities, drawing on our team’s hospital and cleanroom construction experience.",
     "introLink": "More about HISSUS",
-    "experienceLabel": "OUR TEAM’S EXPERIENCE",
-    "experienceTitle": "Experience in demanding environments.",
-    "experienceDesc": "Our team brings hospital and cleanroom construction experience to conversations about your facility. Every project has its own requirements; the scope and responsibilities are agreed before work begins.",
+    "experienceLabel": "OUR EXPERIENCE & WHERE WE WORK",
     "hospital": "Hospital construction",
     "cleanroom": "Cleanroom construction",
-    "experienceNote": "Talk with our team about how this experience relates to your facility needs.",
     "gmpLabel": "A PROPOSED COOPERATION MODEL",
     "gmpTitle": "Clear costs. Shared interests.",
     "gmpIntro": "We recommend considering GMP (Guaranteed Maximum Price) to help manage construction quality, cost, and risk. The budget ceiling, open-book reporting, and savings arrangements are defined in the project agreement.",
@@ -469,17 +466,17 @@
       }
     },
     "serviceArea": {
-      "label": "WHERE WE WORK",
-      "title": "Your partner in the Lone Star State.",
-      "nationwide": "If your factory project takes you elsewhere in the USA, we can discuss how our team can support you.",
-      "mapAlt": "Map of the contiguous United States with Texas highlighted in tan.",
-      "texasLegend": "Texas: primary service area",
-      "usaLegend": "USA: factory inquiries welcome"
+      "nationwide": "If your factory project takes you elsewhere in the USA, we can discuss how our team can support you."
     },
     "taiwanExperience": {
       "title": "From Taiwan to Texas.",
-      "desc": "We’ve helped Taiwanese companies set up factories in Texas, working alongside their teams to plan and coordinate the project.",
-      "mapAlt": "White outline map of Taiwan with tan edging, representing the origins of Taiwanese clients."
+      "desc": "We’ve helped Taiwanese companies set up factories in Texas, working alongside their teams to plan and coordinate the project."
+    },
+    "connectionMap": {
+      "alt": "Illustration connecting Taiwan to Texas with a dotted line, showing the origins of Taiwanese clients and their Texas factory projects.",
+      "taiwan": "Taiwan",
+      "texas": "Texas",
+      "usa": "USA"
     }
   },
   "gallery": {

@@ -1445,3 +1445,27 @@
   - **Expected**: It says 台灣企業在德州設立工廠; Taiwan is not presented as the factory location or a new office. The map sits beside readable text rather than clipping it.
   - **Command/URL**: `/tw/factory/services#taiwan-texas-experience`
 - **Provenance**: AI-generated geographic illustration uses the earlier USA map as a style reference. Original PNG remains at `/workspace/generated_images/exec-91b2a11c-bab2-4c8a-b7fe-892dd923f64d.png`; responsive transparent variants are committed. It is not a navigational or surveyed map.
+
+### [FEAT-030] Combine Experience and Coverage with Taiwan-to-Texas Connection (2026-10-14)
+
+- **Summary**: Combined team experience and service geography into one clean factory Services section. Reused the existing Taiwan/USA maps with a dotted SVG connection ending in Texas, a concise bilingual client-experience introduction and two compact hospital/cleanroom items.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/features/homepage/components/FactoryServiceArea.tsx`
+  - `frontend/src/pages/ServicesPage.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/features/homepage.md`
+  - `docs/seo-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, locale parity and existing SEO/browser regressions.
+  - **Expected**: Build/lint/locales pass; 75 SEO checks and 297 browser checks pass. The map and experience information occupy one section, preserving verified geographic/client facts, SEO metadata, services, navigation, media and forms.
+  - **Command/URL**: `cd frontend && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build && pnpm lint && pnpm check-locales`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Action**: Inspect both languages at 1440/390/320px and the legacy section bookmarks.
+  - **Expected**: Six focused cases pass: one headline, two short paragraphs, two experience items, Taiwan/USA images and one dotted connection ending on highlighted Texas. Localized place labels remain readable without horizontal overflow or browser errors. Screenshots are under `/tmp/hissus-combined-experience-review`. Existing anchors still resolve inside the combined section.
+  - **Command/URL**: `/factory/services#experience`, `/tw/factory/services#service-area`, `/factory/services#taiwan-texas-experience`
+  - **Fail Case**: View Traditional Chinese at 320px.
+  - **Expected**: Copy and map stack cleanly; 德州 stays together in the shorter headline. Taiwan remains the clients' origin and Texas the factory location, while other USA projects remain subject to discussion.
+  - **Command/URL**: `/tw/factory/services#experience`
+- **Graphic scope**: Existing AI-generated cartographic artwork is reused unchanged. The dotted line is a schematic business/client connection, not a navigation, shipping or flight route. No new office or project geography is claimed.

@@ -3,67 +3,48 @@ import { ArrowUpRight, Building2, FileText, Handshake, Hospital, ShieldCheck } f
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/hooks'
 import { Reveal } from './Reveal'
-import taiwanSmall from '@/assets/images/factory/taiwan-map-240.webp'
-import taiwanLarge from '@/assets/images/factory/taiwan-map-480.webp'
-import { getAssetUrl } from '@/lib/utils'
+import { FactoryServiceArea } from './FactoryServiceArea'
 
 export function ExperienceSection() {
   const { t } = useTranslation()
   return (
     <section
       id="experience"
-      className="company-section bg-gray-50"
+      className="company-section scroll-mt-28 bg-[#faf8f5]"
       aria-labelledby="experience-heading"
     >
-      <Reveal className="company-container grid gap-16 lg:grid-cols-2">
-        <div>
-          <p className="company-eyebrow">{t('company.experienceLabel')}</p>
-          <h2 id="experience-heading" className="company-heading mt-8">
-            {t('company.experienceTitle')}
-          </h2>
-          <p className="company-copy mt-8">{t('company.experienceDesc')}</p>
-          <div
-            id="taiwan-texas-experience"
-            className="mt-8 grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-6"
-          >
-            <img
-              src={getAssetUrl(taiwanLarge)}
-              srcSet={`${getAssetUrl(taiwanSmall)} 240w, ${getAssetUrl(taiwanLarge)} 480w`}
-              sizes="(min-width: 640px) 112px, 80px"
-              width={480}
-              height={720}
-              alt={t('company.taiwanExperience.mapAlt')}
-              loading="lazy"
-              decoding="async"
-              className="block h-auto w-full"
-            />
-            <div>
-              <h3 className="text-xl font-medium">{t('company.taiwanExperience.title')}</h3>
-              <p className="mt-3 text-base leading-relaxed text-gray-600">
-                {t('company.taiwanExperience.desc')}
-              </p>
-            </div>
+      <div id="service-area" className="scroll-mt-28">
+        <Reveal className="company-container grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+          <div>
+            <p className="company-eyebrow">{t('company.experienceLabel')}</p>
+            <h2 id="experience-heading" className="company-heading mt-6">
+              {t('company.taiwanExperience.title')}
+            </h2>
+            <p id="taiwan-texas-experience" className="company-copy mt-6 scroll-mt-28">
+              {t('company.taiwanExperience.desc')}
+            </p>
+            <p className="mt-5 text-base leading-relaxed text-gray-600">
+              {t('company.serviceArea.nationwide')}
+            </p>
+            <ul className="mt-8 grid gap-x-5 gap-y-4 border-t border-[#e4dbd0] pt-6 sm:grid-cols-2">
+              {[
+                { key: 'hospital', icon: Hospital },
+                { key: 'cleanroom', icon: Building2 },
+              ].map(({ key, icon: Icon }) => (
+                <li key={key} className="flex items-center gap-3 text-sm font-medium text-gray-700">
+                  <Icon
+                    className="h-5 w-5 shrink-0 text-primary"
+                    strokeWidth={1.25}
+                    aria-hidden="true"
+                  />
+                  {t(`company.${key}`)}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-        <div className="self-end">
-          {[
-            { key: 'hospital', icon: Hospital },
-            { key: 'cleanroom', icon: Building2 },
-          ].map(({ key, icon: Icon }) => (
-            <div key={key} className="flex items-center gap-8 border-b border-gray-300 py-8">
-              <Icon
-                className="h-8 w-8 shrink-0 text-primary"
-                strokeWidth={1.25}
-                aria-hidden="true"
-              />
-              <h3 className="text-xl font-medium">{t(`company.${key}`)}</h3>
-            </div>
-          ))}
-          <p className="mt-8 text-sm leading-relaxed text-gray-600">
-            {t('company.experienceNote')}
-          </p>
-        </div>
-      </Reveal>
+          <FactoryServiceArea />
+        </Reveal>
+      </div>
     </section>
   )
 }
