@@ -6,6 +6,7 @@ import {
   FactoryImage,
   FACTORY_PHOTOS,
   FactoryServices,
+  FactoryServiceArea,
   Reveal,
 } from '@/features/homepage'
 
@@ -35,6 +36,7 @@ export function ServicesPage() {
         </Reveal>
       </section>
       <FactoryServices />
+      <FactoryServiceArea />
       <ExperienceSection />
       <GmpSection />
       <CompanyContact />

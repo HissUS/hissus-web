@@ -1363,3 +1363,30 @@
   - **Fail Case**: Use the footer factory link while viewing the Chinese window site.
   - **Expected**: It opens the Chinese factory homepage, preserving language.
   - **Command/URL**: `/tw/windows/home`
+
+### [FEAT-026] Texas SEO Context and Request-Based USA Factory Map (2026-10-14)
+
+- **Summary**: Applied owner-confirmed Texas coverage for both businesses and qualified nationwide factory projects as available on request. Updated bilingual visible copy/page metadata and added a tan-and-white generated service-area map after one-stop coordination on Factory Services, preserving existing layouts, routes, gallery order and inquiry contracts.
+- **Affected Files**:
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/features/homepage/components/FactoryServiceArea.tsx`
+  - `frontend/src/features/homepage/components/index.ts`
+  - `frontend/src/features/homepage/index.ts`
+  - `frontend/src/pages/ServicesPage.tsx`
+  - `frontend/src/assets/images/factory/service-area-map-640.webp`
+  - `frontend/src/assets/images/factory/service-area-map-1000.webp`
+  - `docs/seo-review.md`
+  - `docs/features/homepage.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, locale parity and existing SEO output/browser regressions.
+  - **Expected**: Build/lint/locales pass, 75 SEO checks and 297 browser checks pass. Thirty generated routes and eighteen public canonicals remain valid; regional page/category metadata is unique and visible text retains the nationwide-on-request qualifier. Both-language factory/window hero heights remain equal at 1440/390/320px.
+  - **Command/URL**: `cd frontend && VITE_TURNSTILE_SITE_KEY=1x00000000000000000000AA pnpm build && pnpm lint && pnpm check-locales`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo && CHROMIUM_PATH=/usr/bin/chromium pnpm test:browser`
+  - **Action**: Inspect the new section in both languages at desktop and mobile widths.
+  - **Expected**: Six focused map/layout cases pass; the map blends into the page, uses tan for Texas and white for the country interior, loads the responsive asset and has descriptive translated alt text. Text and legend state Texas primary coverage and other USA factory projects on request; no horizontal overflow or browser errors occur. Screenshots are under `/tmp/hissus-service-area-review`.
+  - **Command/URL**: `/factory/services#service-area`, `/tw/factory/services#service-area`
+  - **Fail Case**: View the Chinese service-area section at 320px and the screen quote form from its business navigation.
+  - **Expected**: Copy stacks above the map without clipping; the screen quote still requests a Texas city and makes no nationwide screen-service claim. No external map API or real email request is used.
+  - **Command/URL**: `/tw/factory/services#service-area`, `/tw/windows/quote`
+- **Provenance/limits**: The AI-generated map depicts the contiguous USA schematically; original PNG is preserved in `/workspace/generated_images`. It is not survey/reference boundary data. Coverage comes from the owner's explicit confirmation. Google indexing/ranking gains and live deployment remain unverified.

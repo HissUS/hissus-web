@@ -11,6 +11,7 @@ export {
   FactoryGallery,
   FactorySteps,
   FactoryServices,
+  FactoryServiceArea,
   Reveal,
 } from './components'
 export { FACTORY_PHOTOS } from './constants'

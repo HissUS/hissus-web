@@ -134,3 +134,7 @@ Factory Contact and Window Quote include a Cloudflare Turnstile widget (normal s
 ## Crawlable public pages
 
 The existing React components render at build time and hydrate in the browser. Public SEO metadata, language alternates, canonical URLs and matching structured data use `src/lib/seo.ts`; sitemap/robots and host-aware preview indexing controls are documented in [SEO review](../seo-review.md). Catalog photos use responsive WebP variants of the unchanged originals, with accurate dimensions and descriptive bilingual alt text. Existing navigation, business separation, layout, galleries and inquiry Functions remain in place.
+
+## Texas and request-based USA factory coverage
+
+Both business sites describe service in Texas in English and Traditional Chinese; factory pages additionally welcome projects elsewhere in the USA on request, as confirmed by the owner. The existing screen quote city's Texas restriction remains unchanged. Factory Services inserts `FactoryServiceArea` after `FactoryServices` and before Experience, keeping the home gallery order intact. Its transparent tan/white USA illustration highlights Texas, with translated supporting text and a legend. Existing `Reveal`, container/heading styles, responsive image loading and barrel exports are reused; there is no framed photo card or new route. See [SEO review](../seo-review.md#confirmed-service-areas-and-map-2026-10-14) for coverage and generated-image provenance.
