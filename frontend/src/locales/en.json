@@ -260,7 +260,7 @@
   "company": {
     "eyebrow": "HISSUS · FACTORIES & FACILITIES",
     "heroTitle": "Build the factory your business needs.",
-    "heroDesc": "Factory setup in Texas, from planning to operations. Nationwide USA projects on request.",
+    "heroDesc": "From planning to operations, we work with you to bring your factory to life.",
     "heroLink": "Explore our approach",
     "introLabel": "WHO WE ARE",
     "introTitle": "Meet HISSUS.",
@@ -470,12 +470,12 @@
     },
     "serviceArea": {
       "label": "WHERE WE WORK",
-      "title": "Texas first. USA projects on request.",
-      "desc": "Based in Plano, Texas, we coordinate factory setup and manufacturing facility development throughout Texas.",
-      "nationwide": "Factory projects in other US states are available on request. We confirm the location, service scope and responsibilities with you before work begins.",
+      "title": "Your partner in the Lone Star State.",
+      "desc": "From our base in Plano, Texas, we work with you to plan and build a facility that fits your business.",
+      "nationwide": "If your factory project takes you elsewhere in the USA, we can discuss how our team can support you.",
       "mapAlt": "Map of the contiguous United States with Texas highlighted in tan.",
       "texasLegend": "Texas: primary service area",
-      "usaLegend": "USA: factory projects on request"
+      "usaLegend": "USA: factory inquiries welcome"
     }
   },
   "gallery": {

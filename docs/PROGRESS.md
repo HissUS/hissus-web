@@ -1390,3 +1390,18 @@
   - **Expected**: Copy stacks above the map without clipping; the screen quote still requests a Texas city and makes no nationwide screen-service claim. No external map API or real email request is used.
   - **Command/URL**: `/tw/factory/services#service-area`, `/tw/windows/quote`
 - **Provenance/limits**: The AI-generated map depicts the contiguous USA schematically; original PNG is preserved in `/workspace/generated_images`. It is not survey/reference boundary data. Coverage comes from the owner's explicit confirmation. Google indexing/ranking gains and live deployment remain unverified.
+
+### [FIX-027] Warmer Factory Hero and Service-Area Copy (2026-10-14)
+
+- **Summary**: Reworded factory hero and service-area copy around working with clients in English and Traditional Chinese. Used Texas's Lone Star State nickname in the English map heading and welcomed other USA factory inquiries through conversation rather than a blunt on-request headline.
+- **Affected Files**:
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint and locale parity; inspect generated bilingual hero and map-section text.
+  - **Expected**: Build/lint/locales pass. Homepage copy focuses on planning together; map section explains the Plano, Texas base and invites discussion of factory projects elsewhere in the USA. Existing regional search metadata and service coverage remain consistent.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales`; `/factory/home`, `/tw/factory/home`, `/factory/services#service-area`, `/tw/factory/services#service-area`
+  - **Fail Case**: View both languages at 320px and check the map legend and hero.
+  - **Expected**: Copy wraps without horizontal overflow; the factory hero retains the window hero's height and the map image still loads. The national inquiry invitation does not advertise nationwide screen services.
+  - **Command/URL**: `/factory/home`, `/windows/home`, `/tw/factory/home`, `/tw/windows/home`, `/factory/services#service-area`, `/tw/factory/services#service-area`
