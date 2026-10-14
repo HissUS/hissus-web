@@ -138,3 +138,7 @@ The existing React components render at build time and hydrate in the browser. P
 ## Texas and request-based USA factory coverage
 
 Both business sites describe service in Texas in English and Traditional Chinese; factory pages additionally welcome projects elsewhere in the USA on request, as confirmed by the owner. The existing screen quote city's Texas restriction remains unchanged. Factory Services inserts `FactoryServiceArea` after `FactoryServices` and before Experience, keeping the home gallery order intact. Its transparent tan/white USA illustration highlights Texas, with translated supporting text and a legend. Existing `Reveal`, container/heading styles, responsive image loading and barrel exports are reused; there is no framed photo card or new route. See [SEO review](../seo-review.md#confirmed-service-areas-and-map-2026-10-14) for coverage and generated-image provenance.
+
+## Taiwanese companies establishing factories in Texas
+
+The owner confirmed experience helping Taiwanese companies set up factories in Texas. `ExperienceSection` now includes a bilingual “From Taiwan to Texas” client-experience note beside a compact tan-and-white Taiwan illustration. This represents client origins and Texas factory work, rather than a Taiwan office or Taiwanese project location. Existing hospital/cleanroom experience, service coverage, map order, navigation and forms remain intact. The extra introductory paragraph in the USA/Texas map section was removed at the owner's request.

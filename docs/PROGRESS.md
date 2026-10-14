@@ -1405,3 +1405,43 @@
   - **Fail Case**: View both languages at 320px and check the map legend and hero.
   - **Expected**: Copy wraps without horizontal overflow; the factory hero retains the window hero's height and the map image still loads. The national inquiry invitation does not advertise nationwide screen services.
   - **Command/URL**: `/factory/home`, `/windows/home`, `/tw/factory/home`, `/tw/windows/home`, `/factory/services#service-area`, `/tw/factory/services#service-area`
+
+### [FIX-028] Simplify the Factory Map Introduction (2026-10-14)
+
+- **Summary**: Removed the base-in-Plano paragraph from the factory map section and both translation dictionaries. The heading now leads directly into the remaining invitation to discuss other USA factory projects.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/FactoryServiceArea.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint and locale parity; inspect the generated bilingual map sections.
+  - **Expected**: Build/lint/locales pass. The removed paragraph is absent, the remaining text follows the heading without an empty paragraph, and map/legend rendering remains intact.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales`; `/factory/services#service-area`, `/tw/factory/services#service-area`
+  - **Fail Case**: View the map section at 320px in either language.
+  - **Expected**: Text and map stack without horizontal overflow or leftover empty spacing.
+  - **Command/URL**: `/factory/services#service-area`, `/tw/factory/services#service-area`
+
+### [FEAT-029] Taiwanese Client Experience in Texas with Matching Map (2026-10-14)
+
+- **Summary**: Added the owner-confirmed experience helping Taiwanese companies set up factories in Texas, with bilingual client-focused copy and a compact matching tan-and-white Taiwan map in the existing factory Experience section. Services metadata reflects the same experience; Taiwan is the clients' origin, not a new office or project/service location.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/CompanySections.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `frontend/src/assets/images/factory/taiwan-map-240.webp`
+  - `frontend/src/assets/images/factory/taiwan-map-480.webp`
+  - `docs/features/homepage.md`
+  - `docs/seo-review.md`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Build/TypeScript, lint, locale parity and existing SEO output regression.
+  - **Expected**: Build/lint/locales pass; 75 SEO checks pass. Thirty generated routes and eighteen canonical pages remain valid; Services metadata and visible client experience describe Texas factory work for Taiwanese companies. No invented client names, case-study results, Taiwan address or project count is included.
+  - **Command/URL**: `cd frontend && pnpm build && pnpm lint && pnpm check-locales`; with preview on 4173: `CHROMIUM_PATH=/usr/bin/chromium pnpm test:seo`
+  - **Action**: Inspect the Experience section in both languages at 1440/390/320px.
+  - **Expected**: Six focused cases pass: the compact map loads and text clearly identifies Taiwan client origins and Texas factory setup, with no horizontal overflow or browser errors. The earlier Plano paragraph remains absent from the USA map section. Screenshots are under `/tmp/hissus-taiwan-experience-review`.
+  - **Command/URL**: `/factory/services#taiwan-texas-experience`, `/tw/factory/services#taiwan-texas-experience`
+  - **Fail Case**: View Traditional Chinese at 320px and inspect the geographic wording.
+  - **Expected**: It says 台灣企業在德州設立工廠; Taiwan is not presented as the factory location or a new office. The map sits beside readable text rather than clipping it.
+  - **Command/URL**: `/tw/factory/services#taiwan-texas-experience`
+- **Provenance**: AI-generated geographic illustration uses the earlier USA map as a style reference. Original PNG remains at `/workspace/generated_images/exec-91b2a11c-bab2-4c8a-b7fe-892dd923f64d.png`; responsive transparent variants are committed. It is not a navigational or surveyed map.

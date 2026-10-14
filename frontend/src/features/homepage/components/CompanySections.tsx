@@ -3,6 +3,9 @@ import { ArrowUpRight, Building2, FileText, Handshake, Hospital, ShieldCheck } f
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '@/hooks'
 import { Reveal } from './Reveal'
+import taiwanSmall from '@/assets/images/factory/taiwan-map-240.webp'
+import taiwanLarge from '@/assets/images/factory/taiwan-map-480.webp'
+import { getAssetUrl } from '@/lib/utils'
 
 export function ExperienceSection() {
   const { t } = useTranslation()
@@ -19,6 +22,28 @@ export function ExperienceSection() {
             {t('company.experienceTitle')}
           </h2>
           <p className="company-copy mt-8">{t('company.experienceDesc')}</p>
+          <div
+            id="taiwan-texas-experience"
+            className="mt-8 grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-5 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-6"
+          >
+            <img
+              src={getAssetUrl(taiwanLarge)}
+              srcSet={`${getAssetUrl(taiwanSmall)} 240w, ${getAssetUrl(taiwanLarge)} 480w`}
+              sizes="(min-width: 640px) 112px, 80px"
+              width={480}
+              height={720}
+              alt={t('company.taiwanExperience.mapAlt')}
+              loading="lazy"
+              decoding="async"
+              className="block h-auto w-full"
+            />
+            <div>
+              <h3 className="text-xl font-medium">{t('company.taiwanExperience.title')}</h3>
+              <p className="mt-3 text-base leading-relaxed text-gray-600">
+                {t('company.taiwanExperience.desc')}
+              </p>
+            </div>
+          </div>
         </div>
         <div className="self-end">
           {[
@@ -63,9 +88,7 @@ export function GmpSection() {
             </h2>
             <div className="mt-8 border-t border-gray-200 pt-8">
               <p className="text-4xl font-medium tracking-tight sm:text-5xl">GMP</p>
-              <p className="mt-3 text-sm leading-relaxed text-gray-500">
-                {t('company.gmpFull')}
-              </p>
+              <p className="mt-3 text-sm leading-relaxed text-gray-500">{t('company.gmpFull')}</p>
               <p className="mt-6 text-base leading-relaxed text-gray-600">
                 {t('company.gmpIntro')}
               </p>

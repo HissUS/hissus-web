@@ -18,7 +18,6 @@ export function FactoryServiceArea() {
           <h2 id="service-area-heading" className="company-heading mt-6">
             {t('company.serviceArea.title')}
           </h2>
-          <p className="company-copy mt-6">{t('company.serviceArea.desc')}</p>
           <p className="mt-5 text-base leading-relaxed text-gray-600">
             {t('company.serviceArea.nationwide')}
           </p>

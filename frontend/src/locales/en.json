@@ -332,7 +332,7 @@
       },
       "services": {
         "title": "Texas Factory Setup & Construction Coordination | HISS US",
-        "desc": "Explore factory planning, permits, design, construction, operations and quality systems in Texas. Support elsewhere in the USA is available on request."
+        "desc": "Factory planning and construction coordination in Texas. We’ve helped Taiwanese companies set up factories here; other USA projects are available on request."
       },
       "about": {
         "title": "About HISSUS",
@@ -471,11 +471,15 @@
     "serviceArea": {
       "label": "WHERE WE WORK",
       "title": "Your partner in the Lone Star State.",
-      "desc": "From our base in Plano, Texas, we work with you to plan and build a facility that fits your business.",
       "nationwide": "If your factory project takes you elsewhere in the USA, we can discuss how our team can support you.",
       "mapAlt": "Map of the contiguous United States with Texas highlighted in tan.",
       "texasLegend": "Texas: primary service area",
       "usaLegend": "USA: factory inquiries welcome"
+    },
+    "taiwanExperience": {
+      "title": "From Taiwan to Texas.",
+      "desc": "We’ve helped Taiwanese companies set up factories in Texas, working alongside their teams to plan and coordinate the project.",
+      "mapAlt": "White outline map of Taiwan with tan edging, representing the origins of Taiwanese clients."
     }
   },
   "gallery": {
