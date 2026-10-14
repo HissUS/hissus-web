@@ -63,12 +63,6 @@ export function FactoryServiceArea() {
       </span>
       <span
         aria-hidden="true"
-        className="absolute right-[2%] top-[2%] text-sm font-medium text-gray-600 sm:text-base"
-      >
-        {t('company.connectionMap.usa')}
-      </span>
-      <span
-        aria-hidden="true"
         className="absolute left-[54%] top-[83%] text-sm font-medium text-gray-600 sm:text-base"
       >
         {t('company.connectionMap.texas')}

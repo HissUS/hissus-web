@@ -469,14 +469,13 @@
       "nationwide": "If your factory project takes you elsewhere in the USA, we can discuss how our team can support you."
     },
     "taiwanExperience": {
-      "title": "From Taiwan to Texas.",
+      "title": "Bringing your factory plans to life, together.",
       "desc": "We’ve helped Taiwanese companies set up factories in Texas, working alongside their teams to plan and coordinate the project."
     },
     "connectionMap": {
       "alt": "Illustration connecting Taiwan to Texas with a dotted line, showing the origins of Taiwanese clients and their Texas factory projects.",
       "taiwan": "Taiwan",
-      "texas": "Texas",
-      "usa": "USA"
+      "texas": "Texas"
     }
   },
   "gallery": {

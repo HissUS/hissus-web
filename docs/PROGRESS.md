@@ -1469,3 +1469,22 @@
   - **Expected**: Copy and map stack cleanly; 德州 stays together in the shorter headline. Taiwan remains the clients' origin and Texas the factory location, while other USA projects remain subject to discussion.
   - **Command/URL**: `/tw/factory/services#experience`
 - **Graphic scope**: Existing AI-generated cartographic artwork is reused unchanged. The dotted line is a schematic business/client connection, not a navigation, shipping or flight route. No new office or project geography is claimed.
+
+### [FIX-031] Warmer Experience Heading and Simpler Map Labels (2026-10-14)
+
+- **Summary**: Replaced the direct Taiwan-to-Texas heading with client-focused partnership copy in English and Traditional Chinese. Removed the USA/country label from the map while retaining Taiwan, Texas and their dotted connection.
+- **Affected Files**:
+  - `frontend/src/features/homepage/components/FactoryServiceArea.tsx`
+  - `frontend/src/locales/en.json`
+  - `frontend/src/locales/zh-TW.json`
+  - `docs/PROGRESS.md`
+- **Verification**:
+  - **Action**: Run the production build, lint and locale parity check.
+  - **Expected**: All pass, with matching locale keys and updated headings in prerendered Services pages.
+  - **Command/URL**: `pnpm -C frontend build && pnpm -C frontend lint && pnpm -C frontend check-locales`
+  - **Action**: Inspect both languages at 1440px and 320px.
+  - **Expected**: New headings appear, map labels show only Taiwan and Texas, both map images load, and the dotted line and existing section anchors remain intact.
+  - **Command/URL**: `/factory/services#experience`, `/tw/factory/services#experience`
+  - **Fail Case**: View the longer Traditional Chinese heading at 320px.
+  - **Expected**: Heading wraps within the page; no horizontal overflow or browser errors.
+  - **Command/URL**: `/tw/factory/services#experience`
